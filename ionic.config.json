@@ -1,0 +1,8 @@
+{
+  "name": "Sonnen Buddy",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "4c26db72"
+}

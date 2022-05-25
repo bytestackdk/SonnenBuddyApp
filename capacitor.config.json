@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "Sonnen Buddy",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
