@@ -1,5 +1,5 @@
 {
-	"appId": "io.ionic.starter",
+	"appId": "dk.bytestack.sonnenbuddy",
 	"appName": "Sonnen Buddy",
 	"webDir": "www",
 	"bundledWebRuntime": false

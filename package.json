@@ -1,7 +1,7 @@
 {
   "name": "sonnen-buddy",
   "version": "0.0.1",
-  "author": "Ionic Framework",
+  "author": "ByteStack",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
@@ -19,9 +19,11 @@
     "@angular/platform-browser": "~13.2.2",
     "@angular/platform-browser-dynamic": "~13.2.2",
     "@angular/router": "~13.2.2",
+    "@capacitor/android": "^3.5.1",
     "@capacitor/app": "1.1.1",
     "@capacitor/core": "3.5.1",
     "@capacitor/haptics": "1.1.4",
+    "@capacitor/ios": "^3.5.1",
     "@capacitor/keyboard": "1.2.2",
     "@capacitor/status-bar": "1.0.8",
     "@ionic/angular": "^6.0.0",
@@ -62,5 +64,5 @@
     "ts-node": "~8.3.0",
     "typescript": "~4.4.4"
   },
-  "description": "An Ionic project"
+  "description": "A companion app for your Sonnen product"
 }
