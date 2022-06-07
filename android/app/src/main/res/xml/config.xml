@@ -3,11 +3,11 @@
   <access origin="*" />
   
   <feature name="CordovaHttpPlugin">
-    <param name="ios-package" value="CordovaHttpPlugin"/>
+    <param name="android-package" value="com.silkimen.cordovahttp.CordovaHttpPlugin"/>
   </feature>
 
   <feature name="File">
-    <param name="ios-package" value="CDVFile"/>
+    <param name="android-package" value="org.apache.cordova.file.FileUtils"/>
     <param name="onload" value="true"/>
   </feature>
 

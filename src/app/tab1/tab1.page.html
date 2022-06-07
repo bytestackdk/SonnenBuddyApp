@@ -13,5 +13,12 @@
     </ion-toolbar>
   </ion-header>
 
+  <p>Responses: {{ responses | json }}</p>
+  <ng-container *ngIf="responses && responses[0] as response">
+    <p>LAN IP: {{ response.lanip }}</p>
+    <p>CA20: {{ response.ca20 }}</p>
+    <p>Info: {{ response.info }}</p>
+    <p>device: {{ response.device }}</p>
+  </ng-container>
   <app-explore-container name="Tab 1 page"></app-explore-container>
 </ion-content>
