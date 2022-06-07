@@ -5,7 +5,7 @@ import { IDiscoverResponse } from '../api/discover.model';
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  styleUrls: ['tab1.page.scss'],
 })
 export class Tab1Page implements OnInit {
   responses: IDiscoverResponse[];
@@ -13,6 +13,8 @@ export class Tab1Page implements OnInit {
   constructor(private readonly discoverService: DiscoverService) {}
 
   ngOnInit() {
-    this.discoverService.find().subscribe(responses => this.responses = responses);
+    this.discoverService
+      .find()
+      .subscribe((responses) => (this.responses = responses));
   }
 }
