@@ -1,8 +1,8 @@
 export type IP = string;
 
-export interface IDiscoverResponse {
+export interface INetworkDevice {
   lanip: IP;
   ca20: boolean;
-  info: string;
+  info: 'sonnenBatterie' | undefined;
   device: number;
 }
