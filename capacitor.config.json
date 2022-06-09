@@ -2,5 +2,11 @@
   "appId": "dk.bytestack.sonnenbuddy",
   "appName": "Sonnen Buddy",
   "webDir": "www",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": false,
+  "server": {
+    "clearText": true
+  },
+  "cordova": {
+    "accessOrigins": ["*"]
+  }
 }
