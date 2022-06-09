@@ -127,4 +127,29 @@ export interface IBatteryStatus {
 
 export interface ILatestData {
   Consumption_W: number;
+  // TODO
+}
+
+export interface IPowerMeter {
+  a_l1: number;
+  a_l2: number;
+  a_l3: number;
+  channel: number;
+  deviceid: number;
+  direction: 'production' | 'consumption';
+  error: number;
+  kwh_exported: number;
+  kwh_imported: number;
+  v_l1_l2: number;
+  v_l1_n: number;
+  v_l2_l3: number;
+  v_l2_n: number;
+  v_l3_l1: number;
+  v_l3_n: number;
+  va_total: number;
+  var_total: number;
+  w_l1: number;
+  w_l2: number;
+  w_l3: number;
+  w_total: number;
 }

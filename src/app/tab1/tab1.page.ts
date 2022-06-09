@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromDevices from '../store/devices';
 import * as fromLatestData from '../store/latest-data';
+import * as fromPowerMeter from '../store/power-meter';
 import * as fromStatus from '../store/status';
 
 @Component({
@@ -12,6 +13,7 @@ import * as fromStatus from '../store/status';
 export class Tab1Page {
   device$ = this.store.select(fromDevices.selectCurrentDevice);
   latestData$ = this.store.select(fromLatestData.selectLatestData);
+  powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
   status$ = this.store.select(fromStatus.selectStatus);
 
   constructor(private readonly store: Store) {}
@@ -32,5 +34,9 @@ export class Tab1Page {
 
   getLatestData() {
     this.store.dispatch(fromLatestData.getLatestData());
+  }
+
+  getPowerMeter() {
+    this.store.dispatch(fromPowerMeter.getPowerMeter());
   }
 }

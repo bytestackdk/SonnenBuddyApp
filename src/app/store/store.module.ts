@@ -7,6 +7,7 @@ import { metaReducers, reducers } from './index';
 import { DevicesEffects } from './devices/devices.effects';
 import { StatusEffects } from './status/status.effects';
 import { LatestDataEffects } from './latest-data/latest-data.effects';
+import { PowerMeterEffects } from './power-meter/power-meter.effects';
 
 @NgModule({
   imports: [
@@ -18,7 +19,12 @@ import { LatestDataEffects } from './latest-data/latest-data.effects';
       },
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([DevicesEffects, LatestDataEffects, StatusEffects]),
+    EffectsModule.forRoot([
+      DevicesEffects,
+      LatestDataEffects,
+      PowerMeterEffects,
+      StatusEffects,
+    ]),
   ],
 })
 export class AppStoreModule {}
