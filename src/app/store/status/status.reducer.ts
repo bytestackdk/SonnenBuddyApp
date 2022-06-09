@@ -29,9 +29,12 @@ export const statusFeature = createFeature({
         ...LoadingState.loaded(),
       })
     ),
-    on(fromActions.getBatteryStatusFailed, (state, { error }) => ({
-      ...state,
-      ...LoadingState.failed(error),
-    }))
+    on(
+      fromActions.getBatteryStatusFailed,
+      (state, { error }): StatusState => ({
+        ...state,
+        ...LoadingState.failed(error),
+      })
+    )
   ),
 });

@@ -37,15 +37,15 @@ export class StatusEffects {
     )
   );
 
-  getStatusPolling$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromPlatform.platformReady),
-      switchMap(() =>
-        interval(POLLING_INTERVAL).pipe(
-          takeUntil(this.actions$.pipe(ofType(fromPlatform.platformStop))),
-          map(() => fromActions.getBatteryStatus())
-        )
-      )
-    );
-  });
+  // getStatusPolling$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromPlatform.platformReady),
+  //     switchMap(() =>
+  //       interval(POLLING_INTERVAL).pipe(
+  //         takeUntil(this.actions$.pipe(ofType(fromPlatform.platformStop))),
+  //         map(() => fromActions.getBatteryStatus())
+  //       )
+  //     )
+  //   );
+  // });
 }

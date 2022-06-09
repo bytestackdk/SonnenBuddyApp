@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromStatus from '../store/status';
 import * as fromDevices from '../store/devices';
+import * as fromLatestData from '../store/latest-data';
+import * as fromStatus from '../store/status';
 
 @Component({
   selector: 'app-tab1',
@@ -10,6 +11,7 @@ import * as fromDevices from '../store/devices';
 })
 export class Tab1Page {
   device$ = this.store.select(fromDevices.selectCurrentDevice);
+  latestData$ = this.store.select(fromLatestData.selectLatestData);
   status$ = this.store.select(fromStatus.selectStatus);
 
   constructor(private readonly store: Store) {}
@@ -26,5 +28,9 @@ export class Tab1Page {
 
   getStatus() {
     this.store.dispatch(fromStatus.getBatteryStatus());
+  }
+
+  getLatestData() {
+    this.store.dispatch(fromLatestData.getLatestData());
   }
 }
