@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClientJsonpModule,
+  HttpClientModule,
+} from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
-
-
+import { NativeHttpInterceptor } from './interceptors/native-http.interceptor';
 
 @NgModule({
   declarations: [],
@@ -12,8 +15,15 @@ import { HTTP } from '@awesome-cordova-plugins/http/ngx';
     CommonModule,
     BrowserModule,
     HttpClientModule,
-    HttpClientJsonpModule
+    HttpClientJsonpModule,
   ],
-  providers: [HTTP]
+  providers: [
+    HTTP,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NativeHttpInterceptor,
+      multi: true,
+    },
+  ],
 })
-export class CoreModule { }
+export class CoreModule {}

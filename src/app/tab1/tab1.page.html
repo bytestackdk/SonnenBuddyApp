@@ -13,12 +13,12 @@
     </ion-toolbar>
   </ion-header>
 
-  <p>Responses: {{ devices$ | async | json }}</p>
-  <ng-container *ngFor="let device of devices$ | async">
-    <p>LAN IP: {{ device.lanIp }}</p>
-    <p>CA20: {{ device.ca20 }}</p>
-    <p>Info: {{ device.info }}</p>
-    <p>Serial number: {{ device.serialNumber }}</p>
-  </ng-container>
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+  <ion-button (click)="findDevices()">Find devices</ion-button>
+  <ion-button (click)="setToken()">Set token</ion-button>
+  <ion-button (click)="getStatus()">Get status</ion-button>
+
+  <h2>Device</h2>
+  <pre>{{ device$ | async | json }}</pre>
+  <h2>Status</h2>
+  <pre>{{ status$ | async | json }}</pre>
 </ion-content>

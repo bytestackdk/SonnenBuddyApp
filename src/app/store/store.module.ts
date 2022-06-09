@@ -5,6 +5,7 @@ import { NgModule } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { metaReducers, reducers } from './index';
 import { DevicesEffects } from './devices/devices.effects';
+import { StatusEffects } from './status/status.effects';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { DevicesEffects } from './devices/devices.effects';
       },
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([DevicesEffects]),
+    EffectsModule.forRoot([DevicesEffects, StatusEffects]),
   ],
 })
 export class AppStoreModule {}

@@ -15,3 +15,6 @@ export const findDevicesFailed = createAction(
   FIND_DEVICES_FAILED,
   props<{ error: HttpErrorResponse }>()
 );
+
+export const SET_TOKEN = '[Devices] Set token';
+export const setToken = createAction(SET_TOKEN, props<{ apiToken: string }>());

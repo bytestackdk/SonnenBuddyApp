@@ -9,3 +9,18 @@ export const selectDevicesFailed = selectFailed;
 export const selectDevices = createSelector(selectDevicesState, (state) =>
   selectAllDevices(state)
 );
+
+export const selectCurrentDevice = createSelector(
+  selectDevicesState,
+  (state) => state.entities[state.activeDevice]
+);
+
+export const selectCurrentDeviceIp = createSelector(
+  selectCurrentDevice,
+  (device) => device?.lanIp
+);
+
+export const selectCurrentDeviceApiToken = createSelector(
+  selectCurrentDevice,
+  (device) => device.apiToken
+);
