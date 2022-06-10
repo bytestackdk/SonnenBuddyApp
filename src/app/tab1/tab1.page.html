@@ -14,13 +14,17 @@
   </ion-header>
 
   <ion-button (click)="findDevices()">Find devices</ion-button>
+  <ion-button (click)="setDevice()">Set device</ion-button>
   <ion-button (click)="setToken()">Set token</ion-button>
   <ion-button (click)="getStatus()">Get status</ion-button>
   <ion-button (click)="getLatestData()">Get data</ion-button>
   <ion-button (click)="getPowerMeter()">Get power</ion-button>
 
-  <h2>Error</h2>
-  <pre>{{ error$ | async | json }}</pre>
+  <h2>Device error</h2>
+  <pre>{{ deviceError$ | async | json }}</pre>
+
+  <h2>Status error</h2>
+  <pre>{{ statusError$ | async | json }}</pre>
 
   <h2>Device</h2>
   <pre>{{ device$ | async | json }}</pre>

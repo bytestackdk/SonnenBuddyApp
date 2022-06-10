@@ -5,3 +5,8 @@ export const selectStatus = createSelector(
   statusFeature.selectStatusState,
   (state) => state.entity
 );
+
+export const selectStatusError = createSelector(
+  statusFeature.selectStatusState,
+  (state) => state.error
+);
