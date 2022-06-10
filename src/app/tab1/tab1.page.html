@@ -20,6 +20,9 @@
   <ion-button (click)="getLatestData()">Get data</ion-button>
   <ion-button (click)="getPowerMeter()">Get power</ion-button>
 
+  <h2>Diller</h2>
+  <pre>{{ diller$ | async | json }}</pre>
+
   <h2>Device state</h2>
   <pre>{{ deviceState$ | async | json }}</pre>
 

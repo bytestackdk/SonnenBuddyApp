@@ -4,6 +4,8 @@ import * as fromDevices from '../store/devices';
 import * as fromLatestData from '../store/latest-data';
 import * as fromPowerMeter from '../store/power-meter';
 import * as fromStatus from '../store/status';
+import { HTTP } from '@awesome-cordova-plugins/http/ngx';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-tab1',
@@ -18,7 +20,14 @@ export class Tab1Page {
   deviceState$ = this.store.select(fromDevices.selectDevicesState);
   statusError$ = this.store.select(fromStatus.selectStatusError);
 
-  constructor(private readonly store: Store) {}
+  diller$ = from(
+    this.nativeHttp.get('https://find-my.sonnen-batterie.com/find', {}, {})
+  );
+
+  constructor(
+    private readonly store: Store,
+    private readonly nativeHttp: HTTP
+  ) {}
 
   findDevices() {
     this.store.dispatch(fromDevices.findDevices());
