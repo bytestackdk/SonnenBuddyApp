@@ -20,8 +20,8 @@
   <ion-button (click)="getLatestData()">Get data</ion-button>
   <ion-button (click)="getPowerMeter()">Get power</ion-button>
 
-  <h2>Device error</h2>
-  <pre>{{ deviceError$ | async | json }}</pre>
+  <h2>Device state</h2>
+  <pre>{{ deviceState$ | async | json }}</pre>
 
   <h2>Status error</h2>
   <pre>{{ statusError$ | async | json }}</pre>

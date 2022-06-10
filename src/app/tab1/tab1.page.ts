@@ -15,7 +15,7 @@ export class Tab1Page {
   latestData$ = this.store.select(fromLatestData.selectLatestData);
   powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
   status$ = this.store.select(fromStatus.selectStatus);
-  deviceError$ = this.store.select(fromDevices.selectDevicesError);
+  deviceState$ = this.store.select(fromDevices.selectDevicesState);
   statusError$ = this.store.select(fromStatus.selectStatusError);
 
   constructor(private readonly store: Store) {}
