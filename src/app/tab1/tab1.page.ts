@@ -4,6 +4,7 @@ import * as fromDevices from '../store/devices';
 import * as fromLatestData from '../store/latest-data';
 import * as fromPowerMeter from '../store/power-meter';
 import * as fromStatus from '../store/status';
+import { selectDevicesError } from '../store/devices';
 
 @Component({
   selector: 'app-tab1',
@@ -15,6 +16,7 @@ export class Tab1Page {
   latestData$ = this.store.select(fromLatestData.selectLatestData);
   powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
   status$ = this.store.select(fromStatus.selectStatus);
+  error$ = this.store.select(fromDevices.selectDevicesError);
 
   constructor(private readonly store: Store) {}
 
