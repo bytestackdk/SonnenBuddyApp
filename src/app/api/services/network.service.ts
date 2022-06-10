@@ -15,7 +15,7 @@ export class NetworkService extends BaseService {
 
   find() {
     if (Capacitor.isNativePlatform()) {
-      const url = ' https://find-my.sonnen-batterie.com/find';
+      const url = 'https://find-my.sonnen-batterie.com/find';
       return this.nativeGet<INetworkDevice[]>(url);
     }
 
