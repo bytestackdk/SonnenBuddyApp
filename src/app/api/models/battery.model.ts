@@ -30,7 +30,7 @@ export interface IBatteryStatus {
    */
   Fac: number;
   /**
-   * Boolean that indicates the energy flow at the installation site. True if status feeds the consumption
+   * Boolean that indicates the energy flow at the installation site. True if battery feeds the consumption
    */
   FlowConsumptionBattery: boolean;
   /**
@@ -42,11 +42,11 @@ export interface IBatteryStatus {
    */
   FlowConsumptionProduction: boolean;
   /**
-   * Boolean that indicates the energy flow at the installation site. True if status is charging from grid
+   * Boolean that indicates the energy flow at the installation site. True if battery is charging from grid
    */
   FlowGridBattery: boolean;
   /**
-   * Boolean that indicates the energy flow at the installation site. True if production is charging the status
+   * Boolean that indicates the energy flow at the installation site. True if production is charging the battery
    */
   FlowProductionBattery: boolean;
   /**
@@ -56,7 +56,7 @@ export interface IBatteryStatus {
   /**
    * W, watt	Grid Feed in negative is consumption and positive is feed in
    */
-  GridFeedIn_W: -58;
+  GridFeedIn_W: number;
   /**
    * 	System is installed or not
    */
@@ -98,7 +98,7 @@ export interface IBatteryStatus {
   /**
    * String that indicates if the system is connected to the grid (“OnGrid”) or disconnected (“OffGrid”)
    */
-  SystemStatus: string;
+  SystemStatus: 'OnGrid' | 'OffGrid';
   /**
    * Local system time
    */
@@ -152,4 +152,14 @@ export interface IPowerMeter {
   w_l2: number;
   w_l3: number;
   w_total: number;
+}
+
+export class IC_InverterMaxPower_w {
+  static key = 'IC_InverterMaxPower_w';
+  IC_InverterMaxPower_w: string;
+}
+
+export class IC_BatteryModules {
+  static key = 'IC_BatteryModules';
+  IC_BatteryModules: string;
 }

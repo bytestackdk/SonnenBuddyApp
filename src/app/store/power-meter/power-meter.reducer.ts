@@ -17,10 +17,7 @@ export const powerMeterFeature = createFeature({
   reducer: createReducer(
     initialState,
 
-    on(
-      fromActions.getPowerMeter,
-      (state): PowerMeterState => ({ ...state, ...LoadingState.loading() })
-    ),
+    on(fromActions.getPowerMeter, (state): PowerMeterState => ({ ...state, ...LoadingState.loading() })),
     on(
       fromActions.getPowerMeterSuccess,
       (state, { powerMeter }): PowerMeterState => ({

@@ -38,11 +38,23 @@ export const devicesFeature = createFeature({
       ...state,
       ...LoadingState.failed(error),
     })),
+    on(
+      fromActions.getInverterMaxPowerSuccess,
+      (state, { maxPower }): DevicesState => ({
+        ...adapter.updateOne({ id: state.activeDevice, changes: { maxPower } }, state),
+      })
+    ),
+    on(
+      fromActions.getBatteryQuantitySuccess,
+      (state, { batteryQuantity }): DevicesState => ({
+        ...adapter.updateOne({ id: state.activeDevice, changes: { batteryQuantity } }, state),
+      })
+    ),
     on(fromActions.setToken, (state, { apiToken }) => ({
-      ...adapter.updateOne(
-        { id: state.activeDevice, changes: { apiToken } },
-        state
-      ),
+      ...adapter.updateOne({ id: state.activeDevice, changes: { apiToken } }, state),
+    })),
+    on(fromActions.setPanelCapacity, (state, { panelCapacity }) => ({
+      ...adapter.updateOne({ id: state.activeDevice, changes: { panelCapacity } }, state),
     }))
   ),
 });

@@ -5,9 +5,7 @@ import { devicesFeature } from './devices.reducer';
 
 export function devicesSyncReducer(reducer: ActionReducer<RootState>) {
   const sync = storageSync<RootState>({
-    features: [
-      { stateKey: devicesFeature.name, storageForFeature: window.localStorage },
-    ],
+    features: [{ stateKey: devicesFeature.name, storageForFeature: window.localStorage }],
     storage: window.localStorage,
   });
 

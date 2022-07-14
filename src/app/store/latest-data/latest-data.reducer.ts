@@ -17,10 +17,7 @@ export const latestDataFeature = createFeature({
   reducer: createReducer(
     initialState,
 
-    on(
-      fromActions.getLatestData,
-      (state): LatestDataState => ({ ...state, ...LoadingState.loading() })
-    ),
+    on(fromActions.getLatestData, (state): LatestDataState => ({ ...state, ...LoadingState.loading() })),
     on(
       fromActions.getLatestDataSuccess,
       (state, { data }): LatestDataState => ({

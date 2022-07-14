@@ -17,14 +17,10 @@ export class ToastEffects {
   showToast$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(
-          fromDevices.findDevicesFailed,
-          fromStatus.getBatteryStatusFailed
-        ),
+        ofType(fromDevices.findDevicesFailed, fromStatus.getBatteryStatusFailed),
         tap(async ({ error }) => {
           const toast = await this.toastController.create({
-            message:
-              'Error: ' + error.message + `(${JSON.stringify(error.error)})`,
+            message: 'Error: ' + error.message + `(${JSON.stringify(error.error)})`,
             duration: 5000,
           });
           toast.present();

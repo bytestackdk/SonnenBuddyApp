@@ -13,21 +13,59 @@
     </ion-toolbar>
   </ion-header>
 
+  <div class="ion-padding">
+    <div class="ion-padding" fxLayout="row">
+      <img src="/assets/ph.svg" alt="Solar">
+      <div class="ion-padding" fxFlex>
+        <div>Capacity: {{ solarCapacity$ | async | kw }}</div>
+        <div>Production: {{ solarProduction$ | async | kw }}</div>
+        <div>Utilization: {{ solarUtilization$ | async | number: '1.0-0' }} %</div>
+        <div>Solar to battery: {{ solarToBattery$ | async }}</div>
+        <div>Solar to inverter: {{ solarToInverter$ | async }}</div>
+      </div>
+    </div>
+    <div class="ion-padding" fxLayout="row">
+      <img src="/assets/battery.svg" alt="Battery">
+      <div class="ion-padding" fxFlex>
+        <div>Usage: {{ batteryUsage$ | async | kw }}</div>
+        <div>Utilization: {{ batteryUtilization$ | async | number: '1.0-0' }} %</div>
+        <div>Charge: {{ batteryCharge$ | async }}% / {{ batteryRemaining$ | async | kw }}h</div>
+        <div>Battery to inverter: {{ batteryToInverter$ | async }}</div>
+      </div>
+    </div>
+    <div class="ion-padding" fxLayout="row">
+      <img src="/assets/sonnen.svg" alt="Inverter">
+      <div class="ion-padding" fxFlex>
+        <div>Usage: {{ inverterUsage$ | async | kw }}</div>
+        <div>Utilization: {{ inverterUtilization$ | async | number: '1.0-0' }} %</div>
+        <div>Inverter to battery: {{ inverterToBattery$ | async }}</div>
+        <div>Inverter to house: {{ inverterToHouse$ | async }}</div>
+        <div>Inverter to grid: {{ inverterToGrid$ | async }}</div>
+      </div>
+    </div>
+    <div class="ion-padding" fxLayout="row">
+      <img src="/assets/house.svg" alt="Home">
+      <div class="ion-padding" fxFlex>
+        <div>Consumption: {{ houseConsumption$ | async | kw }}</div>
+      </div>
+    </div>
+    <div class="ion-padding" fxLayout="row">
+      <img src="/assets/grid.svg" alt="Grid">
+      <div class="ion-padding" fxFlex>
+        <div>Grid feed in: {{ gridFeedIn$ | async | kw }}</div>
+        <div>Grid to house: {{ gridToHouse$ | async }}</div>
+      </div>
+    </div>
+  </div>
+
   <ion-button (click)="findDevices()">Find devices</ion-button>
-  <ion-button (click)="setDevice()">Set device</ion-button>
   <ion-button (click)="setToken()">Set token</ion-button>
+  <ion-button (click)="setPanelCapacity(6000)">Set 6 kW</ion-button>
   <ion-button (click)="getStatus()">Get status</ion-button>
   <ion-button (click)="getLatestData()">Get data</ion-button>
   <ion-button (click)="getPowerMeter()">Get power</ion-button>
-
-  <h2>Diller</h2>
-  <pre>{{ diller$ | async | json }}</pre>
-
-  <h2>Device state</h2>
-  <pre>{{ deviceState$ | async | json }}</pre>
-
-  <h2>Status error</h2>
-  <pre>{{ statusError$ | async | json }}</pre>
+  <ion-button (click)="getInverterMaxPower()">Get inverter max</ion-button>
+  <ion-button (click)="getBatteryQuantity()">Get battery quantity</ion-button>
 
   <h2>Device</h2>
   <pre>{{ device$ | async | json }}</pre>

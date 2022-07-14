@@ -4,10 +4,13 @@ import { Store } from '@ngrx/store';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import {
   IBatteryStatus,
+  IC_BatteryModules,
+  IC_InverterMaxPower_w,
   ILatestData,
   IPowerMeter,
 } from '../models/battery.model';
 import { BaseService } from './base.service';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class BatteryService extends BaseService {
@@ -25,5 +28,21 @@ export class BatteryService extends BaseService {
 
   getPowerMeter() {
     return this.get<IPowerMeter[]>('api/v2/powermeter');
+  }
+
+  getInverterMaxPower() {
+    return this.getConfiguration<IC_InverterMaxPower_w>(IC_InverterMaxPower_w.key).pipe(
+      map((configuration) => parseInt(configuration[IC_InverterMaxPower_w.key], 10))
+    );
+  }
+
+  getBatteryQuantity() {
+    return this.getConfiguration<IC_BatteryModules>(IC_BatteryModules.key).pipe(
+      map((configuration) => parseInt(configuration[IC_BatteryModules.key], 10))
+    );
+  }
+
+  private getConfiguration<T>(configuration: string) {
+    return this.get<T>('api/v2/configurations/' + configuration);
   }
 }

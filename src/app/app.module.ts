@@ -9,12 +9,7 @@ import { AppStoreModule } from './store/store.module';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [
-    CoreModule,
-    IonicModule.forRoot(),
-    AppRoutingModule,
-    AppStoreModule,
-  ],
+  imports: [CoreModule, IonicModule.forRoot(), AppRoutingModule, AppStoreModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

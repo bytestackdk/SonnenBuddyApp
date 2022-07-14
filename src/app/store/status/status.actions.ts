@@ -7,11 +7,5 @@ export const GET_STATUS_SUCCESS = '[Battery] Get status success';
 export const GET_STATUS_FAILED = '[Battery] Get status failed';
 
 export const getBatteryStatus = createAction(GET_STATUS);
-export const getBatteryStatusSuccess = createAction(
-  GET_STATUS_SUCCESS,
-  props<{ status: IBatteryStatus }>()
-);
-export const getBatteryStatusFailed = createAction(
-  GET_STATUS_FAILED,
-  props<{ error: HttpErrorResponse }>()
-);
+export const getBatteryStatusSuccess = createAction(GET_STATUS_SUCCESS, props<{ status: IBatteryStatus }>());
+export const getBatteryStatusFailed = createAction(GET_STATUS_FAILED, props<{ error: HttpErrorResponse }>());

@@ -17,10 +17,7 @@ export const statusFeature = createFeature({
   reducer: createReducer(
     initialState,
 
-    on(
-      fromActions.getBatteryStatus,
-      (state): StatusState => ({ ...state, ...LoadingState.loading() })
-    ),
+    on(fromActions.getBatteryStatus, (state): StatusState => ({ ...state, ...LoadingState.loading() })),
     on(
       fromActions.getBatteryStatusSuccess,
       (state, { status }): StatusState => ({
