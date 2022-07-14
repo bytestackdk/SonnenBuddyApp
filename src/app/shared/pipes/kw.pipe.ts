@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class KwPipe implements PipeTransform {
   transform(value: number, precision = 1): string {
-    value = value > 0 ? value : -1 * value;
+    value = Math.abs(value);
     const kw = value > 0 ? this.round(value / 1000, precision) : 0;
     return `${kw.toFixed(precision)} kW`;
   }

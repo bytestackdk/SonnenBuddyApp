@@ -20,7 +20,7 @@ export const selectBatteryUsage = createSelector(selectStatus, (entity) => entit
 export const selectBatteryUtilization = createSelector(
   fromDevices.selectCurrentDeviceBatteryMaxPower,
   selectBatteryUsage,
-  (capacity, current) => (current / capacity) * 100
+  (capacity, current) => Math.abs((current / capacity) * 100)
 );
 export const selectBatteryCharge = createSelector(selectStatus, (entity) => entity?.RSOC);
 export const selectBatteryRemaining = createSelector(selectStatus, (entity) => entity?.RemainingCapacity_Wh);

@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromDevices from '../store/devices';
-import * as fromLatestData from '../store/latest-data';
-import * as fromPowerMeter from '../store/power-meter';
-import * as fromStatus from '../store/status';
-import { selectBatteryUtilization } from '../store/status';
+import * as fromDevices from '../../store/devices';
+import * as fromLatestData from '../../store/latest-data';
+import * as fromPowerMeter from '../../store/power-meter';
+import * as fromStatus from '../../store/status';
 
 @Component({
-  selector: 'app-tab1',
-  templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss'],
+  selector: 'app-live',
+  templateUrl: 'live-page.component.html',
+  styleUrls: ['live-page.component.scss'],
 })
-export class Tab1Page {
+export class LivePage {
   device$ = this.store.select(fromDevices.selectCurrentDevice);
   latestData$ = this.store.select(fromLatestData.selectLatestData);
   powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);

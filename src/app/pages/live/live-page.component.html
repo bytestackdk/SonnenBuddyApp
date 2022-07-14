@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      Live 1
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,13 +9,13 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title size="large">Live 2</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div class="ion-padding">
     <div class="ion-padding" fxLayout="row">
-      <img src="/assets/ph.svg" alt="Solar">
+      <img src="assets/ph.svg" class="flow-item" alt="Solar">
       <div class="ion-padding" fxFlex>
         <div>Capacity: {{ solarCapacity$ | async | kw }}</div>
         <div>Production: {{ solarProduction$ | async | kw }}</div>
@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="ion-padding" fxLayout="row">
-      <img src="/assets/battery.svg" alt="Battery">
+      <img src="assets/battery.svg" class="flow-item" alt="Battery">
       <div class="ion-padding" fxFlex>
         <div>Usage: {{ batteryUsage$ | async | kw }}</div>
         <div>Utilization: {{ batteryUtilization$ | async | number: '1.0-0' }} %</div>
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="ion-padding" fxLayout="row">
-      <img src="/assets/sonnen.svg" alt="Inverter">
+      <img src="assets/sonnen.svg" class="flow-item" alt="Inverter">
       <div class="ion-padding" fxFlex>
         <div>Usage: {{ inverterUsage$ | async | kw }}</div>
         <div>Utilization: {{ inverterUtilization$ | async | number: '1.0-0' }} %</div>
@@ -44,13 +44,13 @@
       </div>
     </div>
     <div class="ion-padding" fxLayout="row">
-      <img src="/assets/house.svg" alt="Home">
+      <img src="assets/house.svg" class="flow-item" alt="Home">
       <div class="ion-padding" fxFlex>
         <div>Consumption: {{ houseConsumption$ | async | kw }}</div>
       </div>
     </div>
     <div class="ion-padding" fxLayout="row">
-      <img src="/assets/grid.svg" alt="Grid">
+      <img src="assets/grid.svg" class="flow-item" alt="Grid">
       <div class="ion-padding" fxFlex>
         <div>Grid feed in: {{ gridFeedIn$ | async | kw }}</div>
         <div>Grid to house: {{ gridToHouse$ | async }}</div>
