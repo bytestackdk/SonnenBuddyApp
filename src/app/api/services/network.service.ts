@@ -21,7 +21,7 @@ export class NetworkService extends BaseService {
 
     const devices: INetworkDevice[] = [
       {
-        lanip: '192.168.1.130',
+        lanip: '192.168.1.6',
         ca20: true,
         info: 'sonnenBatterie',
         device: 162099,
