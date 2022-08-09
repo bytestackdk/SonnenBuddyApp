@@ -59,6 +59,18 @@ export class DevicesEffects {
     );
   });
 
+  getBatteryModuleCapacity$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.getBatteryModuleCapacity),
+      exhaustMap(() =>
+        this.batteryService.getBatteryModuleCapacity().pipe(
+          map((batteryModuleCapacity) => fromActions.getBatteryModuleCapacitySuccess({ batteryModuleCapacity })),
+          catchError((error) => of(fromActions.getBatteryModuleCapacityFailed({ error })))
+        )
+      )
+    );
+  });
+
   private mapToDevice(networkDevice: INetworkDevice) {
     const { ca20, info, device } = networkDevice;
     const battery: IDevice = {

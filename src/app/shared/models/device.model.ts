@@ -20,4 +20,8 @@ export interface IDevice {
    * Number of batteries installed in system
    */
   batteryQuantity?: number;
+  /**
+   * Capacity of a single battery module in the system
+   */
+  batteryModuleCapacity?: number;
 }

@@ -18,3 +18,7 @@ export const selectCurrentDeviceInverterMaxPower = createSelector(selectCurrentD
 export const selectCurrentDeviceBatteryMaxPower = createSelector(selectCurrentDevice, (device) =>
   device.batteryQuantity === 1 ? 2500 : 3300
 );
+export const selectCurrentDeviceBatteryCapacity = createSelector(
+  selectCurrentDevice,
+  (device) => device.batteryQuantity * device.batteryModuleCapacity
+);

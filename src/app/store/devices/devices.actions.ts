@@ -35,6 +35,20 @@ export const getBatteryQuantityFailed = createAction(
   props<{ error: HttpErrorResponse }>()
 );
 
+export const GET_BATTERY_MODULE_CAPACITY = '[Devices] Get battery module capacity';
+export const GET_BATTERY_MODULE_CAPACITY_SUCCESS = '[Devices] Get battery module capacity success';
+export const GET_BATTERY_MODULE_CAPACITY_FAILED = '[Devices] Get battery module capacity failed';
+
+export const getBatteryModuleCapacity = createAction(GET_BATTERY_MODULE_CAPACITY);
+export const getBatteryModuleCapacitySuccess = createAction(
+  GET_BATTERY_MODULE_CAPACITY_SUCCESS,
+  props<{ batteryModuleCapacity: number }>()
+);
+export const getBatteryModuleCapacityFailed = createAction(
+  GET_BATTERY_MODULE_CAPACITY_FAILED,
+  props<{ error: HttpErrorResponse }>()
+);
+
 export const SET_TOKEN = '[Devices] Set token';
 export const setToken = createAction(SET_TOKEN, props<{ apiToken: string }>());
 

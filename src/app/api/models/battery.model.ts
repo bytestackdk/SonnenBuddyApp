@@ -163,3 +163,8 @@ export class IC_BatteryModules {
   static key = 'IC_BatteryModules';
   IC_BatteryModules: string;
 }
+
+export class CM_MarketingModuleCapacity {
+  static key = 'CM_MarketingModuleCapacity';
+  CM_MarketingModuleCapacity: string;
+}

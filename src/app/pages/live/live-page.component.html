@@ -32,6 +32,8 @@
         <div>Utilization: {{ batteryUtilization$ | async | number: '1.0-0' }} %</div>
         <div>Usage: {{ batteryUsage$ | async | kw }}</div>
         <div>Charge: {{ batteryCharge$ | async }}% / {{ batteryRemaining$ | async | kw }}h</div>
+        <div *ngIf="batteryCharging$ | async">Charging time: {{ batteryChargingTime$ | async}}</div>
+        <div *ngIf="batteryDischarging$ | async">Discharge time: {{ batteryDischargingTime$ | async }}</div>
         <div>Battery to inverter: {{ batteryToInverter$ | async }}</div>
       </div>
     </div>
@@ -69,6 +71,7 @@
   <ion-button (click)="getPowerMeter()">Get power</ion-button>
   <ion-button (click)="getInverterMaxPower()">Get inverter max</ion-button>
   <ion-button (click)="getBatteryQuantity()">Get battery quantity</ion-button>
+  <ion-button (click)="getBatteryModuleCapacity()">Get battery capacity</ion-button>
 
   <h2>Device</h2>
   <pre>{{ device$ | async | json }}</pre>

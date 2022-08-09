@@ -29,7 +29,7 @@
     .usage {
       height: 100%;
       float: right;
-      transition: width 1s ease-out;
+      transition: width 1s ease-in-out;
 
       @media (prefers-color-scheme: dark) {
         background-color: black;

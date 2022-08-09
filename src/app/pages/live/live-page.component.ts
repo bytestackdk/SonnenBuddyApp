@@ -22,7 +22,11 @@ export class LivePage {
   solarToBattery$ = this.store.select(fromStatus.selectSolarToBattery);
   solarToInverter$ = this.store.select(fromStatus.selectSolarToInverter);
 
-  batteryCharge$ = this.store.select(fromStatus.selectBatteryCharge);
+  batteryCharge$ = this.store.select(fromStatus.selectBatteryChargePercent);
+  batteryCharging$ = this.store.select(fromStatus.selectBatteryCharging);
+  batteryChargingTime$ = this.store.select(fromStatus.selectBatteryChargingTime);
+  batteryDischarging$ = this.store.select(fromStatus.selectBatteryDischarging);
+  batteryDischargingTime$ = this.store.select(fromStatus.selectBatteryDischargingTime);
   batteryUtilization$ = this.store.select(fromStatus.selectBatteryUtilization);
   batteryRemaining$ = this.store.select(fromStatus.selectBatteryRemaining);
   batteryUsage$ = this.store.select(fromStatus.selectBatteryUsage);
@@ -51,6 +55,10 @@ export class LivePage {
 
   getBatteryQuantity() {
     this.store.dispatch(fromDevices.getBatteryQuantity());
+  }
+
+  getBatteryModuleCapacity() {
+    this.store.dispatch(fromDevices.getBatteryModuleCapacity());
   }
 
   setToken() {

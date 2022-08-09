@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import {
+  CM_MarketingModuleCapacity,
   IBatteryStatus,
   IC_BatteryModules,
   IC_InverterMaxPower_w,
@@ -39,6 +40,12 @@ export class BatteryService extends BaseService {
   getBatteryQuantity() {
     return this.getConfiguration<IC_BatteryModules>(IC_BatteryModules.key).pipe(
       map((configuration) => parseInt(configuration[IC_BatteryModules.key], 10))
+    );
+  }
+
+  getBatteryModuleCapacity() {
+    return this.getConfiguration<CM_MarketingModuleCapacity>(CM_MarketingModuleCapacity.key).pipe(
+      map((configuration) => parseInt(configuration[CM_MarketingModuleCapacity.key], 10))
     );
   }
 

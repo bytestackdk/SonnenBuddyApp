@@ -50,6 +50,12 @@ export const devicesFeature = createFeature({
         ...adapter.updateOne({ id: state.activeDevice, changes: { batteryQuantity } }, state),
       })
     ),
+    on(
+      fromActions.getBatteryModuleCapacitySuccess,
+      (state, { batteryModuleCapacity }): DevicesState => ({
+        ...adapter.updateOne({ id: state.activeDevice, changes: { batteryModuleCapacity } }, state),
+      })
+    ),
     on(fromActions.setToken, (state, { apiToken }) => ({
       ...adapter.updateOne({ id: state.activeDevice, changes: { apiToken } }, state),
     })),
