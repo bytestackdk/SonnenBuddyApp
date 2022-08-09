@@ -7,6 +7,14 @@ img {
   height: 50px;
 }
 
+.utilization {
+  height: 30px;
+  display: block;
+}
+.battery {
+  width: 50px;
+}
+
 @media (prefers-color-scheme: dark) {
   .flow-item {
     filter: invert(100%) sepia(0%) saturate(5172%) hue-rotate(123deg) brightness(123%) contrast(113%);

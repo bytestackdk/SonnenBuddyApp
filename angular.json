@@ -156,6 +156,9 @@
     "defaultCollection": "@ionic/angular-toolkit"
   },
   "schematics": {
+    "@schematics/angular:component": {
+      "style": "scss"
+    },
     "@ionic/angular-toolkit:component": {
       "styleext": "scss"
     },

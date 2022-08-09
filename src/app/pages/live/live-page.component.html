@@ -17,18 +17,20 @@
     <div class="ion-padding" fxLayout="row">
       <img src="assets/ph.svg" class="flow-item" alt="Solar">
       <div class="ion-padding" fxFlex>
+        <app-utilization class="utilization" [percent]="solarUtilization$ | async"></app-utilization>
+        <div>Utilization: {{ solarUtilization$ | async | number: '1.0-0' }} %</div>
         <div>Capacity: {{ solarCapacity$ | async | kw }}</div>
         <div>Production: {{ solarProduction$ | async | kw }}</div>
-        <div>Utilization: {{ solarUtilization$ | async | number: '1.0-0' }} %</div>
         <div>Solar to battery: {{ solarToBattery$ | async }}</div>
         <div>Solar to inverter: {{ solarToInverter$ | async }}</div>
       </div>
     </div>
     <div class="ion-padding" fxLayout="row">
-      <img src="assets/battery.svg" class="flow-item" alt="Battery">
+      <app-battery class="battery" [percent]="batteryCharge$ | async"></app-battery>
       <div class="ion-padding" fxFlex>
-        <div>Usage: {{ batteryUsage$ | async | kw }}</div>
+        <app-utilization class="utilization" [percent]="batteryUtilization$ | async"></app-utilization>
         <div>Utilization: {{ batteryUtilization$ | async | number: '1.0-0' }} %</div>
+        <div>Usage: {{ batteryUsage$ | async | kw }}</div>
         <div>Charge: {{ batteryCharge$ | async }}% / {{ batteryRemaining$ | async | kw }}h</div>
         <div>Battery to inverter: {{ batteryToInverter$ | async }}</div>
       </div>
@@ -36,8 +38,9 @@
     <div class="ion-padding" fxLayout="row">
       <img src="assets/sonnen.svg" class="flow-item" alt="Inverter">
       <div class="ion-padding" fxFlex>
-        <div>Usage: {{ inverterUsage$ | async | kw }}</div>
+        <app-utilization class="utilization" [percent]="inverterUtilization$ | async"></app-utilization>
         <div>Utilization: {{ inverterUtilization$ | async | number: '1.0-0' }} %</div>
+        <div>Usage: {{ inverterUsage$ | async | kw }}</div>
         <div>Inverter to battery: {{ inverterToBattery$ | async }}</div>
         <div>Inverter to house: {{ inverterToHouse$ | async }}</div>
         <div>Inverter to grid: {{ inverterToGrid$ | async }}</div>
