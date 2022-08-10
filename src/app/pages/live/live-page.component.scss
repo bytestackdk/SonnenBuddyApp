@@ -1,5 +1,55 @@
-.aha {
-  display: none;
+.live-view {
+  //border: 1px solid purple;
+  font-size: 0.8em;
+
+  .utilization-wrapper {
+    width: 50px;
+
+    .utilization-bar {
+      height: 16px;
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .sonnen-box {
+    width: 300px;
+    height: 200px;
+    padding: 16px;
+
+    @media (prefers-color-scheme: dark) {
+      border: 1px solid white;
+    }
+    @media (prefers-color-scheme: light) {
+      border: 1px solid black;
+    }
+
+    .battery {
+      margin: auto;
+    }
+
+    .logo {
+    }
+
+    .inverter {
+    }
+  }
+
+  .consume-box {
+    width: 300px;
+    height: 200px;
+    padding: 16px;
+
+    .grid {
+      margin-top: 90px;
+    }
+  }
+
+  .power-1 {
+    height: 100px;
+    width: 100px;
+    display: block;
+  }
 }
 
 img {
@@ -11,12 +61,13 @@ img {
   height: 30px;
   display: block;
 }
-.battery {
-  width: 50px;
-}
 
 @media (prefers-color-scheme: dark) {
+  // TODO: Remove
   .flow-item {
+    filter: invert(100%) sepia(0%) saturate(5172%) hue-rotate(123deg) brightness(123%) contrast(113%);
+  }
+  .svg-icon {
     filter: invert(100%) sepia(0%) saturate(5172%) hue-rotate(123deg) brightness(123%) contrast(113%);
   }
 }

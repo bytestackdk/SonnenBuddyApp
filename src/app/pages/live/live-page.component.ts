@@ -4,11 +4,13 @@ import * as fromDevices from '../../store/devices';
 import * as fromLatestData from '../../store/latest-data';
 import * as fromPowerMeter from '../../store/power-meter';
 import * as fromStatus from '../../store/status';
+import { LivePageFacade } from './live-page.facade';
 
 @Component({
   selector: 'app-live',
   templateUrl: 'live-page.component.html',
   styleUrls: ['live-page.component.scss'],
+  providers: [LivePageFacade],
 })
 export class LivePage {
   device$ = this.store.select(fromDevices.selectCurrentDevice);
@@ -43,7 +45,7 @@ export class LivePage {
   gridFeedIn$ = this.store.select(fromStatus.selectGridFeedIn);
   gridToHouse$ = this.store.select(fromStatus.selectGridToHouse);
 
-  constructor(private readonly store: Store) {}
+  constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 
   findDevices() {
     this.store.dispatch(fromDevices.findDevices());

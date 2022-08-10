@@ -6,10 +6,20 @@ import { IonicModule } from '@ionic/angular';
 import { KwPipe } from './pipes/kw.pipe';
 import { UtilizationComponent } from './components/utilization/utilization.component';
 import { BatteryComponent } from './components/battery/battery.component';
+import { PowerSquareComponent } from './components/power-square/power-square.component';
 
 @NgModule({
-  declarations: [KwPipe, UtilizationComponent, BatteryComponent],
+  declarations: [KwPipe, UtilizationComponent, BatteryComponent, PowerSquareComponent],
   imports: [CommonModule, IonicModule, FormsModule, FlexModule],
-  exports: [CommonModule, IonicModule, FormsModule, FlexModule, KwPipe, UtilizationComponent, BatteryComponent],
+  exports: [
+    CommonModule,
+    IonicModule,
+    FormsModule,
+    FlexModule,
+    KwPipe,
+    UtilizationComponent,
+    BatteryComponent,
+    PowerSquareComponent,
+  ],
 })
 export class SharedModule {}
