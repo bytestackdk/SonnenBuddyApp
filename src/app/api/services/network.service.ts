@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { of } from 'rxjs';
-import { INetworkDevice } from '../models/network.model';
+import { IDevice, INetworkDevice, mapToDevice } from '../models/network.model';
 import { HttpClient } from '@angular/common/http';
 import { Capacitor } from '@capacitor/core';
 import { BaseService } from './base.service';
 import { Store } from '@ngrx/store';
+import { delay, map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class NetworkService extends BaseService {
@@ -16,17 +17,19 @@ export class NetworkService extends BaseService {
   find() {
     if (Capacitor.isNativePlatform()) {
       const url = 'https://find-my.sonnen-batterie.com/find';
-      return this.nativeGet<INetworkDevice[]>(url);
+      return this.nativeGet<INetworkDevice[]>(url).pipe(
+        map((networkDevices) => networkDevices.map((networkDevice) => mapToDevice(networkDevice)))
+      );
     }
 
-    const devices: INetworkDevice[] = [
+    const devices: IDevice[] = [
       {
-        lanip: '192.168.1.6',
+        lanIp: '192.168.1.130',
         ca20: true,
         info: 'sonnenBatterie',
-        device: 162099,
+        serialNumber: 162099,
       },
     ];
-    return of(devices);
+    return of(devices).pipe(delay(1000));
   }
 }

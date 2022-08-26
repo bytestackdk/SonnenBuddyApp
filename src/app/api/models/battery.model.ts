@@ -153,18 +153,3 @@ export interface IPowerMeter {
   w_l3: number;
   w_total: number;
 }
-
-export class IC_InverterMaxPower_w {
-  static key = 'IC_InverterMaxPower_w';
-  IC_InverterMaxPower_w: string;
-}
-
-export class IC_BatteryModules {
-  static key = 'IC_BatteryModules';
-  IC_BatteryModules: string;
-}
-
-export class CM_MarketingModuleCapacity {
-  static key = 'CM_MarketingModuleCapacity';
-  CM_MarketingModuleCapacity: string;
-}

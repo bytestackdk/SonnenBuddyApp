@@ -1,14 +1,24 @@
 import { createAction, props } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
-import { IDevice } from '../../shared/models/device.model';
+import { ApiToken, IDeviceDetails } from '../../shared/models/device-details.model';
+import { IDevice } from '../../api/models/network.model';
+
+export const CLEAR_DEVICES = '[Devices] Clear';
+export const clearDevices = createAction(CLEAR_DEVICES);
 
 export const FIND_DEVICES = '[Devices] Find';
 export const FIND_DEVICES_SUCCESS = '[Devices] Find success';
 export const FIND_DEVICES_FAILED = '[Devices] Find failed';
 
-export const findDevices = createAction(FIND_DEVICES);
-export const findDevicesSuccess = createAction(FIND_DEVICES_SUCCESS, props<{ devices: IDevice[] }>());
+export const findDevices = createAction(FIND_DEVICES, props<{ stopAfterFind: boolean }>());
+export const findDevicesSuccess = createAction(
+  FIND_DEVICES_SUCCESS,
+  props<{ devices: IDevice[]; stopAfterFind: boolean }>()
+);
 export const findDevicesFailed = createAction(FIND_DEVICES_FAILED, props<{ error: HttpErrorResponse }>());
+
+export const TEST_TOKEN = '[Devices] Test token';
+export const testToken = createAction(TEST_TOKEN, props<{ apiToken: string }>());
 
 export const GET_INVERTER_MAX_POWER = '[Devices] Get inverter max power';
 export const GET_INVERTER_MAX_POWER_SUCCESS = '[Devices] Get inverter max power success';
@@ -54,3 +64,22 @@ export const setToken = createAction(SET_TOKEN, props<{ apiToken: string }>());
 
 export const SET_PANEL_CAPACITY = '[Devices] Set panel capacity';
 export const setPanelCapacity = createAction(SET_PANEL_CAPACITY, props<{ panelCapacity: number }>());
+
+export const SET_DEVICE_DETAILS = '[Devices] Set device details';
+export const setDeviceDetails = createAction(
+  SET_DEVICE_DETAILS,
+  props<{ deviceSerialNumber: number; details: IDeviceDetails }>()
+);
+
+export const FINISH_WIZARD = '[Platform] Finish wizard';
+export const finishWizard = createAction(
+  FINISH_WIZARD,
+  props<{
+    apiToken: ApiToken;
+    device: IDevice;
+    maxPower: number;
+    batteryQuantity: number;
+    batteryModuleCapacity: number;
+    panelCapacity: number;
+  }>()
+);

@@ -5,10 +5,8 @@ import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { NetworkService } from '../../api/services/network.service';
 import * as fromActions from './devices.actions';
-import { INetworkDevice } from '../../api/models/network.model';
-import { IDevice } from '../../shared/models/device.model';
+import * as fromPlatform from '../platform/platform.actions';
 import { BatteryService } from '../../api/services/battery.service';
-import { getInverterMaxPowerFailed } from './devices.actions';
 
 @Injectable()
 export class DevicesEffects {
@@ -22,11 +20,12 @@ export class DevicesEffects {
   findDevices$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromActions.findDevices),
-      exhaustMap(() =>
+      exhaustMap(({ stopAfterFind }) =>
         this.deviceService.find().pipe(
           map((devices) =>
             fromActions.findDevicesSuccess({
-              devices: devices.map((device) => this.mapToDevice(device)),
+              devices,
+              stopAfterFind,
             })
           ),
           catchError((error) => of(fromActions.findDevicesFailed({ error })))
@@ -35,51 +34,74 @@ export class DevicesEffects {
     );
   });
 
-  getInverterMaxPower$ = createEffect(() => {
+  finishWizard$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.getInverterMaxPower),
-      exhaustMap(() =>
-        this.batteryService.getInverterMaxPower().pipe(
-          map((maxPower) => fromActions.getInverterMaxPowerSuccess({ maxPower })),
-          catchError((error) => of(fromActions.getInverterMaxPowerFailed({ error })))
-        )
-      )
+      ofType(fromActions.finishWizard),
+      map(() => fromPlatform.gotoLivePage())
     );
   });
 
-  getBatteryQuantity$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.getBatteryQuantity),
-      exhaustMap(() =>
-        this.batteryService.getBatteryQuantity().pipe(
-          map((batteryQuantity) => fromActions.getBatteryQuantitySuccess({ batteryQuantity })),
-          catchError((error) => of(fromActions.getBatteryQuantityFailed({ error })))
-        )
-      )
-    );
-  });
+  // testToken$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromActions.testToken),
+  //     map(() => fromActions.setToken())
+  //   );
+  // });
+  //
+  // testTokenInverterMaxPower$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromActions.testToken),
+  //     map(() => fromActions.getInverterMaxPower())
+  //   );
+  // });
+  //
+  // testTokenBatteryQuantity$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromActions.testToken),
+  //     map(() => fromActions.getBatteryQuantity())
+  //   );
+  // });
+  //
+  // testTokenBatteryModuleCapacity$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromActions.testToken),
+  //     map(() => fromActions.getBatteryModuleCapacity())
+  //   );
+  // });
 
-  getBatteryModuleCapacity$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(fromActions.getBatteryModuleCapacity),
-      exhaustMap(() =>
-        this.batteryService.getBatteryModuleCapacity().pipe(
-          map((batteryModuleCapacity) => fromActions.getBatteryModuleCapacitySuccess({ batteryModuleCapacity })),
-          catchError((error) => of(fromActions.getBatteryModuleCapacityFailed({ error })))
-        )
-      )
-    );
-  });
-
-  private mapToDevice(networkDevice: INetworkDevice) {
-    const { ca20, info, device } = networkDevice;
-    const battery: IDevice = {
-      lanIp: networkDevice.lanip,
-      serialNumber: device,
-      ca20,
-      info,
-    };
-
-    return battery;
-  }
+  // getInverterMaxPower$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromActions.getInverterMaxPower),
+  //     exhaustMap(() =>
+  //       this.batteryService.getInverterMaxPower().pipe(
+  //         map((maxPower) => fromActions.getInverterMaxPowerSuccess({ maxPower })),
+  //         catchError((error) => of(fromActions.getInverterMaxPowerFailed({ error })))
+  //       )
+  //     )
+  //   );
+  // });
+  //
+  // getBatteryQuantity$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromActions.getBatteryQuantity),
+  //     exhaustMap(() =>
+  //       this.batteryService.getBatteryQuantity().pipe(
+  //         map((batteryQuantity) => fromActions.getBatteryQuantitySuccess({ batteryQuantity })),
+  //         catchError((error) => of(fromActions.getBatteryQuantityFailed({ error })))
+  //       )
+  //     )
+  //   );
+  // });
+  //
+  // getBatteryModuleCapacity$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromActions.getBatteryModuleCapacity),
+  //     exhaustMap(() =>
+  //       this.batteryService.getBatteryModuleCapacity().pipe(
+  //         map((batteryModuleCapacity) => fromActions.getBatteryModuleCapacitySuccess({ batteryModuleCapacity })),
+  //         catchError((error) => of(fromActions.getBatteryModuleCapacityFailed({ error })))
+  //       )
+  //     )
+  //   );
+  // });
 }

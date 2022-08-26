@@ -1,16 +1,4 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> Live 1 </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Live 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div class="ion-padding">
     <div class="live-view" fxLayout="column" fxLayoutAlign="start center">
       <div class="utilization-wrapper" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="12px">
@@ -24,6 +12,7 @@
             <app-utilization class="utilization-bar" [percent]="batteryUtilization$ | async"></app-utilization>
             <app-battery class="battery" [percent]="batteryCharge$ | async"></app-battery>
             <div>{{ batteryCharge$ | async }}%</div>
+            <div>{{ batteryUsage$ | async | kw }}</div>
             <!--<div>{{ batteryRemaining$ | async | kw }}h</div>-->
           </div>
         </div>

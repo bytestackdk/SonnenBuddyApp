@@ -1,7 +1,7 @@
 import { createSelector } from '@ngrx/store';
 import { statusFeature } from './status.reducer';
 import * as fromDevices from '../devices/devices.selectors';
-import { selectCurrentDeviceBatteryCapacity, selectCurrentDeviceInverterMaxPower } from '../devices/devices.selectors';
+import { selectActiveDeviceBatteryCapacity, selectActiveDeviceInverterMaxPower } from '../devices/devices.selectors';
 import * as timeFunctions from '../../shared/functions/timespan';
 
 export const selectStatus = createSelector(statusFeature.selectStatusState, (state) => state.entity);
@@ -9,7 +9,7 @@ export const selectStatusError = createSelector(statusFeature.selectStatusState,
 
 export const selectSolarProduction = createSelector(selectStatus, (entity) => entity?.Production_W || 0);
 export const selectSolarUtilization = createSelector(
-  fromDevices.selectCurrentDevicePanelCapacity,
+  fromDevices.selectActiveDevicePanelCapacity,
   selectSolarProduction,
   (capacity, production) => (production / capacity) * 100
 );
@@ -21,7 +21,7 @@ export const selectBatteryCharging = createSelector(selectStatus, (entity) => en
 export const selectBatteryDischarging = createSelector(selectStatus, (entity) => entity?.BatteryDischarging);
 export const selectBatteryUsage = createSelector(selectStatus, (entity) => entity?.Pac_total_W);
 export const selectBatteryUtilization = createSelector(
-  fromDevices.selectCurrentDeviceBatteryMaxPower,
+  fromDevices.selectActiveDeviceBatteryMaxPower,
   selectBatteryUsage,
   (capacity, current) => (!!current ? Math.abs((current / capacity) * 100) : 0)
 );
@@ -29,7 +29,7 @@ export const selectBatteryChargePercent = createSelector(selectStatus, (entity) 
 export const selectBatteryRemaining = createSelector(selectStatus, (entity) => entity?.RemainingCapacity_Wh);
 export const selectBatteryChargingTime = createSelector(
   selectBatteryCharging,
-  fromDevices.selectCurrentDeviceBatteryCapacity,
+  fromDevices.selectActiveDeviceBatteryCapacity,
   selectBatteryRemaining,
   selectBatteryUsage,
   (charging, capacity, batteryRemaining, currentUsage) => {
@@ -73,7 +73,7 @@ export const selectInverterCurrentPower = createSelector(selectStatus, (entity) 
 });
 
 export const selectInverterUtilization = createSelector(
-  selectCurrentDeviceInverterMaxPower,
+  selectActiveDeviceInverterMaxPower,
   selectInverterCurrentPower,
   (capacity, current) => (current / capacity) * 100
 );

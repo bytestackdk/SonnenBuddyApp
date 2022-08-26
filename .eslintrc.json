@@ -45,7 +45,8 @@
         "@typescript-eslint/member-ordering": [
           "error",
           { "default": ["signature", "method", "field"] }
-        ]
+        ],
+        "@typescript-eslint/member-ordering": ["off"]
       }
     },
     {

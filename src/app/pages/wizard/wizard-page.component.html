@@ -1,0 +1,166 @@
+<ion-content [fullscreen]="true" [scrollY]="false">
+  <swiper class="swiper" #swiper [allowTouchMove]="false">
+    <ng-template swiperSlide>
+      <div class="step" fxLayout="column">
+        <div fxFlex>
+          <div style="height: 100px">-LOGO HERE-</div>
+          <h2>Sonnen Buddy</h2>
+          <p>
+            This app will allow you to do realtime monitoring of your sonnenBatterie and make changes to its
+            configuration
+          </p>
+          <p>Let's get started</p>
+        </div>
+        <ion-button (click)="next()">Next</ion-button>
+      </div>
+    </ng-template>
+
+    <ng-template swiperSlide>
+      <div class="step" fxLayout="column">
+        <div>
+          <h2>Find your sonnenBatterie</h2>
+          <p>
+            Sonnen Buddy will try and find the sonnenBatterie on your network. Make sure you're connected to the same
+            network as the sonnenBatterie and don't have any VPN running.
+          </p>
+          <p>Make sure that:</p>
+          <ul class="left-align">
+            <li>You're connected to the same network as the sonnenBatterie</li>
+            <li>You don't have any VPN running or blocking the local network access</li>
+          </ul>
+        </div>
+
+        <div fxFlex>
+          <ion-button (click)="find()" [disabled]="componentStore.loading$ | async">Find sonnenBatterie</ion-button>
+
+          <ion-card
+            *ngIf="
+              (componentStore.loading$ | async) || (componentStore.device$ | async) || (componentStore.error$ | async)
+            "
+          >
+            <ion-card-content>
+              <ion-spinner *ngIf="componentStore.loading$ | async"></ion-spinner>
+
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                fxLayoutGap="24px"
+                *ngIf="componentStore.device$ | async as device"
+              >
+                <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
+                <p class="left-align">
+                  IP: <b>{{ device.lanIp }}</b
+                  ><br />
+                  Serial number: <b>{{ device.serialNumber }}</b>
+                </p>
+                <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
+              </div>
+
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                fxLayoutGap="24px"
+                *ngIf="componentStore.error$ | async as error"
+              >
+                <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
+                <p>There was an error<br />Please try again</p>
+                <ion-icon class="icon" name="alert-sharp" color="danger"></ion-icon>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <ion-button (click)="next()" [disabled]="componentStore.noDevice$ | async">Next</ion-button>
+      </div>
+    </ng-template>
+
+    <ng-template swiperSlide>
+      <div class="step" fxLayout="column">
+        <div>
+          <h2>API Token</h2>
+          <p>Please provide the access token to communicate with your sonnenBatterie. Follow below steps:</p>
+          <ul class="left-align">
+            <li>
+              Open a browser on this address: <b>http://{{ componentStore.lanIp$ | async }}</b>
+            </li>
+            <li>Select User and try this password: <b>sonnenUser3552</b></li>
+            <li>Go to Software-Integration and enable <b>Read API</b> and <b>Write API</b></li>
+            <li>Input the API token below and click the button</li>
+          </ul>
+          <ion-item>
+            <ion-label position="floating">API Token</ion-label>
+            <ion-input (ionChange)="updateToken($event)" value="5cb9e400-dac7-4211-942d-c03eeaaed186"></ion-input>
+          </ion-item>
+        </div>
+
+        <div fxFlex>
+          <ion-button (click)="testToken()" [disabled]="componentStore.apiTokenInvalid$ | async">Test token</ion-button>
+
+          <ion-card
+            *ngIf="
+              (componentStore.loading$ | async) ||
+              (componentStore.apiTokenTested$ | async) ||
+              (componentStore.error$ | async)
+            "
+          >
+            <ion-card-content>
+              <ion-spinner *ngIf="componentStore.loading$ | async"></ion-spinner>
+
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                fxLayoutGap="24px"
+                *ngIf="componentStore.apiTokenTested$ | async"
+              >
+                <p class="left-align">
+                  Inverter max power: <b>{{ componentStore.maxPower$ | async }}W</b><br />
+                  Module capacity: <b>{{ componentStore.batteryModuleCapacity$ | async }}W</b><br />
+                  Battery modules: <b>{{ componentStore.batteryQuantity$ | async }}</b>
+                </p>
+                <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
+              </div>
+
+              <div
+                fxLayout="row"
+                fxLayoutAlign="center center"
+                fxLayoutGap="24px"
+                *ngIf="componentStore.error$ | async as error"
+              >
+                <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
+                <p>There was an error<br />Please try again</p>
+                <ion-icon class="icon" name="alert-sharp" color="danger"></ion-icon>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+
+        <ion-button (click)="next()" [disabled]="componentStore.apiTokenUntested$ | async">Next</ion-button>
+      </div>
+    </ng-template>
+
+    <ng-template swiperSlide>
+      <div class="step" fxLayout="column">
+        <div fxFlex>
+          <img src="assets/ph.svg" class="svg-icon" alt="Solar panels" />
+          <h2>Solar Output</h2>
+          <p>Please input how many panels you have and the output of a single panel.</p>
+          <p>This is used to calculate the utilization of your solar panels.</p>
+          <ion-item>
+            <ion-label position="floating">Number of panels</ion-label>
+            <ion-input type="number" (ionChange)="updatePanelQuantity($event)"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Power output per panel in Watts</ion-label>
+            <ion-input type="number" (ionChange)="updatePanelPowerOutput($event)"></ion-input>
+          </ion-item>
+          <h2>Total capacity</h2>
+          <h2>{{ componentStore.panelTotalCapacity$ | async | kw }}</h2>
+        </div>
+
+        <ion-button (click)="finish()" [disabled]="(componentStore.panelTotalCapacity$ | async) < 100"
+          >Finish</ion-button
+        >
+      </div>
+    </ng-template>
+  </swiper>
+</ion-content>

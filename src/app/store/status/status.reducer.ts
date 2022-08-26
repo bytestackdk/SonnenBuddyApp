@@ -32,6 +32,9 @@ export const statusFeature = createFeature({
         ...state,
         ...LoadingState.failed(error),
       })
-    )
+    ),
+    on(fromActions.clearStatus, (state) => ({
+      ...initialState,
+    }))
   ),
 });

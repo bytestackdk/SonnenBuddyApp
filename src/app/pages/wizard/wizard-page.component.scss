@@ -1,0 +1,41 @@
+.swiper {
+  padding-top: 50px;
+}
+
+.step {
+  padding: 0 20px 20px 20px;
+
+  .item {
+    margin-bottom: 16px;
+  }
+}
+
+.swiper,
+.step {
+  height: 100%;
+}
+
+p,
+li {
+  font-size: 14px;
+}
+
+li {
+  margin-bottom: 8px;
+  vertical-align: top;
+}
+
+.left-align {
+  text-align: left;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .svg-icon {
+    filter: invert(100%) sepia(0%) saturate(5172%) hue-rotate(123deg) brightness(123%) contrast(113%);
+  }
+}

@@ -1,11 +1,13 @@
 import { Directive } from '@angular/core';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { selectCurrentDevice } from '../../store/devices';
+import { selectActiveDeviceTokenAndIP } from '../../store/devices';
 import { Store } from '@ngrx/store';
-import { from, Observable } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { from, iif, Observable, of } from 'rxjs';
+import { map, mergeMap, switchMap, take } from 'rxjs/operators';
 import { Capacitor } from '@capacitor/core';
+import { ApiToken } from '../../shared/models/device-details.model';
+import { IP } from '../models/network.model';
 
 @Directive()
 export class BaseService {
@@ -15,8 +17,12 @@ export class BaseService {
     protected readonly store: Store
   ) {}
 
-  protected get<T>(url: string): Observable<T> {
-    return this.store.select(selectCurrentDevice).pipe(
+  protected get<T>(url: string, apiToken?: ApiToken, lanIp?: IP): Observable<T> {
+    const useOverride$ = of({ apiToken, lanIp });
+    const useStore$ = this.store.select(selectActiveDeviceTokenAndIP);
+
+    return of({}).pipe(
+      mergeMap(() => iif(() => !!apiToken && !!lanIp, useOverride$, useStore$)),
       take(1),
       switchMap((device) => {
         // eslint-disable-next-line @typescript-eslint/naming-convention

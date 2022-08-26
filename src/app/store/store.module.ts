@@ -9,6 +9,7 @@ import { StatusEffects } from './status/status.effects';
 import { LatestDataEffects } from './latest-data/latest-data.effects';
 import { PowerMeterEffects } from './power-meter/power-meter.effects';
 import { ToastEffects } from './toast/toast.effects';
+import { PlatformEffects } from './platform/platform.effects';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { ToastEffects } from './toast/toast.effects';
     EffectsModule.forRoot([
       DevicesEffects,
       LatestDataEffects,
+      PlatformEffects,
       PowerMeterEffects,
       StatusEffects,
       ToastEffects,

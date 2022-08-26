@@ -13,12 +13,12 @@ import { LivePageFacade } from './live-page.facade';
   providers: [LivePageFacade],
 })
 export class LivePage {
-  device$ = this.store.select(fromDevices.selectCurrentDevice);
+  device$ = this.store.select(fromDevices.selectActiveDevice);
   latestData$ = this.store.select(fromLatestData.selectLatestData);
   powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
   status$ = this.store.select(fromStatus.selectStatus);
 
-  solarCapacity$ = this.store.select(fromDevices.selectCurrentDevicePanelCapacity);
+  solarCapacity$ = this.store.select(fromDevices.selectActiveDevicePanelCapacity);
   solarProduction$ = this.store.select(fromStatus.selectSolarProduction);
   solarUtilization$ = this.store.select(fromStatus.selectSolarUtilization);
   solarToBattery$ = this.store.select(fromStatus.selectSolarToBattery);
@@ -48,7 +48,7 @@ export class LivePage {
   constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 
   findDevices() {
-    this.store.dispatch(fromDevices.findDevices());
+    this.store.dispatch(fromDevices.findDevices({ stopAfterFind: true }));
   }
 
   getInverterMaxPower() {

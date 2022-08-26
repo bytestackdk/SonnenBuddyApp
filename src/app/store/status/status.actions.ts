@@ -9,3 +9,12 @@ export const GET_STATUS_FAILED = '[Battery] Get status failed';
 export const getBatteryStatus = createAction(GET_STATUS);
 export const getBatteryStatusSuccess = createAction(GET_STATUS_SUCCESS, props<{ status: IBatteryStatus }>());
 export const getBatteryStatusFailed = createAction(GET_STATUS_FAILED, props<{ error: HttpErrorResponse }>());
+
+export const CLEAR_STATUS = '[Battery] Clear status';
+export const clearStatus = createAction(CLEAR_STATUS);
+
+export const START_POLLING = '[Battery] Start polling';
+export const STOP_POLLING = '[Battery] Stop polling';
+
+export const startPolling = createAction(START_POLLING);
+export const stopPolling = createAction(STOP_POLLING);
