@@ -19,9 +19,25 @@ export interface IWizardState {
   maxPower: number;
   batteryQuantity: number;
   batteryModuleCapacity: number;
+  showFindHelp: boolean;
+  showTokenHelp: boolean;
   loading: boolean;
   error: any;
 }
+
+export const initialState: IWizardState = {
+  device: null,
+  apiToken: null,
+  panelPowerOutput: null,
+  panelQuantity: null,
+  maxPower: null,
+  batteryQuantity: null,
+  batteryModuleCapacity: null,
+  showFindHelp: false,
+  showTokenHelp: false,
+  loading: false,
+  error: null,
+};
 
 @Injectable()
 export class WizardPageStore extends ComponentStore<IWizardState> {
@@ -40,6 +56,8 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   readonly batteryQuantity$ = this.select((state) => state.batteryQuantity);
   readonly batteryModuleCapacity$ = this.select((state) => state.batteryModuleCapacity);
   readonly panelTotalCapacity$ = this.select((state) => state.panelPowerOutput * state.panelQuantity);
+  readonly showFindHelp$ = this.select((state) => state.showFindHelp);
+  readonly showTokenHelp$ = this.select((state) => state.showTokenHelp);
   readonly loading$ = this.select((state) => state.loading);
   readonly error$ = this.select((state) => state.error);
 
@@ -48,23 +66,19 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
     private readonly networkService: NetworkService,
     private readonly store: Store
   ) {
-    super({
-      device: null,
-      apiToken: null,
-      panelPowerOutput: null,
-      panelQuantity: null,
-      maxPower: null,
-      batteryQuantity: null,
-      batteryModuleCapacity: null,
-      loading: false,
-      error: null,
-    });
+    super({ ...initialState });
+  }
+
+  toggleFindHelp(showFindHelp: boolean) {
+    this.patchState((state) => ({ showFindHelp }));
+  }
+
+  toggleTokenHelp(showTokenHelp: boolean) {
+    this.patchState((state) => ({ showTokenHelp }));
   }
 
   setToken(apiToken: ApiToken) {
-    this.patchState((state) => ({
-      apiToken,
-    }));
+    this.patchState((state) => ({ apiToken }));
   }
 
   setPanelPowerOutput(panelPowerOutput: number) {
@@ -86,7 +100,11 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
     );
   }
 
-  readonly find = this.effect((trigger$) => {
+  reset() {
+    this.setState((state) => ({ ...initialState }));
+  }
+
+  readonly findDevice = this.effect((trigger$) => {
     return trigger$.pipe(
       tap(() => this.patchState({ device: null, loading: true, error: null })),
       switchMap(() =>
@@ -125,7 +143,6 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
                 maxPower,
                 batteryQuantity,
                 batteryModuleCapacity,
-                apiToken,
                 loading: false,
               });
             },

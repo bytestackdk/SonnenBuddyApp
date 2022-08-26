@@ -2,11 +2,13 @@ import { Component, ViewChild } from '@angular/core';
 import { SwiperComponent } from 'swiper/angular';
 import { WizardPageStore } from './wizard-page.store';
 import { ApiToken } from '../../shared/models/device-details.model';
+import { WizardPageService } from './wizard-page.service';
 
 @Component({
   selector: 'app-wizard',
   templateUrl: './wizard-page.component.html',
   styleUrls: ['./wizard-page.component.scss'],
+  providers: [WizardPageService, WizardPageStore],
 })
 export class WizardPage {
   @ViewChild('swiper', { static: false }) swiper?: SwiperComponent;
@@ -17,8 +19,16 @@ export class WizardPage {
     this.swiper.swiperRef.slideNext(100);
   }
 
-  find() {
-    this.componentStore.find();
+  findDevice() {
+    this.componentStore.findDevice();
+  }
+
+  toggleFindHelp(show: boolean) {
+    this.componentStore.toggleFindHelp(show);
+  }
+
+  toggleTokenHelp(show: boolean) {
+    this.componentStore.toggleTokenHelp(show);
   }
 
   testToken() {
@@ -26,7 +36,7 @@ export class WizardPage {
   }
 
   updateToken(e: CustomEvent<{ value: ApiToken }>) {
-    this.componentStore.setToken(e.detail.value);
+    this.componentStore.setToken(e.detail.value.trim());
   }
 
   updatePanelQuantity(e: CustomEvent<{ value: number }>) {
@@ -47,5 +57,9 @@ export class WizardPage {
 
   finish() {
     this.componentStore.finish();
+    this.componentStore.reset();
+
+    // Reset position
+    setTimeout(() => this.swiper.swiperRef.slideTo(0, 100), 2000);
   }
 }

@@ -30,6 +30,6 @@ export class NetworkService extends BaseService {
         serialNumber: 162099,
       },
     ];
-    return of(devices).pipe(delay(1000));
+    return of(devices);
   }
 }

@@ -16,7 +16,8 @@
 }
 
 p,
-li {
+li,
+ion-input {
   font-size: 14px;
 }
 
@@ -25,13 +26,13 @@ li {
   vertical-align: top;
 }
 
-.left-align {
-  text-align: left;
-}
-
 .icon {
   width: 24px;
   height: 24px;
+}
+
+.half-width {
+  min-width: 50%;
 }
 
 @media (prefers-color-scheme: dark) {

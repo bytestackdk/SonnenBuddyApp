@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Platform } from '@ionic/angular';
 import * as fromPlatform from './store/platform';
+import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,20 @@ import * as fromPlatform from './store/platform';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  constructor(private readonly store: Store, private readonly platform: Platform) {}
+  constructor(
+    private readonly store: Store,
+    private readonly screenOrientation: ScreenOrientation,
+    private readonly platform: Platform
+  ) {}
 
   ngOnInit() {
-    this.platform.ready().then(() => this.store.dispatch(fromPlatform.platformReady()));
+    this.platform.ready().then(() => {
+      if (!this.platform.url().startsWith('http')) {
+        this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      }
+
+      this.store.dispatch(fromPlatform.platformReady());
+    });
   }
 
   ngOnDestroy() {
