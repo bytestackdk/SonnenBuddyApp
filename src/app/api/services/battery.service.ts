@@ -2,10 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
-import { IBatteryStatus, ILatestData, IPowerMeter } from '../models/battery.model';
+import { ConfigurationKey, IBatteryStatus, ILatestData, IPowerMeter, OperatingMode } from '../models/battery.model';
 import { BaseService } from './base.service';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { ApiToken } from '../../shared/models/device-details.model';
+import { IP } from '../models/network.model';
 
 @Injectable({ providedIn: 'root' })
 export class BatteryService extends BaseService {
@@ -30,5 +32,19 @@ export class BatteryService extends BaseService {
 
   getPowerMeter() {
     return this.get<IPowerMeter[]>('api/v2/powermeter');
+  }
+
+  getOperatingMode() {
+    return this.getConfiguration(ConfigurationKey.EM_OperatingMode) as Observable<OperatingMode>;
+  }
+
+  getConfigurationAsNumber(key: ConfigurationKey, apiToken?: ApiToken, lanIp?: IP) {
+    return this.getConfiguration(key, apiToken, lanIp).pipe(map((configuration) => parseInt(configuration, 10)));
+  }
+
+  getConfiguration(key: ConfigurationKey, apiToken?: ApiToken, lanIp?: IP) {
+    return this.get<Record<string, string>>('api/v2/configurations/' + key, apiToken, lanIp).pipe(
+      map((configuration) => configuration[key])
+    );
   }
 }

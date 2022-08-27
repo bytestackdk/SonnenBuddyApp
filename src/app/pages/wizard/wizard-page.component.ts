@@ -2,13 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { SwiperComponent } from 'swiper/angular';
 import { WizardPageStore } from './wizard-page.store';
 import { ApiToken } from '../../shared/models/device-details.model';
-import { WizardPageService } from './wizard-page.service';
 
 @Component({
   selector: 'app-wizard',
   templateUrl: './wizard-page.component.html',
   styleUrls: ['./wizard-page.component.scss'],
-  providers: [WizardPageService, WizardPageStore],
+  providers: [WizardPageStore],
 })
 export class WizardPage {
   @ViewChild('swiper', { static: false }) swiper?: SwiperComponent;

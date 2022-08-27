@@ -26,12 +26,10 @@ export const selectActiveDeviceTokenAndIP = createSelector(selectActiveDevice, (
   return { apiToken, lanIp };
 });
 
-export const selectActiveDeviceIp = createSelector(selectActiveDevice, (device) => device?.lanIp);
-export const selectActiveDeviceApiToken = createSelector(selectActiveDevice, (device) => device.apiToken);
 export const selectActiveDevicePanelCapacity = createSelector(selectActiveDevice, (device) => device.panelCapacity);
 export const selectActiveDeviceInverterMaxPower = createSelector(selectActiveDevice, (device) => device.maxPower);
-// https://www.myenergy.dk/wp-content/uploads/2021/01/Sonnen-Hybrid-9.53.pdf
 export const selectActiveDeviceBatteryMaxPower = createSelector(selectActiveDevice, (device) =>
+  // https://www.myenergy.dk/wp-content/uploads/2021/01/Sonnen-Hybrid-9.53.pdf
   device.batteryQuantity === 1 ? 2500 : 3300
 );
 export const selectActiveDeviceBatteryCapacity = createSelector(

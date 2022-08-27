@@ -8,9 +8,10 @@ import { UtilizationComponent } from './components/utilization/utilization.compo
 import { BatteryComponent } from './components/battery/battery.component';
 import { PowerSquareComponent } from './components/power-square/power-square.component';
 import { SwiperModule } from 'swiper/angular';
+import { OmPipe } from './pipes/om.pipe';
 
 @NgModule({
-  declarations: [KwPipe, UtilizationComponent, BatteryComponent, PowerSquareComponent],
+  declarations: [KwPipe, OmPipe, UtilizationComponent, BatteryComponent, PowerSquareComponent],
   imports: [CommonModule, IonicModule, FormsModule, FlexModule, SwiperModule],
   exports: [
     BatteryComponent,
@@ -19,6 +20,7 @@ import { SwiperModule } from 'swiper/angular';
     FormsModule,
     IonicModule,
     KwPipe,
+    OmPipe,
     PowerSquareComponent,
     SwiperModule,
     UtilizationComponent,

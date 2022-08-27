@@ -11,5 +11,90 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-datetime presentation="time"></ion-datetime>
+  <div
+    fxLayout="column"
+    fxLayoutAlign="center center"
+    [style.height]="'100%'"
+    *ngIf="componentStore.loading$ | async; else content"
+  >
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ng-template #content>
+    <ion-card *ngIf="componentStore.scheduleDisabled$ | async; else schedule">
+      <ion-card-header>
+        <ion-card-subtitle>Operating Mode</ion-card-subtitle>
+        <ion-card-title class="card-title" color="primary">
+          {{ componentStore.operatingMode$ | async | om }}
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p>
+          To set a schedule sonnenBatterie charge and discharge stop, the operation mode must be set to
+          <ion-text color="primary">{{ OperatingMode.TimeOfUse | om }}</ion-text> - You can change the current operating
+          mode under Settings.
+        </p>
+      </ion-card-content>
+    </ion-card>
+
+    <ng-template #schedule>
+      <ion-list-header>
+        <ion-label>New This Week</ion-label>
+        <ion-button fill="outline">Add</ion-button>
+      </ion-list-header>
+
+      <!--      <ion-list>-->
+      <!--        <ion-item>-->
+      <!--          <ion-label>Input</ion-label>-->
+      <!--          <ion-input></ion-input>-->
+      <!--        </ion-item>-->
+      <!--        <ion-item>-->
+      <!--          <ion-label>Toggle</ion-label>-->
+      <!--          <ion-toggle slot="end"></ion-toggle>-->
+      <!--        </ion-item>-->
+      <!--        <ion-item>-->
+      <!--          <ion-label>Radio</ion-label>-->
+      <!--          <ion-radio slot="end"></ion-radio>-->
+      <!--        </ion-item>-->
+      <!--        <ion-item>-->
+      <!--          <ion-label>Checkbox</ion-label>-->
+      <!--          <ion-checkbox slot="start"></ion-checkbox>-->
+      <!--        </ion-item>-->
+      <!--      </ion-list>-->
+
+      <ion-list>
+        <ion-list-header lines="inset">
+          <ion-label>Active</ion-label>
+          <ion-button>Clear</ion-button>
+        </ion-list-header>
+
+        <ion-item-sliding>
+          <ion-item>
+            <ion-label>Item</ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option (click)="removeEvent(1)" color="warning">Remove</ion-item-option>
+            <ion-item-option (click)="disableEvent(1)">Disable</ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+
+        <ion-list-header lines="inset">
+          <ion-label>Disabled</ion-label>
+          <ion-button>Clear</ion-button>
+        </ion-list-header>
+
+        <ion-item-sliding>
+          <ion-item>
+            <ion-label>Item</ion-label>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option (click)="removeEvent(2)">Remove</ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </ion-list>
+    </ng-template>
+  </ng-template>
+
+  <!--  <ion-datetime presentation="time"></ion-datetime>-->
 </ion-content>

@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromDevices from '../../store/devices';
-import * as fromLatestData from '../../store/latest-data';
-import * as fromPowerMeter from '../../store/power-meter';
 import * as fromStatus from '../../store/status';
 import { LivePageFacade } from './live-page.facade';
 
@@ -13,10 +11,10 @@ import { LivePageFacade } from './live-page.facade';
   providers: [LivePageFacade],
 })
 export class LivePage {
-  device$ = this.store.select(fromDevices.selectActiveDevice);
-  latestData$ = this.store.select(fromLatestData.selectLatestData);
-  powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
-  status$ = this.store.select(fromStatus.selectStatus);
+  // device$ = this.store.select(fromDevices.selectActiveDevice);
+  // latestData$ = this.store.select(fromLatestData.selectLatestData);
+  // powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
+  // status$ = this.store.select(fromStatus.selectStatus);
 
   solarCapacity$ = this.store.select(fromDevices.selectActiveDevicePanelCapacity);
   solarProduction$ = this.store.select(fromStatus.selectSolarProduction);
@@ -47,39 +45,39 @@ export class LivePage {
 
   constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 
-  findDevices() {
-    this.store.dispatch(fromDevices.findDevices({ stopAfterFind: true }));
-  }
-
-  getInverterMaxPower() {
-    this.store.dispatch(fromDevices.getInverterMaxPower());
-  }
-
-  getBatteryQuantity() {
-    this.store.dispatch(fromDevices.getBatteryQuantity());
-  }
-
-  getBatteryModuleCapacity() {
-    this.store.dispatch(fromDevices.getBatteryModuleCapacity());
-  }
-
-  setToken() {
-    this.store.dispatch(fromDevices.setToken({ apiToken: '5cb9e400-dac7-4211-942d-c03eeaaed186' }));
-  }
-
-  setPanelCapacity(panelCapacity: number) {
-    this.store.dispatch(fromDevices.setPanelCapacity({ panelCapacity }));
-  }
-
-  getStatus() {
-    this.store.dispatch(fromStatus.getBatteryStatus());
-  }
-
-  getLatestData() {
-    this.store.dispatch(fromLatestData.getLatestData());
-  }
-
-  getPowerMeter() {
-    this.store.dispatch(fromPowerMeter.getPowerMeter());
-  }
+  // findDevices() {
+  //   this.store.dispatch(fromDevices.findDevices({ stopAfterFind: true }));
+  // }
+  //
+  // getInverterMaxPower() {
+  //   this.store.dispatch(fromDevices.getInverterMaxPower());
+  // }
+  //
+  // getBatteryQuantity() {
+  //   this.store.dispatch(fromDevices.getBatteryQuantity());
+  // }
+  //
+  // getBatteryModuleCapacity() {
+  //   this.store.dispatch(fromDevices.getBatteryModuleCapacity());
+  // }
+  //
+  // setToken() {
+  //   this.store.dispatch(fromDevices.setToken({ apiToken: '5cb9e400-dac7-4211-942d-c03eeaaed186' }));
+  // }
+  //
+  // setPanelCapacity(panelCapacity: number) {
+  //   this.store.dispatch(fromDevices.setPanelCapacity({ panelCapacity }));
+  // }
+  //
+  // getStatus() {
+  //   this.store.dispatch(fromStatus.getBatteryStatus());
+  // }
+  //
+  // getLatestData() {
+  //   this.store.dispatch(fromLatestData.getLatestData());
+  // }
+  //
+  // getPowerMeter() {
+  //   this.store.dispatch(fromPowerMeter.getPowerMeter());
+  // }
 }

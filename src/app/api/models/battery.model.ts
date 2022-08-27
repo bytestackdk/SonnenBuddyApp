@@ -1,5 +1,19 @@
 export type DateString = string;
 
+export enum ConfigurationKey {
+  IC_InverterMaxPower_w = 'IC_InverterMaxPower_w',
+  IC_BatteryModules = 'IC_BatteryModules',
+  CM_MarketingModuleCapacity = 'CM_MarketingModuleCapacity',
+  EM_OperatingMode = 'EM_OperatingMode',
+}
+
+export enum OperatingMode {
+  Manual = '1',
+  SelfConsumption = '2',
+  BatteryModuleExtension = '6',
+  TimeOfUse = '10',
+}
+
 export interface IBatteryStatus {
   /**
    * VA, volt-ampere	All AC output of apparent power in VA

@@ -30,6 +30,21 @@ export const devicesFeature = createFeature({
       ...adapter.removeAll(state),
       details: {},
     })),
+    on(
+      fromActions.finishWizard,
+      (state, { apiToken, device, batteryModuleCapacity, batteryQuantity, maxPower, panelCapacity }) => ({
+        ...adapter.setAll([device], state),
+        activeDeviceSerialNumber: device.serialNumber,
+        details: {
+          [device.serialNumber]: { apiToken, batteryModuleCapacity, batteryQuantity, maxPower, panelCapacity },
+        },
+      })
+    ),
+    on(fromPlatform.resetApp, (state) => ({
+      ...adapter.removeAll(state),
+      activeDeviceSerialNumber: null,
+      details: {},
+    })),
     on(fromActions.findDevices, (state) => ({
       ...state,
       ...LoadingState.loading(),
@@ -45,50 +60,7 @@ export const devicesFeature = createFeature({
     on(fromActions.findDevicesFailed, (state, { error }) => ({
       ...state,
       ...LoadingState.failed(error),
-    })),
-    on(
-      fromActions.finishWizard,
-      (state, { apiToken, device, batteryModuleCapacity, batteryQuantity, maxPower, panelCapacity }) => ({
-        ...adapter.setAll([device], state),
-        activeDeviceSerialNumber: device.serialNumber,
-        details: {
-          [device.serialNumber]: { apiToken, batteryModuleCapacity, batteryQuantity, maxPower, panelCapacity },
-        },
-      })
-    ),
-    on(fromPlatform.resetApp, (state) => ({
-      ...adapter.removeAll(state),
-      activeDeviceSerialNumber: null,
-      details: {},
     }))
-
-    // From sonnenBatterie
-    // on(
-    //   fromActions.getInverterMaxPowerSuccess,
-    //   (state, { maxPower }): DevicesState => ({
-    //     ...adapter.updateOne({ id: state.activeDevice, changes: { maxPower } }, state),
-    //   })
-    // ),
-    // on(
-    //   fromActions.getBatteryQuantitySuccess,
-    //   (state, { batteryQuantity }): DevicesState => ({
-    //     ...adapter.updateOne({ id: state.activeDevice, changes: { batteryQuantity } }, state),
-    //   })
-    // ),
-    // on(
-    //   fromActions.getBatteryModuleCapacitySuccess,
-    //   (state, { batteryModuleCapacity }): DevicesState => ({
-    //     ...adapter.updateOne({ id: state.activeDevice, changes: { batteryModuleCapacity } }, state),
-    //   })
-    // ),
-
-    // From the user
-    // on(fromActions.setToken, (state, { apiToken }) => ({
-    //   ...adapter.updateOne({ id: state.activeDevice, changes: { apiToken } }, state),
-    // })),
-    // on(fromActions.setPanelCapacity, (state, { panelCapacity }) => ({
-    //   ...adapter.updateOne({ id: state.activeDevice, changes: { panelCapacity } }, state),
-    // }))
   ),
 });
 

@@ -41,67 +41,15 @@ export class DevicesEffects {
     );
   });
 
-  // testToken$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromActions.testToken),
-  //     map(() => fromActions.setToken())
-  //   );
-  // });
-  //
-  // testTokenInverterMaxPower$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromActions.testToken),
-  //     map(() => fromActions.getInverterMaxPower())
-  //   );
-  // });
-  //
-  // testTokenBatteryQuantity$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromActions.testToken),
-  //     map(() => fromActions.getBatteryQuantity())
-  //   );
-  // });
-  //
-  // testTokenBatteryModuleCapacity$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromActions.testToken),
-  //     map(() => fromActions.getBatteryModuleCapacity())
-  //   );
-  // });
-
-  // getInverterMaxPower$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromActions.getInverterMaxPower),
-  //     exhaustMap(() =>
-  //       this.batteryService.getInverterMaxPower().pipe(
-  //         map((maxPower) => fromActions.getInverterMaxPowerSuccess({ maxPower })),
-  //         catchError((error) => of(fromActions.getInverterMaxPowerFailed({ error })))
-  //       )
-  //     )
-  //   );
-  // });
-  //
-  // getBatteryQuantity$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromActions.getBatteryQuantity),
-  //     exhaustMap(() =>
-  //       this.batteryService.getBatteryQuantity().pipe(
-  //         map((batteryQuantity) => fromActions.getBatteryQuantitySuccess({ batteryQuantity })),
-  //         catchError((error) => of(fromActions.getBatteryQuantityFailed({ error })))
-  //       )
-  //     )
-  //   );
-  // });
-  //
-  // getBatteryModuleCapacity$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromActions.getBatteryModuleCapacity),
-  //     exhaustMap(() =>
-  //       this.batteryService.getBatteryModuleCapacity().pipe(
-  //         map((batteryModuleCapacity) => fromActions.getBatteryModuleCapacitySuccess({ batteryModuleCapacity })),
-  //         catchError((error) => of(fromActions.getBatteryModuleCapacityFailed({ error })))
-  //       )
-  //     )
-  //   );
-  // });
+  getOperatingMode$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromActions.getConfiguration),
+      exhaustMap(({ key }) =>
+        this.batteryService.getConfiguration(key).pipe(
+          map((configuration) => fromActions.getConfigurationSuccess({ key, configuration })),
+          catchError((error) => of(fromActions.getConfigurationFailed({ error })))
+        )
+      )
+    );
+  });
 }

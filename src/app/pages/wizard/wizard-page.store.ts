@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { ApiToken } from '../../shared/models/device-details.model';
-import { WizardPageService } from './wizard-page.service';
 import { NetworkService } from '../../api/services/network.service';
 import { Store } from '@ngrx/store';
 import { switchMap, tap } from 'rxjs/operators';
@@ -10,6 +9,8 @@ import { forkJoin } from 'rxjs';
 import { concatLatestFrom } from '@ngrx/effects';
 import { Guid } from 'guid-typescript';
 import * as fromDevices from '../../store/devices';
+import { BatteryService } from '../../api/services/battery.service';
+import { ConfigurationKey } from '../../api/models/battery.model';
 
 export interface IWizardState {
   device: IDevice;
@@ -62,7 +63,7 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   readonly error$ = this.select((state) => state.error);
 
   constructor(
-    private readonly wizardService: WizardPageService,
+    private readonly batteryService: BatteryService,
     private readonly networkService: NetworkService,
     private readonly store: Store
   ) {
@@ -132,9 +133,21 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
       concatLatestFrom(() => [this.apiToken$, this.lanIp$]),
       switchMap(([, apiToken, lanIp]) =>
         forkJoin({
-          maxPower: this.wizardService.getInverterMaxPower(apiToken, lanIp),
-          batteryQuantity: this.wizardService.getBatteryQuantity(apiToken, lanIp),
-          batteryModuleCapacity: this.wizardService.getBatteryModuleCapacity(apiToken, lanIp),
+          maxPower: this.batteryService.getConfigurationAsNumber(
+            ConfigurationKey.IC_InverterMaxPower_w,
+            apiToken,
+            lanIp
+          ),
+          batteryQuantity: this.batteryService.getConfigurationAsNumber(
+            ConfigurationKey.IC_BatteryModules,
+            apiToken,
+            lanIp
+          ),
+          batteryModuleCapacity: this.batteryService.getConfigurationAsNumber(
+            ConfigurationKey.CM_MarketingModuleCapacity,
+            apiToken,
+            lanIp
+          ),
         }).pipe(
           tapResponse(
             (configurations) => {
