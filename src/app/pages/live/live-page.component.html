@@ -1,8 +1,16 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar></ion-toolbar>
+<ion-header class="ion-no-border" translucent="true">
+  <ion-toolbar>
+    <ion-title>Live</ion-title>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-padding" fullscreen="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Live</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
   <div class="ion-padding">
     <div class="live-view" fxLayout="column" fxLayoutAlign="start center">
       <div class="utilization-wrapper" fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="12px">

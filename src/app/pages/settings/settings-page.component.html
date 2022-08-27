@@ -1,9 +1,16 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar></ion-toolbar>
+<ion-header class="ion-no-border" translucent="true">
+  <ion-toolbar>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <h2>Settings</h2>
+<ion-content class="ion-padding" fullscreen="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Settings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
   <div fxLayout="column">
     <ion-button (click)="resetApp()">Reset app</ion-button>
   </div>
