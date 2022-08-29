@@ -1,0 +1,15 @@
+.card-title {
+  font-size: 1.5em;
+}
+
+p,
+ul {
+  font-size: 14px;
+}
+
+.icon {
+  &.info {
+    width: 24px;
+    height: 24px;
+  }
+}

@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { Capacitor } from '@capacitor/core';
 import { BaseService } from './base.service';
 import { Store } from '@ngrx/store';
-import { delay, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class NetworkService extends BaseService {

@@ -6,7 +6,7 @@ import { ConfigurationKey, IBatteryStatus, ILatestData, IPowerMeter, OperatingMo
 import { BaseService } from './base.service';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { ApiToken } from '../../shared/models/device-details.model';
+import { ApiToken } from '../../shared/models/sonnen-batterie.model';
 import { IP } from '../models/network.model';
 
 @Injectable({ providedIn: 'root' })
@@ -38,13 +38,28 @@ export class BatteryService extends BaseService {
     return this.getConfiguration(ConfigurationKey.EM_OperatingMode) as Observable<OperatingMode>;
   }
 
+  // setOperatingMode(operatingMode: OperatingMode) {
+  //   const body = {
+  //     [OperatingMode[operatingMode]]: operatingMode,
+  //   };
+  //   this.put('api/v2/configurations', body);
+  // }
+
   getConfigurationAsNumber(key: ConfigurationKey, apiToken?: ApiToken, lanIp?: IP) {
     return this.getConfiguration(key, apiToken, lanIp).pipe(map((configuration) => parseInt(configuration, 10)));
   }
 
   getConfiguration(key: ConfigurationKey, apiToken?: ApiToken, lanIp?: IP) {
     return this.get<Record<string, string>>('api/v2/configurations/' + key, apiToken, lanIp).pipe(
-      map((configuration) => configuration[key])
+      map((response) => response[key])
     );
+  }
+
+  setConfiguration(key: ConfigurationKey, configuration: string) {
+    const body = {
+      [ConfigurationKey[key]]: configuration,
+    };
+
+    return this.put('api/v2/configurations', body).pipe(map((response) => response[key]));
   }
 }

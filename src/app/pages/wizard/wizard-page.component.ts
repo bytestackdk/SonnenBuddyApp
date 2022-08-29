@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { SwiperComponent } from 'swiper/angular';
 import { WizardPageStore } from './wizard-page.store';
-import { ApiToken } from '../../shared/models/device-details.model';
+import { ApiToken } from '../../shared/models/sonnen-batterie.model';
 
 @Component({
   selector: 'app-wizard',

@@ -3,8 +3,7 @@ import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BatteryService } from '../../api/services/battery.service';
 import * as fromPlatformActions from './platform.actions';
-import * as fromDeviceActions from '../devices/devices.actions';
-import * as fromDevices from '../devices/devices.selectors';
+import * as fromSonnenBatterie from '../sonnen-batterie';
 import { exhaustMap, filter, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -20,9 +19,9 @@ export class PlatformEffects {
   hasActiveDevice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromPlatformActions.platformReady),
-      concatLatestFrom(() => this.store.select(fromDevices.selectActiveDeviceSerialNumber)),
-      map(([, activeDeviceSerialNumber]) => {
-        return activeDeviceSerialNumber === null
+      concatLatestFrom(() => this.store.select(fromSonnenBatterie.selectDevice)),
+      map(([, device]) => {
+        return device === null
           ? fromPlatformActions.noActiveDeviceExists()
           : fromPlatformActions.usingKnownActiveDevice();
       })
@@ -81,18 +80,16 @@ export class PlatformEffects {
   onlineFindDevice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromPlatformActions.online),
-      map(() => fromDeviceActions.findDevices({ stopAfterFind: false }))
+      map(() => fromSonnenBatterie.findDevice({ stopAfterFind: false }))
     )
   );
 
   findDevicesSuccess$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromDeviceActions.findDevicesSuccess),
+      ofType(fromSonnenBatterie.findDeviceSuccess),
       filter(({ stopAfterFind }) => !stopAfterFind),
-      map(({ devices }) => {
-        return devices?.length === 0
-          ? fromPlatformActions.deviceNotFound()
-          : fromPlatformActions.checkActiveDeviceResponding();
+      map(({ device }) => {
+        return !device ? fromPlatformActions.deviceNotFound() : fromPlatformActions.checkActiveDeviceResponding();
       })
     )
   );

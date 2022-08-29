@@ -1,16 +1,17 @@
 import { IDevice } from '../../api/models/network.model';
+import { OperatingMode } from '../../api/models/battery.model';
 
 export type ApiToken = string;
 
-export interface IActiveDevice extends IDevice, IDeviceDetails {}
+export interface ISonnenBatterie extends IDevice, IDeviceConfiguration {}
 
-export interface IDeviceDetails {
+export interface IDeviceConfiguration {
   /**
-   * The token used for more advanced API operations (Needs to be manually input)
+   * The token used for more advanced API operations (Manual input)
    */
   apiToken?: ApiToken;
   /**
-   * Capacity of attached solar panels in Watts (Needs to be manually input)
+   * Capacity of attached solar panels in Watts (Manual input)
    */
   panelCapacity?: number;
   /**
@@ -25,4 +26,8 @@ export interface IDeviceDetails {
    * Capacity of a single battery module in the system (from API)
    */
   batteryModuleCapacity?: number;
+  /**
+   * The operating mode of the system (from API)
+   */
+  operatingMode?: OperatingMode;
 }

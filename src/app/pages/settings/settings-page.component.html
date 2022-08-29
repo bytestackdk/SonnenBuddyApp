@@ -11,7 +11,111 @@
     </ion-toolbar>
   </ion-header>
 
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle>Operating mode</ion-card-subtitle>
+      <ion-card-title class="card-title" color="primary">{{
+        componentStore.operatingMode$ | async | om
+      }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>
+        This can be changed by clicking the button below, which will also provide a brief description for each of the
+        operating modes.
+      </p>
+
+      <ion-button class="ion-float-right ion-margin-bottom" (click)="toggleOperatingModeModal(true)">Change</ion-button>
+    </ion-card-content>
+  </ion-card>
+
   <div fxLayout="column">
     <ion-button (click)="resetApp()">Reset app</ion-button>
   </div>
+
+  <!--  Operating mode modal-->
+  <ion-modal
+    [isOpen]="componentStore.showOperatingMode$ | async"
+    [swipeToClose]="true"
+    (didDismiss)="toggleOperatingModeModal(false)"
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Operating mode</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="toggleOperatingModeModal(false)">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-accordion-group *ngIf="componentStore.operatingMode$ | async as currentMode" [value]="currentMode">
+          <ion-accordion [value]="mode" *ngFor="let mode of operatingModes">
+            <ion-item slot="header" color="light">
+              <ion-label>{{ mode | om }}</ion-label>
+              <ion-badge color="primary" *ngIf="mode === currentMode">Current</ion-badge>
+            </ion-item>
+            <div class="ion-padding" slot="content">
+              <ng-container [ngSwitch]="mode">
+                <ng-container *ngSwitchCase="OperatingMode.TimeOfUse">
+                  <p>
+                    This mode is the recommended mode if you want the option to charge your battery from the grid during
+                    periods with low electricity prices. It will prioritize power like this unless configured otherwise:
+                  </p>
+                  <ul>
+                    <li>Cover the household loads</li>
+                    <li>Charge the battery system</li>
+                    <li>Export excess power to the grid</li>
+                  </ul>
+                  <ion-card>
+                    <ion-card-content fxLayout="row" fxLayoutAlign="start center">
+                      <ion-icon
+                        class="icon info ion-margin-end"
+                        name="checkmark-done-circle-outline"
+                        color="success"
+                      ></ion-icon>
+                      <p fxFlex>With this mode you can set schedules</p>
+                    </ion-card-content>
+                  </ion-card>
+                </ng-container>
+                <ng-container *ngSwitchCase="OperatingMode.Manual">
+                  <p>TODO: Describe manual</p>
+                  <ng-container *ngTemplateOutlet="noScheduleWarning"></ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="OperatingMode.BatteryModuleExtension">
+                  <p>TODO: Describe battery module extension...</p>
+                  <ng-container *ngTemplateOutlet="noScheduleWarning"></ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="OperatingMode.SelfConsumption">
+                  <p>
+                    This is the automatic mode, which is almost the same as Time-Of-Use. It will prioritize power like
+                    this:
+                  </p>
+                  <ul>
+                    <li>Cover the household loads</li>
+                    <li>Charge the battery system</li>
+                    <li>Export excess power to the grid</li>
+                  </ul>
+                  <ng-container *ngTemplateOutlet="noScheduleWarning"></ng-container>
+                </ng-container>
+              </ng-container>
+
+              <div fxLayout="row" fxLayoutAlign="end center" *ngIf="mode !== currentMode">
+                <ion-button (click)="setOperatingMode(mode)">Select</ion-button>
+              </div>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
+
+<ng-template #noScheduleWarning>
+  <ion-card>
+    <ion-card-content fxLayout="row" fxLayoutAlign="start center">
+      <ion-icon class="icon info ion-margin-end" name="warning-outline" color="warning"></ion-icon>
+      <p fxFlex>This mode will not allow for any schedules to be set</p>
+    </ion-card-content>
+  </ion-card>
+</ng-template>

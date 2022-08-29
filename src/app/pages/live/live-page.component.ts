@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromDevices from '../../store/devices';
+import * as fromSonnenBatterie from '../../store/sonnen-batterie';
 import * as fromStatus from '../../store/status';
 import { LivePageFacade } from './live-page.facade';
+import { ConfigurationKey } from '../../api/models/battery.model';
 
 @Component({
   selector: 'app-live',
@@ -11,12 +12,12 @@ import { LivePageFacade } from './live-page.facade';
   providers: [LivePageFacade],
 })
 export class LivePage {
-  // device$ = this.store.select(fromDevices.selectActiveDevice);
+  // device$ = this.store.select(fromSonnenBatterie.selectActiveDevice);
   // latestData$ = this.store.select(fromLatestData.selectLatestData);
   // powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
   // status$ = this.store.select(fromStatus.selectStatus);
 
-  solarCapacity$ = this.store.select(fromDevices.selectActiveDevicePanelCapacity);
+  solarCapacity$ = this.store.select(fromSonnenBatterie.selectSonnenBatteriePanelCapacity);
   solarProduction$ = this.store.select(fromStatus.selectSolarProduction);
   solarUtilization$ = this.store.select(fromStatus.selectSolarUtilization);
   solarToBattery$ = this.store.select(fromStatus.selectSolarToBattery);
@@ -45,28 +46,33 @@ export class LivePage {
 
   constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 
+  ionViewWillEnter() {
+    // Silently get current operating mode
+    this.store.dispatch(fromSonnenBatterie.getConfiguration({ key: ConfigurationKey.EM_OperatingMode }));
+  }
+
   // findDevices() {
-  //   this.store.dispatch(fromDevices.findDevices({ stopAfterFind: true }));
+  //   this.store.dispatch(fromSonnenBatterie.findDevices({ stopAfterFind: true }));
   // }
   //
   // getInverterMaxPower() {
-  //   this.store.dispatch(fromDevices.getInverterMaxPower());
+  //   this.store.dispatch(fromSonnenBatterie.getInverterMaxPower());
   // }
   //
   // getBatteryQuantity() {
-  //   this.store.dispatch(fromDevices.getBatteryQuantity());
+  //   this.store.dispatch(fromSonnenBatterie.getBatteryQuantity());
   // }
   //
   // getBatteryModuleCapacity() {
-  //   this.store.dispatch(fromDevices.getBatteryModuleCapacity());
+  //   this.store.dispatch(fromSonnenBatterie.getBatteryModuleCapacity());
   // }
   //
   // setToken() {
-  //   this.store.dispatch(fromDevices.setToken({ apiToken: '5cb9e400-dac7-4211-942d-c03eeaaed186' }));
+  //   this.store.dispatch(fromSonnenBatterie.setToken({ apiToken: '5cb9e400-dac7-4211-942d-c03eeaaed186' }));
   // }
   //
   // setPanelCapacity(panelCapacity: number) {
-  //   this.store.dispatch(fromDevices.setPanelCapacity({ panelCapacity }));
+  //   this.store.dispatch(fromSonnenBatterie.setPanelCapacity({ panelCapacity }));
   // }
   //
   // getStatus() {

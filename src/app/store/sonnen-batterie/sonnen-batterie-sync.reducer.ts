@@ -1,11 +1,11 @@
 import { ActionReducer } from '@ngrx/store';
 import { RootState } from '../index';
 import { storageSync } from '@larscom/ngrx-store-storagesync';
-import { devicesFeature } from './devices.reducer';
+import { sonnenBatterieFeature } from './sonnen-batterie.reducer';
 
-export function devicesSyncReducer(reducer: ActionReducer<RootState>) {
+export function sonnenBatterieSyncReducer(reducer: ActionReducer<RootState>) {
   const sync = storageSync<RootState>({
-    features: [{ stateKey: devicesFeature.name, storageForFeature: window.localStorage }],
+    features: [{ stateKey: sonnenBatterieFeature.name, storageForFeature: window.localStorage }],
     storage: window.localStorage,
   });
 

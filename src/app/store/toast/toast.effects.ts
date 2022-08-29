@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import * as fromDevices from '../devices/devices.actions';
+import * as fromSonnenBatterie from '../sonnen-batterie/sonnen-batterie.actions';
 import * as fromStatus from '../status/status.actions';
 import { tap } from 'rxjs/operators';
 import { ToastController } from '@ionic/angular';
@@ -17,7 +17,11 @@ export class ToastEffects {
   showToast$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(fromDevices.findDevicesFailed, fromStatus.getBatteryStatusFailed),
+        ofType(
+          fromSonnenBatterie.findDeviceFailed,
+          fromSonnenBatterie.setConfigurationFailed,
+          fromStatus.getBatteryStatusFailed
+        ),
         tap(async ({ error }) => {
           const toast = await this.toastController.create({
             message: 'Error: ' + error.message + `(${JSON.stringify(error.error)})`,
