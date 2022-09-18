@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { WizardPageStore } from './schedule-page.store';
-import { ConfigurationKey, OperatingMode } from '../../api/models/battery.model';
+import { OperatingMode } from '../../api/models/battery.model';
 import * as fromSonnenBatterie from '../../store/sonnen-batterie';
 import { Store } from '@ngrx/store';
+import { TimespanChangeEvent } from '../../shared/components/timespan/timespan.component.store';
 
 @Component({
   selector: 'app-schedule',
@@ -13,6 +14,9 @@ import { Store } from '@ngrx/store';
 export class SchedulePage implements OnInit {
   OperatingMode = OperatingMode;
 
+  start: string;
+  stop: string;
+
   constructor(private readonly store: Store, private readonly componentStore: WizardPageStore) {}
 
   ngOnInit() {
@@ -21,8 +25,12 @@ export class SchedulePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    // Silently get current operating mode
-    this.store.dispatch(fromSonnenBatterie.getConfiguration({ key: ConfigurationKey.EM_OperatingMode }));
+    this.store.dispatch(fromSonnenBatterie.refreshConfigurations());
+  }
+
+  timespanChange(e: TimespanChangeEvent) {
+    this.start = e.start;
+    this.stop = e.stop;
   }
 
   removeEvent(someId: any) {}

@@ -28,8 +28,7 @@ export class SettingsPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    // Silently get current operating mode
-    this.store.dispatch(fromSonnenBatterie.getConfiguration({ key: ConfigurationKey.EM_OperatingMode }));
+    this.store.dispatch(fromSonnenBatterie.refreshConfigurations());
   }
 
   toggleOperatingModeModal(show: boolean) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError, exhaustMap, map } from 'rxjs/operators';
+import { catchError, concatMap, exhaustMap, map } from 'rxjs/operators';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { NetworkService } from '../../api/services/network.service';
 import * as fromSonnenBatterie from './';
 import * as fromPlatform from '../platform/platform.actions';
 import { BatteryService } from '../../api/services/battery.service';
+import { ConfigurationKey } from '../../api/models/battery.model';
 
 @Injectable()
 export class SonnenBatterieEffects {
@@ -45,7 +46,7 @@ export class SonnenBatterieEffects {
   getConfiguration$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromSonnenBatterie.getConfiguration),
-      exhaustMap(({ key }) =>
+      concatMap(({ key }) =>
         this.batteryService.getConfiguration(key).pipe(
           map((configuration) => fromSonnenBatterie.getConfigurationSuccess({ key, configuration })),
           catchError((error) => of(fromSonnenBatterie.getConfigurationFailed({ error })))
@@ -66,4 +67,18 @@ export class SonnenBatterieEffects {
       )
     );
   });
+
+  refreshOperatingMode$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromSonnenBatterie.refreshConfigurations),
+      map(() => fromSonnenBatterie.getConfiguration({ key: ConfigurationKey.EM_OperatingMode }))
+    );
+  });
+
+  // refreshPrognosisCharging$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(fromSonnenBatterie.refreshConfigurations),
+  //     map(() => fromSonnenBatterie.getConfiguration({ key: ConfigurationKey.EM_Prognosis_Charging }))
+  //   );
+  // });
 }

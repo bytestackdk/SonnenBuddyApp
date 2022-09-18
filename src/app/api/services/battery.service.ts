@@ -62,4 +62,30 @@ export class BatteryService extends BaseService {
 
     return this.put('api/v2/configurations', body).pipe(map((response) => response[key]));
   }
+
+  // Use weather:
+  // EM_Prognosis_Charging: 1 or 0
+
+  // Online status
+  // GET: http://192.168.1.130/api/online_status
+  // Return true / false
+
+  // Charge event
+  // PUT - Request - Single
+  // http://192.168.1.130/api/configs
+  // EM_ToU_Schedule: [{"start":"21:00","stop":"22:00","threshold_p_max":2000}]
+  // IN_ToUHighTariffWindows: []
+
+  // PUT - Request - Multiple
+  // EM_ToU_Schedule: [{"start":"21:00","stop":"22:00","threshold_p_max":2000},{"start":"23:00","stop":"23:30","threshold_p_max":2000}]
+  // IN_ToUHighTariffWindows: []
+
+  // Deleting just removed an item from the list and PUTs the latest version
+
+  // Deleting all:
+  // EM_ToU_Schedule: []
+  // IN_ToUHighTariffWindows: []
+
+  // GET: EM_ToU_Schedule
+  // "EM_ToU_Schedule": "[{\"start\":\"09:00\",\"stop\":\"12:00\",\"threshold_p_max\":2000}]"
 }

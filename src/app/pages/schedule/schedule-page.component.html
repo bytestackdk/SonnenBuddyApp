@@ -21,6 +21,10 @@
   </div>
 
   <ng-template #content>
+    <app-timespan [start]="'08:00'" [stop]="'16:00'" (timespanChange)="timespanChange($event)"></app-timespan>
+
+    <p>Timespan: {{ start }} - {{ stop }}</p>
+
     <ion-card *ngIf="componentStore.scheduleDisabled$ | async; else schedule">
       <ion-card-header>
         <ion-card-subtitle>Operating Mode</ion-card-subtitle>

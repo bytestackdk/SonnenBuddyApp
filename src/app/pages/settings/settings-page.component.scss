@@ -7,9 +7,16 @@ ul {
   font-size: 14px;
 }
 
+ion-toggle {
+  &.forecast {
+    --background-checked: orange;
+  }
+}
+
 .icon {
-  &.info {
-    width: 24px;
-    height: 24px;
+  width: 24px;
+  height: 24px;
+  &.sun {
+    color: orange;
   }
 }

@@ -1,0 +1,7 @@
+ion-range {
+  --knob-size: 20px;
+  &.inverted {
+    --bar-background-active: var(--ion-color-light);
+    --bar-background: var(--ion-color-primary);
+  }
+}

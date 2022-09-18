@@ -30,4 +30,8 @@ export interface IDeviceConfiguration {
    * The operating mode of the system (from API)
    */
   operatingMode?: OperatingMode;
+  /**
+   * Whether prognosis charging is enabled (from API)
+   */
+  prognosisCharging?: boolean;
 }

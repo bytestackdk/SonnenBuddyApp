@@ -5,6 +5,10 @@ export enum ConfigurationKey {
   IC_BatteryModules = 'IC_BatteryModules',
   CM_MarketingModuleCapacity = 'CM_MarketingModuleCapacity',
   EM_OperatingMode = 'EM_OperatingMode',
+  /**
+   * Not currently supported by the API unfortunately
+   */
+  EM_Prognosis_Charging = 'EM_Prognosis_Charging',
 }
 
 export enum OperatingMode {

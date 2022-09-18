@@ -11,6 +11,7 @@
     </ion-toolbar>
   </ion-header>
 
+  <!--Operating mode-->
   <ion-card>
     <ion-card-header>
       <ion-card-subtitle>Operating mode</ion-card-subtitle>
@@ -28,6 +29,15 @@
       <ion-button class="ion-float-right ion-margin-bottom" (click)="toggleOperatingModeModal(true)">Change</ion-button>
     </ion-card-content>
   </ion-card>
+
+  <!--Weather forecast charging-->
+  <!--  <ion-card>-->
+  <!--    <ion-card-content fxLayout="row" fxLayoutAlign="start center">-->
+  <!--      <ion-icon class="icon sun ion-margin-end" name="sunny"></ion-icon>-->
+  <!--      <p fxFlex>Use weather forecast for charge management</p>-->
+  <!--      <ion-toggle class="forecast"></ion-toggle>-->
+  <!--    </ion-card-content>-->
+  <!--  </ion-card>-->
 
   <div fxLayout="column">
     <ion-button (click)="resetApp()">Reset app</ion-button>
@@ -79,7 +89,8 @@
                   </ion-card>
                 </ng-container>
                 <ng-container *ngSwitchCase="OperatingMode.Manual">
-                  <p>TODO: Describe manual</p>
+                  <p>Manual charging or discharging via API.</p>
+                  <p>Manual charge/discharge can be reverted by setting mode to self consumption.</p>
                   <ng-container *ngTemplateOutlet="noScheduleWarning"></ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="OperatingMode.BatteryModuleExtension">
@@ -114,7 +125,7 @@
 <ng-template #noScheduleWarning>
   <ion-card>
     <ion-card-content fxLayout="row" fxLayoutAlign="start center">
-      <ion-icon class="icon info ion-margin-end" name="warning-outline" color="warning"></ion-icon>
+      <ion-icon class="icon ion-margin-end" name="warning-outline" color="warning"></ion-icon>
       <p fxFlex>This mode will not allow for any schedules to be set</p>
     </ion-card-content>
   </ion-card>

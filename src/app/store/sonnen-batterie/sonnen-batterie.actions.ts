@@ -43,6 +43,9 @@ export const setConfigurationFailed = createAction(
   props<{ error: HttpErrorResponse; oldConfiguration: IDeviceConfiguration }>()
 );
 
+export const REFRESH_CONFIGURATIONS = '[SonnenBatterie] Refresh configurations';
+export const refreshConfigurations = createAction(REFRESH_CONFIGURATIONS);
+
 export const FINISH_WIZARD = '[SonnenBatterie] Finish wizard';
 export const finishWizard = createAction(
   FINISH_WIZARD,

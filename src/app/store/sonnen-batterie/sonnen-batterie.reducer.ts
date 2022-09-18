@@ -71,6 +71,7 @@ export const sonnenBatterieFeature = createFeature({
         configuration: {
           ...state.configuration,
           ...(key === ConfigurationKey.EM_OperatingMode && { operatingMode: configuration as OperatingMode }),
+          ...(key === ConfigurationKey.EM_Prognosis_Charging && { prognosisCharging: configuration === '1' }),
         },
         ...LoadingState.loaded(),
       })

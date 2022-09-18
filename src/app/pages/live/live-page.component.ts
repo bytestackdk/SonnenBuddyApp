@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import * as fromSonnenBatterie from '../../store/sonnen-batterie';
 import * as fromStatus from '../../store/status';
 import { LivePageFacade } from './live-page.facade';
-import { ConfigurationKey } from '../../api/models/battery.model';
 
 @Component({
   selector: 'app-live',
@@ -47,8 +46,7 @@ export class LivePage {
   constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 
   ionViewWillEnter() {
-    // Silently get current operating mode
-    this.store.dispatch(fromSonnenBatterie.getConfiguration({ key: ConfigurationKey.EM_OperatingMode }));
+    this.store.dispatch(fromSonnenBatterie.refreshConfigurations());
   }
 
   // findDevices() {
