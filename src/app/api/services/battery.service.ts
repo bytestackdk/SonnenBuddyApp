@@ -2,7 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Store } from '@ngrx/store';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
-import { ConfigurationKey, IBatteryStatus, ILatestData, IPowerMeter, OperatingMode } from '../models/battery.model';
+import {
+  ConfigurationKey,
+  IBatteryStatus,
+  ILatestData,
+  IPowerMeter,
+  ISchedule,
+  OperatingMode,
+} from '../models/battery.model';
 import { BaseService } from './base.service';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
@@ -38,12 +45,14 @@ export class BatteryService extends BaseService {
     return this.getConfiguration(ConfigurationKey.EM_OperatingMode) as Observable<OperatingMode>;
   }
 
-  // setOperatingMode(operatingMode: OperatingMode) {
-  //   const body = {
-  //     [OperatingMode[operatingMode]]: operatingMode,
-  //   };
-  //   this.put('api/v2/configurations', body);
-  // }
+  getSchedule(): Observable<ISchedule[]> {
+    return this.getConfiguration(ConfigurationKey.EM_ToU_Schedule).pipe(map((schedule) => JSON.parse(schedule)));
+  }
+
+  setSchedule(schedules: ISchedule[]) {
+    const configuration = JSON.stringify(schedules);
+    return this.setConfiguration(ConfigurationKey.EM_ToU_Schedule, configuration);
+  }
 
   getConfigurationAsNumber(key: ConfigurationKey, apiToken?: ApiToken, lanIp?: IP) {
     return this.getConfiguration(key, apiToken, lanIp).pipe(map((configuration) => parseInt(configuration, 10)));

@@ -5,6 +5,7 @@ export enum ConfigurationKey {
   IC_BatteryModules = 'IC_BatteryModules',
   CM_MarketingModuleCapacity = 'CM_MarketingModuleCapacity',
   EM_OperatingMode = 'EM_OperatingMode',
+  EM_ToU_Schedule = 'EM_ToU_Schedule',
   /**
    * Not currently supported by the API unfortunately
    */
@@ -16,6 +17,15 @@ export enum OperatingMode {
   SelfConsumption = '2',
   BatteryModuleExtension = '6',
   TimeOfUse = '10',
+}
+
+export interface ITimespan {
+  start: string;
+  stop: string;
+}
+
+export interface ISchedule extends ITimespan {
+  threshold_p_max: number;
 }
 
 export interface IBatteryStatus {

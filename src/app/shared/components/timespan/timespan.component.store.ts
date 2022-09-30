@@ -38,6 +38,9 @@ export class TimespanComponentStore extends ComponentStore<TimespanState> {
   readonly startIsUpperKnob$ = this.select((state) => state.upperKnob === Knob.start);
 
   initialize(start: string, stop: string) {
+    start = start.length < 5 ? `0${start}` : start;
+    stop = stop.length < 5 ? `0${stop}` : stop;
+
     const upperKnob = start > stop ? Knob.start : Knob.stop;
     const initialLower = this.timeToNumber(upperKnob === Knob.start ? stop : start);
     const initialUpper = this.timeToNumber(upperKnob === Knob.start ? start : stop);

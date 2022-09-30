@@ -21,11 +21,8 @@
   </div>
 
   <ng-template #content>
-    <app-timespan [start]="'08:00'" [stop]="'16:00'" (timespanChange)="timespanChange($event)"></app-timespan>
-
-    <p>Timespan: {{ start }} - {{ stop }}</p>
-
-    <ion-card *ngIf="componentStore.scheduleDisabled$ | async; else schedule">
+    <!--Card schedules can not be used-->
+    <ion-card *ngIf="componentStore.scheduleDisabled$ | async; else schedules">
       <ion-card-header>
         <ion-card-subtitle>Operating Mode</ion-card-subtitle>
         <ion-card-title class="card-title" color="primary">
@@ -42,63 +39,101 @@
       </ion-card-content>
     </ion-card>
 
-    <ng-template #schedule>
-      <ion-list-header>
-        <ion-label>New This Week</ion-label>
-        <ion-button fill="outline">Add</ion-button>
-      </ion-list-header>
+    <!--Schedules-->
+    <ng-template #schedules>
+      <ion-button fill="outline" (click)="addClick()">Add</ion-button>
 
-      <!--      <ion-list>-->
-      <!--        <ion-item>-->
-      <!--          <ion-label>Input</ion-label>-->
-      <!--          <ion-input></ion-input>-->
-      <!--        </ion-item>-->
-      <!--        <ion-item>-->
-      <!--          <ion-label>Toggle</ion-label>-->
-      <!--          <ion-toggle slot="end"></ion-toggle>-->
-      <!--        </ion-item>-->
-      <!--        <ion-item>-->
-      <!--          <ion-label>Radio</ion-label>-->
-      <!--          <ion-radio slot="end"></ion-radio>-->
-      <!--        </ion-item>-->
-      <!--        <ion-item>-->
-      <!--          <ion-label>Checkbox</ion-label>-->
-      <!--          <ion-checkbox slot="start"></ion-checkbox>-->
-      <!--        </ion-item>-->
-      <!--      </ion-list>-->
-
-      <ion-list>
-        <ion-list-header lines="inset">
-          <ion-label>Active</ion-label>
-          <ion-button>Clear</ion-button>
-        </ion-list-header>
-
-        <ion-item-sliding>
-          <ion-item color="light">
-            <ion-label>Item</ion-label>
-          </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option (click)="removeEvent(1)" color="warning">Remove</ion-item-option>
-            <ion-item-option (click)="disableEvent(1)">Disable</ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-
-        <ion-list-header lines="inset">
-          <ion-label>Disabled</ion-label>
-          <ion-button>Clear</ion-button>
-        </ion-list-header>
-
-        <ion-item-sliding>
-          <ion-item>
-            <ion-label>Item</ion-label>
-          </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option (click)="removeEvent(2)">Remove</ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-      </ion-list>
+      <ion-card
+        class="ion-activatable"
+        *ngFor="let schedule of componentStore.schedules$ | async"
+        (click)="editClick(schedule)"
+      >
+        <ion-card-header>
+          <ion-card-title>{{ schedule.start }} - {{ schedule.stop }}</ion-card-title>
+          <ion-card-subtitle>
+            <ng-container *ngIf="schedule.threshold_p_max === 0; else charging">Battery not discharging</ng-container>
+            <ng-template #charging>Battery charging from grid</ng-template>
+          </ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+          <ion-icon name="flash-outline" *ngIf="schedule.threshold_p_max > 0"></ion-icon>
+          <ion-icon name="flash-off-outline" *ngIf="schedule.threshold_p_max === 0"></ion-icon>
+          <div>
+            <b>{{ schedule.threshold_p_max }}W</b>
+          </div>
+        </ion-card-content>
+        <ion-ripple-effect></ion-ripple-effect>
+      </ion-card>
     </ng-template>
   </ng-template>
 
-  <!--  <ion-datetime presentation="time"></ion-datetime>-->
+  <div fxLayout="column">
+    <ion-button (click)="clear()">Clear</ion-button>
+  </div>
+
+  <ion-modal
+    class="schedule-modal"
+    [isOpen]="componentStore.showScheduleModal$ | async"
+    [swipeToClose]="true"
+    (didDismiss)="componentStore.toggleScheduleModal(false)"
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title *ngIf="(componentStore.new$ | async) === true">Add schedule</ion-title>
+          <ion-title *ngIf="(componentStore.new$ | async) === false">Edit schedule</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="componentStore.toggleScheduleModal(false)">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div class="ion-margin">Bla bla bla how to set up</div>
+        <ion-card>
+          <ion-card-content>
+            <div fxLayout="row">
+              <div>
+                <p>Timespan</p>
+                <h1>
+                  <b>{{ componentStore.scheduleStart$ | async }} - {{ componentStore.scheduleStop$ | async }}</b>
+                </h1>
+              </div>
+              <div fxFlex class="right-align">
+                <p>Power</p>
+                <h1>
+                  <b>{{ componentStore.scheduleThreshold$ | async }}W</b>
+                </h1>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <ion-icon class="icon ion-margin-end" name="information-circle-outline" color="primary"></ion-icon>
+              <p fxFlex>Bla bla bla</p>
+            </div>
+          </ion-card-content>
+        </ion-card>
+
+        <app-timespan [start]="start" [stop]="stop" (timespanChange)="timespanChange($event)"></app-timespan>
+
+        <ion-range
+          [min]="0"
+          [max]="10000"
+          [step]="250"
+          [value]="threshold"
+          (ionChange)="thresholdChange($event)"
+          [pin]="true"
+          [pinFormatter]="wattFormatter"
+        >
+          <ion-icon slot="start" name="flash-outline"></ion-icon>
+        </ion-range>
+
+        <div fxLayout="row" fxLayoutGap="16px" class="ion-margin-horizontal">
+          <ion-button (click)="remove()" *ngIf="(componentStore.new$ | async) === false" color="danger" fxFlex
+            >Remove</ion-button
+          >
+          <ion-button (click)="save()" [disabled]="componentStore.unchanged$ | async" fxFlex>Save</ion-button>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>
