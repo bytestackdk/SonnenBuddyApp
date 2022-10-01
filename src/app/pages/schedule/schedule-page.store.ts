@@ -1,40 +1,36 @@
 import { Injectable } from '@angular/core';
-import { ComponentStore, tapResponse } from '@ngrx/component-store';
+import { ComponentStore } from '@ngrx/component-store';
 import { ISchedule, ITimespan, OperatingMode } from '../../api/models/battery.model';
 import { Store } from '@ngrx/store';
-import { BatteryService } from '../../api/services/battery.service';
-import { switchMap, tap } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
+import * as fromSonnenBatterie from './../../store/sonnen-batterie';
+import { selectSonnenBatterieOperatingMode, selectSonnenBatterieSchedules } from './../../store/sonnen-batterie';
 
 export interface IScheduleState {
-  schedules: ISchedule[];
-  operatingMode: OperatingMode;
-  loading: boolean;
-  error: any;
-  showScheduleModal?: boolean;
-  schedule?: ISchedule;
+  showModal?: boolean;
   unchanged?: boolean;
-  new?: boolean;
+  edit?: boolean;
+  initialStart?: string;
+  schedule?: ISchedule;
 }
 
 export const initialState: IScheduleState = {
-  schedules: null,
-  operatingMode: null,
-  loading: false,
-  error: null,
-  showScheduleModal: false,
-  schedule: null,
+  showModal: false,
   unchanged: true,
-  new: true,
+  edit: true,
+  initialStart: null,
+  schedule: null,
 };
 
 @Injectable()
 export class SchedulePageStore extends ComponentStore<IScheduleState> {
-  readonly operatingMode$ = this.select((state) => state.operatingMode);
-  readonly schedules$ = this.select((state) => state.schedules);
+  // From global store
+  readonly operatingMode$ = this.select(this.store.select(selectSonnenBatterieOperatingMode), (mode) => mode);
+  readonly schedules$ = this.select(this.store.select(selectSonnenBatterieSchedules), (schedules) => schedules);
+
+  // Local selectors
   readonly schedule$ = this.select((state) => state.schedule);
   readonly unchanged$ = this.select((state) => state.unchanged);
-  readonly new$ = this.select((state) => state.new);
+  readonly edit$ = this.select((state) => state.edit);
   readonly scheduleStart$ = this.select(this.schedule$, (schedule) => schedule?.start || '01:00');
   readonly scheduleStop$ = this.select(this.schedule$, (schedule) => schedule?.stop || '05:00');
   readonly scheduleThreshold$ = this.select(this.schedule$, (schedule) => schedule?.threshold_p_max || 0);
@@ -42,62 +38,30 @@ export class SchedulePageStore extends ComponentStore<IScheduleState> {
     this.operatingMode$,
     (operatingMode) => operatingMode !== OperatingMode.TimeOfUse
   );
-  readonly loading$ = this.select((state) => state.loading);
-  readonly error$ = this.select((state) => state.error);
-  readonly showScheduleModal$ = this.select((state) => state.showScheduleModal);
+  readonly showModal$ = this.select((state) => state.showModal);
 
-  constructor(private readonly store: Store, private readonly batteryService: BatteryService) {
+  constructor(private readonly store: Store) {
     super({ ...initialState });
   }
 
-  readonly load = this.effect((trigger$) => {
-    return trigger$.pipe(
-      tap(() => this.patchState({ operatingMode: null, loading: true, error: null })),
-      switchMap(() =>
-        forkJoin([this.batteryService.getOperatingMode(), this.batteryService.getSchedule()]).pipe(
-          tapResponse(
-            // TODO: Join schedules that crosses 24:00
-            ([operatingMode, schedules]) => this.patchState({ operatingMode, schedules, loading: false }),
-            (error) => this.patchState({ error, loading: false })
-          )
-        )
-      )
-    );
-  });
-
-  readonly sync = this.effect((trigger$) => {
-    return trigger$.pipe(
-      tap(() => this.patchState({ loading: true, error: null })),
-      switchMap(() => {
-        const { schedules } = this.get();
-
-        // TODO: Join schedules that crosses 24:00
-        return this.batteryService.setSchedule(schedules).pipe(
-          tapResponse(
-            () => this.patchState({ loading: false }),
-            (error) => this.patchState({ error, loading: false })
-          )
-        );
-      })
-    );
-  });
-
-  readonly add = this.updater((state, schedule: ISchedule) => {
+  readonly showAddModal = this.updater((state, schedule: ISchedule) => {
     return {
       ...state,
-      showScheduleModal: true,
+      showModal: true,
       unchanged: false,
-      new: true,
+      edit: false,
+      initialStart: schedule.start,
       schedule,
     };
   });
 
-  readonly edit = this.updater((state, schedule: ISchedule) => {
+  readonly showEditModal = this.updater((state, schedule: ISchedule) => {
     return {
       ...state,
-      showScheduleModal: true,
+      showModal: true,
       unchanged: true,
-      new: false,
+      edit: true,
+      initialStart: schedule.start,
       schedule,
     };
   });
@@ -119,49 +83,28 @@ export class SchedulePageStore extends ComponentStore<IScheduleState> {
     };
   });
 
-  readonly remove = this.updater((state) => {
-    return {
-      ...state,
-      showScheduleModal: false,
-      schedules: [...state.schedules.filter((s) => s.start !== state.schedule.start)],
-      schedule: null,
-    };
-  });
+  remove() {
+    this.store.dispatch(fromSonnenBatterie.removeSchedule({ start: this.get().initialStart }));
+    this.patchState({ showModal: false });
+  }
 
-  readonly clear = this.updater((state) => {
-    return {
-      ...state,
-      schedules: [],
-    };
-  });
+  clear() {
+    this.store.dispatch(fromSonnenBatterie.clearSchedules());
+  }
 
-  readonly save = this.updater((state, initialStart: string) => {
-    let schedule = state.schedule;
+  save() {
+    const { initialStart, edit, schedule } = this.get();
 
-    if (!state.new) {
-      // Find existing schedule
-      schedule = state.schedules.find((s) => s.start === initialStart);
-
-      // Extract new values
-      const { start, stop, threshold_p_max } = state.schedule;
-
-      // Update existing schedule
-      schedule.start = start;
-      schedule.stop = stop;
-      schedule.threshold_p_max = threshold_p_max;
+    if (edit) {
+      this.store.dispatch(fromSonnenBatterie.updateSchedule({ start: initialStart, schedule }));
+    } else {
+      this.store.dispatch(fromSonnenBatterie.addSchedule({ schedule }));
     }
 
-    const schedules = state.new ? [...state.schedules, schedule] : [...state.schedules];
+    this.patchState({ showModal: false });
+  }
 
-    return {
-      ...state,
-      showScheduleModal: false,
-      schedules,
-      schedule: null,
-    };
-  });
-
-  toggleScheduleModal(showScheduleModal: boolean) {
-    this.patchState(() => ({ showScheduleModal, ...(!showScheduleModal && { schedule: null }) }));
+  toggleModal(showModal: boolean) {
+    this.patchState(() => ({ showModal, ...(!showModal && { schedule: null }) }));
   }
 }

@@ -48,3 +48,8 @@ export const selectSonnenBatterieOperatingMode = createSelector(
   selectSonnenBatterie,
   (sonnenBatterie) => sonnenBatterie.operatingMode
 );
+
+export const selectSonnenBatterieSchedules = createSelector(
+  selectSonnenBatterie,
+  (sonnenBatterie) => sonnenBatterie.schedules || []
+);

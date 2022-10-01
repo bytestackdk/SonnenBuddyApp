@@ -5,90 +5,92 @@
 </ion-header>
 
 <ion-content class="ion-padding" fullscreen="true">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="showAddModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Schedule</ion-title>
+      <ion-button slot="end" (click)="clear()" *ngIf="(componentStore.schedules$ | async).length > 1">
+        <ion-icon name="close-outline"></ion-icon>
+        Clear
+      </ion-button>
     </ion-toolbar>
   </ion-header>
 
-  <div
-    fxLayout="column"
-    fxLayoutAlign="center center"
-    [style.height]="'100%'"
-    *ngIf="componentStore.loading$ | async; else content"
-  >
-    <ion-spinner></ion-spinner>
-  </div>
+  <!--Card schedules can not be used-->
+  <ion-card *ngIf="componentStore.scheduleDisabled$ | async; else schedules">
+    <ion-card-header>
+      <ion-card-subtitle>Operating Mode</ion-card-subtitle>
+      <ion-card-title class="card-title" color="primary">
+        {{ componentStore.operatingMode$ | async | om }}
+      </ion-card-title>
+    </ion-card-header>
 
-  <ng-template #content>
-    <!--Card schedules can not be used-->
-    <ion-card *ngIf="componentStore.scheduleDisabled$ | async; else schedules">
-      <ion-card-header>
-        <ion-card-subtitle>Operating Mode</ion-card-subtitle>
-        <ion-card-title class="card-title" color="primary">
-          {{ componentStore.operatingMode$ | async | om }}
-        </ion-card-title>
-      </ion-card-header>
+    <ion-card-content>
+      <p>
+        To set a schedule sonnenBatterie charge and discharge stop, the operation mode must be set to
+        <ion-text color="primary">{{ OperatingMode.TimeOfUse | om }}</ion-text> - You can change the current operating
+        mode under Settings.
+      </p>
+    </ion-card-content>
+  </ion-card>
 
-      <ion-card-content>
-        <p>
-          To set a schedule sonnenBatterie charge and discharge stop, the operation mode must be set to
-          <ion-text color="primary">{{ OperatingMode.TimeOfUse | om }}</ion-text> - You can change the current operating
-          mode under Settings.
+  <!--Schedules-->
+  <ng-template #schedules>
+    <ion-card *ngIf="(componentStore.schedules$ | async).length === 0">
+      <ion-card-content fxLayout="row" fxLayoutAlign="start center">
+        <ion-icon class="icon ion-margin-end" color="primary" name="timer-outline"></ion-icon>
+        <p fxFlex>
+          You have no schedules setup. These can be setup to create periods where your battery charges from the grid or
+          doesn't discharge.
         </p>
       </ion-card-content>
     </ion-card>
 
-    <!--Schedules-->
-    <ng-template #schedules>
-      <ion-button fill="outline" (click)="addClick()">Add</ion-button>
-
-      <ion-card
-        class="ion-activatable"
-        *ngFor="let schedule of componentStore.schedules$ | async"
-        (click)="editClick(schedule)"
-      >
-        <ion-card-header>
-          <ion-card-title>{{ schedule.start }} - {{ schedule.stop }}</ion-card-title>
-          <ion-card-subtitle>
-            <ng-container *ngIf="schedule.threshold_p_max === 0; else charging">Battery not discharging</ng-container>
-            <ng-template #charging>Battery charging from grid</ng-template>
-          </ion-card-subtitle>
-        </ion-card-header>
-        <ion-card-content fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
-          <ion-icon name="flash-outline" *ngIf="schedule.threshold_p_max > 0"></ion-icon>
-          <ion-icon name="flash-off-outline" *ngIf="schedule.threshold_p_max === 0"></ion-icon>
-          <div>
-            <b>{{ schedule.threshold_p_max }}W</b>
-          </div>
-        </ion-card-content>
-        <ion-ripple-effect></ion-ripple-effect>
-      </ion-card>
-    </ng-template>
+    <ion-card
+      class="ion-activatable"
+      *ngFor="let schedule of componentStore.schedules$ | async"
+      (click)="showEditModal(schedule)"
+    >
+      <ion-card-header>
+        <ion-card-title>{{ schedule.start }} - {{ schedule.stop }}</ion-card-title>
+        <ion-card-subtitle>
+          <ng-container *ngIf="schedule.threshold_p_max === 0; else charging">Battery not discharging</ng-container>
+          <ng-template #charging>Battery charging from grid</ng-template>
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+        <ion-icon name="flash-outline" *ngIf="schedule.threshold_p_max > 0"></ion-icon>
+        <ion-icon name="flash-off-outline" *ngIf="schedule.threshold_p_max === 0"></ion-icon>
+        <div>
+          <b>{{ schedule.threshold_p_max }}W</b>
+        </div>
+      </ion-card-content>
+      <ion-ripple-effect></ion-ripple-effect>
+    </ion-card>
   </ng-template>
-
-  <div fxLayout="column">
-    <ion-button (click)="clear()">Clear</ion-button>
-  </div>
 
   <ion-modal
     class="schedule-modal"
-    [isOpen]="componentStore.showScheduleModal$ | async"
+    [isOpen]="componentStore.showModal$ | async"
     [swipeToClose]="true"
-    (didDismiss)="componentStore.toggleScheduleModal(false)"
+    (didDismiss)="componentStore.toggleModal(false)"
   >
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title *ngIf="(componentStore.new$ | async) === true">Add schedule</ion-title>
-          <ion-title *ngIf="(componentStore.new$ | async) === false">Edit schedule</ion-title>
+          <ion-title *ngIf="(componentStore.edit$ | async) === false">Add schedule</ion-title>
+          <ion-title *ngIf="(componentStore.edit$ | async) === true">Edit schedule</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="componentStore.toggleScheduleModal(false)">Close</ion-button>
+            <ion-button (click)="componentStore.toggleModal(false)">Close</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <div class="ion-margin">Bla bla bla how to set up</div>
         <ion-card>
           <ion-card-content>
             <div fxLayout="row">
@@ -105,13 +107,14 @@
                 </h1>
               </div>
             </div>
-
-            <div fxLayout="row" fxLayoutAlign="start center">
-              <ion-icon class="icon ion-margin-end" name="information-circle-outline" color="primary"></ion-icon>
-              <p fxFlex>Bla bla bla</p>
-            </div>
           </ion-card-content>
         </ion-card>
+
+        <div class="ion-margin">
+          <ion-text color="medium">
+            Select a timespan and set the charge power for the battery. Setting it to 0W will prevent battery discharge.
+          </ion-text>
+        </div>
 
         <app-timespan [start]="start" [stop]="stop" (timespanChange)="timespanChange($event)"></app-timespan>
 
@@ -124,11 +127,11 @@
           [pin]="true"
           [pinFormatter]="wattFormatter"
         >
-          <ion-icon slot="start" name="flash-outline"></ion-icon>
+          <ion-icon slot="start" color="primary" name="flash-outline"></ion-icon>
         </ion-range>
 
-        <div fxLayout="row" fxLayoutGap="16px" class="ion-margin-horizontal">
-          <ion-button (click)="remove()" *ngIf="(componentStore.new$ | async) === false" color="danger" fxFlex
+        <div fxLayout="row" fxLayoutGap="16px" class="ion-margin ion-padding-top">
+          <ion-button (click)="remove()" *ngIf="(componentStore.edit$ | async) === true" color="danger" fxFlex
             >Remove</ion-button
           >
           <ion-button (click)="save()" [disabled]="componentStore.unchanged$ | async" fxFlex>Save</ion-button>

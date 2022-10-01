@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SchedulePageStore } from './schedule-page.store';
 import { ISchedule, OperatingMode } from '../../api/models/battery.model';
 import * as fromSonnenBatterie from '../../store/sonnen-batterie';
@@ -11,7 +11,7 @@ import { TimespanChangeEvent } from '../../shared/components/timespan/timespan.c
   styleUrls: ['schedule-page.component.scss'],
   providers: [SchedulePageStore],
 })
-export class SchedulePage implements OnInit {
+export class SchedulePage {
   OperatingMode = OperatingMode;
 
   start: string;
@@ -21,10 +21,6 @@ export class SchedulePage implements OnInit {
   unchanged = true;
 
   constructor(private readonly store: Store, public readonly componentStore: SchedulePageStore) {}
-
-  ngOnInit() {
-    this.componentStore.load();
-  }
 
   ionViewWillEnter() {
     this.store.dispatch(fromSonnenBatterie.refreshConfigurations());
@@ -41,7 +37,7 @@ export class SchedulePage implements OnInit {
     this.componentStore.updateThreshold(parseInt(this.threshold, 10));
   }
 
-  addClick() {
+  showAddModal() {
     // TODO: Don't start with something that's not valid
     this.start = '01:00';
     this.stop = '05:00';
@@ -53,30 +49,27 @@ export class SchedulePage implements OnInit {
       threshold_p_max: parseInt(this.threshold, 10),
     };
 
-    this.componentStore.add(schedule);
+    this.componentStore.showAddModal(schedule);
   }
 
-  editClick(schedule: ISchedule) {
+  showEditModal(schedule: ISchedule) {
     this.start = schedule.start;
     this.stop = schedule.stop;
     this.threshold = schedule.threshold_p_max.toString();
 
-    this.componentStore.edit(schedule);
+    this.componentStore.showEditModal(schedule);
   }
 
   save() {
-    this.componentStore.save(this.start);
-    this.componentStore.sync();
+    this.componentStore.save();
   }
 
   remove() {
     this.componentStore.remove();
-    this.componentStore.sync();
   }
 
   clear() {
     this.componentStore.clear();
-    this.componentStore.sync();
   }
 
   wattFormatter = (value: string) => {

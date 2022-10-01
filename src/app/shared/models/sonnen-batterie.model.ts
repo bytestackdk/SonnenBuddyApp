@@ -1,5 +1,5 @@
 import { IDevice } from '../../api/models/network.model';
-import { OperatingMode } from '../../api/models/battery.model';
+import { ISchedule, OperatingMode } from '../../api/models/battery.model';
 
 export type ApiToken = string;
 
@@ -30,6 +30,10 @@ export interface IDeviceConfiguration {
    * The operating mode of the system (from API)
    */
   operatingMode?: OperatingMode;
+  /**
+   * Charging schedules setup on the battery
+   */
+  schedules?: ISchedule[];
   /**
    * Whether prognosis charging is enabled (from API)
    */

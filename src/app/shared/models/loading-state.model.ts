@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
 export class LoadingState {
-  error: HttpErrorResponse;
+  error: string | HttpErrorResponse;
   loaded: boolean;
   loading: boolean;
   failed: boolean;
@@ -33,7 +33,7 @@ export class LoadingState {
     };
   }
 
-  static failed(error: HttpErrorResponse = null): LoadingState {
+  static failed(error: string | HttpErrorResponse = null): LoadingState {
     return {
       error,
       loaded: false,

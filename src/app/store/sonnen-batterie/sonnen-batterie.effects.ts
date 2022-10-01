@@ -43,6 +43,55 @@ export class SonnenBatterieEffects {
     );
   });
 
+  addSchedule$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromSonnenBatterie.addSchedule),
+      concatLatestFrom(() => this.store.select(fromSonnenBatterie.selectSonnenBatterieSchedules)),
+      map(([{ schedule }, schedules]) => fromSonnenBatterie.saveSchedules({ schedules: [...schedules, schedule] }))
+    );
+  });
+
+  updateSchedule$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromSonnenBatterie.updateSchedule),
+      concatLatestFrom(() => this.store.select(fromSonnenBatterie.selectSonnenBatterieSchedules)),
+      map(([{ start, schedule }, schedules]) =>
+        fromSonnenBatterie.saveSchedules({
+          schedules: schedules.map((s) => (s.start === start ? schedule : s)),
+        })
+      )
+    );
+  });
+
+  removeSchedule$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromSonnenBatterie.removeSchedule),
+      concatLatestFrom(() => this.store.select(fromSonnenBatterie.selectSonnenBatterieSchedules)),
+      map(([{ start }, schedules]) =>
+        fromSonnenBatterie.saveSchedules({
+          schedules: schedules.filter((s) => s.start !== start),
+        })
+      )
+    );
+  });
+
+  clearSchedules$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromSonnenBatterie.clearSchedules),
+      map(() => fromSonnenBatterie.saveSchedules({ schedules: [] }))
+    );
+  });
+
+  saveSchedules$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromSonnenBatterie.saveSchedules),
+      map(({ schedules }) => {
+        const configuration = JSON.stringify(schedules);
+        return fromSonnenBatterie.setConfiguration({ key: ConfigurationKey.EM_ToU_Schedule, configuration });
+      })
+    );
+  });
+
   getConfiguration$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromSonnenBatterie.getConfiguration),
@@ -58,11 +107,14 @@ export class SonnenBatterieEffects {
   setConfiguration$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(fromSonnenBatterie.setConfiguration),
-      concatLatestFrom(() => this.store.select(fromSonnenBatterie.selectSonnenBatterieConfiguration)),
-      exhaustMap(([{ key, configuration }, oldConfiguration]) =>
+      exhaustMap(({ key, configuration }) =>
         this.batteryService.setConfiguration(key, configuration).pipe(
-          map(() => fromSonnenBatterie.setConfigurationSuccess()),
-          catchError((error) => of(fromSonnenBatterie.setConfigurationFailed({ error, oldConfiguration })))
+          map((response) =>
+            response
+              ? fromSonnenBatterie.setConfigurationSuccess({ configuration: response })
+              : fromSonnenBatterie.setConfigurationFailed({ error: 'Error saving configuration' })
+          ),
+          catchError((error) => of(fromSonnenBatterie.setConfigurationFailed({ error })))
         )
       )
     );
@@ -72,6 +124,13 @@ export class SonnenBatterieEffects {
     return this.actions$.pipe(
       ofType(fromSonnenBatterie.refreshConfigurations),
       map(() => fromSonnenBatterie.getConfiguration({ key: ConfigurationKey.EM_OperatingMode }))
+    );
+  });
+
+  refreshSchedules$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(fromSonnenBatterie.refreshConfigurations),
+      map(() => fromSonnenBatterie.getConfiguration({ key: ConfigurationKey.EM_ToU_Schedule }))
     );
   });
 

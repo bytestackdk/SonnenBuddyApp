@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IDeviceConfiguration } from '../../shared/models/sonnen-batterie.model';
 import { IDevice } from '../../api/models/network.model';
-import { ConfigurationKey } from '../../api/models/battery.model';
+import { ConfigurationKey, ISchedule } from '../../api/models/battery.model';
 
 export const CLEAR_DEVICE = '[SonnenBatterie] Clear';
 export const clearDevice = createAction(CLEAR_DEVICE);
@@ -17,6 +17,18 @@ export const findDeviceSuccess = createAction(
   props<{ device: IDevice; stopAfterFind: boolean }>()
 );
 export const findDeviceFailed = createAction(FIND_DEVICE_FAILED, props<{ error: HttpErrorResponse }>());
+
+export const ADD_SCHEDULE = '[SonnenBatterie] Add schedule';
+export const UPDATE_SCHEDULE = '[SonnenBatterie] Update schedule';
+export const REMOVE_SCHEDULE = '[SonnenBatterie] Remove schedule';
+export const CLEAR_SCHEDULES = '[SonnenBatterie] Clear schedules';
+export const SAVE_SCHEDULES = '[SonnenBatterie] Save schedules';
+
+export const addSchedule = createAction(ADD_SCHEDULE, props<{ schedule: ISchedule }>());
+export const updateSchedule = createAction(UPDATE_SCHEDULE, props<{ start: string; schedule: ISchedule }>());
+export const removeSchedule = createAction(REMOVE_SCHEDULE, props<{ start: string }>());
+export const clearSchedules = createAction(CLEAR_SCHEDULES);
+export const saveSchedules = createAction(SAVE_SCHEDULES, props<{ schedules: ISchedule[] }>());
 
 export const GET_CONFIGURATION = '[SonnenBatterie] Get configuration';
 export const GET_CONFIGURATION_SUCCESS = '[SonnenBatterie] Get configuration success';
@@ -37,10 +49,10 @@ export const setConfiguration = createAction(
   SET_CONFIGURATION,
   props<{ key: ConfigurationKey; configuration: string }>()
 );
-export const setConfigurationSuccess = createAction(SET_CONFIGURATION_SUCCESS);
+export const setConfigurationSuccess = createAction(SET_CONFIGURATION_SUCCESS, props<{ configuration: string }>());
 export const setConfigurationFailed = createAction(
   SET_CONFIGURATION_FAILED,
-  props<{ error: HttpErrorResponse; oldConfiguration: IDeviceConfiguration }>()
+  props<{ error?: string | HttpErrorResponse }>()
 );
 
 export const REFRESH_CONFIGURATIONS = '[SonnenBatterie] Refresh configurations';

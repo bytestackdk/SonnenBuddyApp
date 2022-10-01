@@ -142,7 +142,14 @@ export class TimespanComponentStore extends ComponentStore<TimespanState> {
 
     date.setMinutes(value * 15);
 
-    return `${date.getUTCHours()}:${date.getUTCMinutes().toString().padStart(2, '0')}`;
+    const hours = this.prefixZero(date.getUTCHours());
+    const minutes = this.prefixZero(date.getUTCMinutes());
+
+    return `${hours}:${minutes}`;
+  }
+
+  private prefixZero(hoursOrMinutes: number) {
+    return hoursOrMinutes.toString().padStart(2, '0');
   }
 
   private invertKnob(knob: Knob) {

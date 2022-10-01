@@ -4,15 +4,22 @@ import * as fromPlatform from '../platform';
 import { IDeviceConfiguration } from '../../shared/models/sonnen-batterie.model';
 import { LoadingState } from 'src/app/shared/models/loading-state.model';
 import { IDevice } from '../../api/models/network.model';
-import { ConfigurationKey, OperatingMode } from '../../api/models/battery.model';
+import { ConfigurationKey, ISchedule, OperatingMode } from '../../api/models/battery.model';
+
+export const asSchedules = (json: string) => {
+  const schedules: ISchedule[] = JSON.parse(json);
+  return schedules;
+};
 
 export interface SonnenBatterieState extends LoadingState {
   device: IDevice;
+  previousConfiguration: IDeviceConfiguration;
   configuration: IDeviceConfiguration;
 }
 
 export const initialState: SonnenBatterieState = {
   device: null,
+  previousConfiguration: null,
   configuration: null,
   ...LoadingState.initial(),
 };
@@ -71,7 +78,8 @@ export const sonnenBatterieFeature = createFeature({
         configuration: {
           ...state.configuration,
           ...(key === ConfigurationKey.EM_OperatingMode && { operatingMode: configuration as OperatingMode }),
-          ...(key === ConfigurationKey.EM_Prognosis_Charging && { prognosisCharging: configuration === '1' }),
+          ...(key === ConfigurationKey.EM_ToU_Schedule && { schedules: asSchedules(configuration) }),
+          // ...(key === ConfigurationKey.EM_Prognosis_Charging && { prognosisCharging: configuration === '1' }),
         },
         ...LoadingState.loaded(),
       })
@@ -81,11 +89,13 @@ export const sonnenBatterieFeature = createFeature({
     // ====================================================================================
     on(fromActions.setConfiguration, (state, { key, configuration }) => ({
       ...state,
-      // Set configuration optimistically
+      previousConfiguration: { ...state.configuration },
+      // Set configuration optimistically because we back up current as previous
       configuration: {
         ...state.configuration,
         // Individual mapping from enum names to something meaningful
         ...(key === ConfigurationKey.EM_OperatingMode && { operatingMode: configuration as OperatingMode }),
+        ...(key === ConfigurationKey.EM_ToU_Schedule && { schedules: asSchedules(configuration) }),
       },
       ...LoadingState.loading(),
     })),
@@ -96,10 +106,10 @@ export const sonnenBatterieFeature = createFeature({
         ...LoadingState.loaded(),
       })
     ),
-    on(fromActions.setConfigurationFailed, (state, { error, oldConfiguration }) => ({
+    on(fromActions.setConfigurationFailed, (state, { error }) => ({
       ...state,
       // Revert changes to the old configuration object
-      configuration: oldConfiguration,
+      configuration: { ...state.previousConfiguration },
       ...LoadingState.failed(error),
     }))
   ),
