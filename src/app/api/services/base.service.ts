@@ -1,13 +1,13 @@
 import { Directive } from '@angular/core';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { selectSonnenBatterieTokenAndIP } from '../../store/sonnen-batterie';
 import { Store } from '@ngrx/store';
 import { from, iif, Observable, of } from 'rxjs';
 import { map, mergeMap, switchMap, take } from 'rxjs/operators';
 import { Capacitor } from '@capacitor/core';
 import { ApiToken } from '../../shared/models/sonnen-batterie.model';
 import { IP } from '../models/network.model';
+import { SonnenBatterieSelectors } from 'src/app/store/sonnen-batterie';
 
 @Directive()
 export class BaseService {
@@ -19,13 +19,12 @@ export class BaseService {
 
   protected get<T>(url: string, apiToken?: ApiToken, lanIp?: IP): Observable<T> {
     const useOverride$ = of({ apiToken, lanIp });
-    const useStore$ = this.store.select(selectSonnenBatterieTokenAndIP);
+    const useStore$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieTokenAndIP);
 
     return of({}).pipe(
       mergeMap(() => iif(() => !!apiToken && !!lanIp, useOverride$, useStore$)),
       take(1),
       switchMap((device) => {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         const authHeader = { 'Auth-Token': device.apiToken };
 
         if (Capacitor.isNativePlatform()) {
@@ -41,10 +40,9 @@ export class BaseService {
   }
 
   protected put<T>(url: string, body: any) {
-    return this.store.select(selectSonnenBatterieTokenAndIP).pipe(
+    return this.store.select(SonnenBatterieSelectors.selectSonnenBatterieTokenAndIP).pipe(
       take(1),
       switchMap((device) => {
-        // eslint-disable-next-line @typescript-eslint/naming-convention
         const authHeader = { 'Auth-Token': device.apiToken };
 
         if (Capacitor.isNativePlatform()) {

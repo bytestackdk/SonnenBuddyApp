@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromSonnenBatterie from '../../store/sonnen-batterie';
 import * as fromStatus from '../../store/status';
 import { LivePageFacade } from './live-page.facade';
+import { SonnenBatterieActions } from '../../store/sonnen-batterie';
+import { SonnenBatterieSelectors } from '../../store/sonnen-batterie';
 
 @Component({
   selector: 'app-live',
@@ -16,7 +17,7 @@ export class LivePage {
   // powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
   // status$ = this.store.select(fromStatus.selectStatus);
 
-  solarCapacity$ = this.store.select(fromSonnenBatterie.selectSonnenBatteriePanelCapacity);
+  solarCapacity$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatteriePanelCapacity);
   solarProduction$ = this.store.select(fromStatus.selectSolarProduction);
   solarUtilization$ = this.store.select(fromStatus.selectSolarUtilization);
   solarToBattery$ = this.store.select(fromStatus.selectSolarToBattery);
@@ -46,7 +47,7 @@ export class LivePage {
   constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 
   ionViewWillEnter() {
-    this.store.dispatch(fromSonnenBatterie.refreshConfigurations());
+    this.store.dispatch(SonnenBatterieActions.refreshConfigurations());
   }
 
   // findDevices() {

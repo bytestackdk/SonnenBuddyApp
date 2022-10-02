@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { ISchedule, ITimespan, OperatingMode } from '../../api/models/battery.model';
 import { Store } from '@ngrx/store';
-import * as fromSonnenBatterie from './../../store/sonnen-batterie';
-import { selectSonnenBatterieOperatingMode, selectSonnenBatterieSchedules } from './../../store/sonnen-batterie';
+import { SonnenBatterieActions, SonnenBatterieSelectors } from './../../store/sonnen-batterie';
 
 export interface IScheduleState {
   showModal?: boolean;
@@ -24,8 +23,14 @@ export const initialState: IScheduleState = {
 @Injectable()
 export class SchedulePageStore extends ComponentStore<IScheduleState> {
   // From global store
-  readonly operatingMode$ = this.select(this.store.select(selectSonnenBatterieOperatingMode), (mode) => mode);
-  readonly schedules$ = this.select(this.store.select(selectSonnenBatterieSchedules), (schedules) => schedules);
+  readonly operatingMode$ = this.select(
+    this.store.select(SonnenBatterieSelectors.selectSonnenBatterieOperatingMode),
+    (mode) => mode
+  );
+  readonly schedules$ = this.select(
+    this.store.select(SonnenBatterieSelectors.selectSonnenBatterieSchedules),
+    (schedules) => schedules
+  );
 
   // Local selectors
   readonly schedule$ = this.select((state) => state.schedule);
@@ -84,21 +89,21 @@ export class SchedulePageStore extends ComponentStore<IScheduleState> {
   });
 
   remove() {
-    this.store.dispatch(fromSonnenBatterie.removeSchedule({ start: this.get().initialStart }));
+    this.store.dispatch(SonnenBatterieActions.removeSchedule({ start: this.get().initialStart }));
     this.patchState({ showModal: false });
   }
 
   clear() {
-    this.store.dispatch(fromSonnenBatterie.clearSchedules());
+    this.store.dispatch(SonnenBatterieActions.clearSchedules());
   }
 
   save() {
     const { initialStart, edit, schedule } = this.get();
 
     if (edit) {
-      this.store.dispatch(fromSonnenBatterie.updateSchedule({ start: initialStart, schedule }));
+      this.store.dispatch(SonnenBatterieActions.updateSchedule({ start: initialStart, schedule }));
     } else {
-      this.store.dispatch(fromSonnenBatterie.addSchedule({ schedule }));
+      this.store.dispatch(SonnenBatterieActions.addSchedule({ schedule }));
     }
 
     this.patchState({ showModal: false });

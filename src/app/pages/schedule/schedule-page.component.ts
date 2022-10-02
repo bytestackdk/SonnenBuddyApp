@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SchedulePageStore } from './schedule-page.store';
 import { ISchedule, OperatingMode } from '../../api/models/battery.model';
-import * as fromSonnenBatterie from '../../store/sonnen-batterie';
+import { SonnenBatterieActions } from '../../store/sonnen-batterie';
 import { Store } from '@ngrx/store';
 import { TimespanChangeEvent } from '../../shared/components/timespan/timespan.component.store';
 
@@ -17,13 +17,11 @@ export class SchedulePage {
   start: string;
   stop: string;
   threshold: string;
-  new = false;
-  unchanged = true;
 
   constructor(private readonly store: Store, public readonly componentStore: SchedulePageStore) {}
 
   ionViewWillEnter() {
-    this.store.dispatch(fromSonnenBatterie.refreshConfigurations());
+    this.store.dispatch(SonnenBatterieActions.refreshConfigurations());
   }
 
   timespanChange(e: TimespanChangeEvent) {

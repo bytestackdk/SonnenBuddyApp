@@ -1,18 +1,15 @@
 import { createSelector } from '@ngrx/store';
 import { statusFeature } from './status.reducer';
 import * as fromSonnenBatterie from '../sonnen-batterie/sonnen-batterie.selectors';
-import {
-  selectSonnenBatterieBatteryCapacity,
-  selectSonnenBatterieInverterMaxPower,
-} from '../sonnen-batterie/sonnen-batterie.selectors';
 import * as timeFunctions from '../../shared/functions/timespan';
+import { SonnenBatterieSelectors } from '../sonnen-batterie';
 
 export const selectStatus = createSelector(statusFeature.selectStatusState, (state) => state.entity);
 export const selectStatusError = createSelector(statusFeature.selectStatusState, (state) => state.error);
 
 export const selectSolarProduction = createSelector(selectStatus, (entity) => entity?.Production_W || 0);
 export const selectSolarUtilization = createSelector(
-  fromSonnenBatterie.selectSonnenBatteriePanelCapacity,
+  SonnenBatterieSelectors.selectSonnenBatteriePanelCapacity,
   selectSolarProduction,
   (capacity, production) => (production / capacity) * 100
 );
@@ -32,7 +29,7 @@ export const selectBatteryChargePercent = createSelector(selectStatus, (entity) 
 export const selectBatteryRemaining = createSelector(selectStatus, (entity) => entity?.RemainingCapacity_Wh);
 export const selectBatteryChargingTime = createSelector(
   selectBatteryCharging,
-  fromSonnenBatterie.selectSonnenBatterieBatteryCapacity,
+  SonnenBatterieSelectors.selectSonnenBatterieBatteryCapacity,
   selectBatteryRemaining,
   selectBatteryUsage,
   (charging, capacity, batteryRemaining, currentUsage) => {
@@ -76,7 +73,7 @@ export const selectInverterCurrentPower = createSelector(selectStatus, (entity) 
 });
 
 export const selectInverterUtilization = createSelector(
-  selectSonnenBatterieInverterMaxPower,
+  SonnenBatterieSelectors.selectSonnenBatterieInverterMaxPower,
   selectInverterCurrentPower,
   (capacity, current) => (current / capacity) * 100
 );

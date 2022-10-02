@@ -8,7 +8,7 @@ import { IDevice } from '../../api/models/network.model';
 import { forkJoin } from 'rxjs';
 import { concatLatestFrom } from '@ngrx/effects';
 import { Guid } from 'guid-typescript';
-import * as fromSonnenBatterie from '../../store/sonnen-batterie';
+import { SonnenBatterieActions } from '../../store/sonnen-batterie';
 import { BatteryService } from '../../api/services/battery.service';
 import { ConfigurationKey } from '../../api/models/battery.model';
 
@@ -103,7 +103,7 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
       panelCapacity,
     };
 
-    this.store.dispatch(fromSonnenBatterie.finishWizard({ device, configuration }));
+    this.store.dispatch(SonnenBatterieActions.finishWizard({ device, configuration }));
   }
 
   reset() {

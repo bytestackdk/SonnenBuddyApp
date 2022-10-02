@@ -2,7 +2,7 @@ import { OperatingMode } from '../../api/models/battery.model';
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
 import { Store } from '@ngrx/store';
-import * as fromSonnenBatterie from '../../store/sonnen-batterie';
+import { SonnenBatterieSelectors } from 'src/app/store/sonnen-batterie';
 
 export interface ISettingsState {
   operatingMode: OperatingMode;
@@ -20,7 +20,7 @@ export const initialState: ISettingsState = {
 
 @Injectable()
 export class SettingsPageStore extends ComponentStore<ISettingsState> {
-  readonly operatingMode$ = this.store.select(fromSonnenBatterie.selectSonnenBatterieOperatingMode);
+  readonly operatingMode$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieOperatingMode);
   readonly showOperatingMode$ = this.select((state) => state.showOperatingModeModal);
 
   constructor(private readonly store: Store) {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectSonnenBatterieSchedules } from '../store/sonnen-batterie';
+import { SonnenBatterieSelectors } from '../store/sonnen-batterie';
 
 @Component({
   selector: 'app-tabs',
@@ -8,7 +8,7 @@ import { selectSonnenBatterieSchedules } from '../store/sonnen-batterie';
   styleUrls: ['tabs.page.scss'],
 })
 export class TabsPage {
-  schedules$ = this.store.select(selectSonnenBatterieSchedules);
+  schedules$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieSchedules);
 
   constructor(private readonly store: Store) {}
 }

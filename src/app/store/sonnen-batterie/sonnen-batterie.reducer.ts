@@ -1,5 +1,5 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
-import * as fromActions from './sonnen-batterie.actions';
+import { SonnenBatterieActions } from './sonnen-batterie.actions';
 import * as fromPlatform from '../platform';
 import { IDeviceConfiguration } from '../../shared/models/sonnen-batterie.model';
 import { LoadingState } from 'src/app/shared/models/loading-state.model';
@@ -29,11 +29,11 @@ export const sonnenBatterieFeature = createFeature({
   reducer: createReducer(
     initialState,
 
-    on(fromActions.clearDevice, (state) => ({
+    on(SonnenBatterieActions.clearDevice, (state) => ({
       ...state,
       device: null,
     })),
-    on(fromActions.finishWizard, (state, { device, configuration }) => ({
+    on(SonnenBatterieActions.finishWizard, (state, { device, configuration }) => ({
       ...state,
       device,
       configuration,
@@ -46,14 +46,14 @@ export const sonnenBatterieFeature = createFeature({
 
     // Loading
     // ====================================================================================
-    on(fromActions.findDevice, fromActions.getConfiguration, (state) => ({
+    on(SonnenBatterieActions.findDevice, SonnenBatterieActions.getConfiguration, (state) => ({
       ...state,
       ...LoadingState.loading(),
     })),
 
     // Failed
     // ====================================================================================
-    on(fromActions.findDeviceFailed, fromActions.getConfigurationFailed, (state, { error }) => ({
+    on(SonnenBatterieActions.findDeviceFailed, SonnenBatterieActions.getConfigurationFailed, (state, { error }) => ({
       ...state,
       ...LoadingState.failed(error),
     })),
@@ -61,7 +61,7 @@ export const sonnenBatterieFeature = createFeature({
     // Find device
     // ====================================================================================
     on(
-      fromActions.findDeviceSuccess,
+      SonnenBatterieActions.findDeviceSuccess,
       (state, { device }): SonnenBatterieState => ({
         ...state,
         device,
@@ -72,7 +72,7 @@ export const sonnenBatterieFeature = createFeature({
     // Get configuration
     // ====================================================================================
     on(
-      fromActions.getConfigurationSuccess,
+      SonnenBatterieActions.getConfigurationSuccess,
       (state, { key, configuration }): SonnenBatterieState => ({
         ...state,
         configuration: {
@@ -87,7 +87,7 @@ export const sonnenBatterieFeature = createFeature({
 
     // Set configuration
     // ====================================================================================
-    on(fromActions.setConfiguration, (state, { key, configuration }) => ({
+    on(SonnenBatterieActions.setConfiguration, (state, { key, configuration }) => ({
       ...state,
       previousConfiguration: { ...state.configuration },
       // Set configuration optimistically because we back up current as previous
@@ -100,13 +100,13 @@ export const sonnenBatterieFeature = createFeature({
       ...LoadingState.loading(),
     })),
     on(
-      fromActions.setConfigurationSuccess,
+      SonnenBatterieActions.setConfigurationSuccess,
       (state): SonnenBatterieState => ({
         ...state,
         ...LoadingState.loaded(),
       })
     ),
-    on(fromActions.setConfigurationFailed, (state, { error }) => ({
+    on(SonnenBatterieActions.setConfigurationFailed, (state, { error }) => ({
       ...state,
       // Revert changes to the old configuration object
       configuration: { ...state.previousConfiguration },

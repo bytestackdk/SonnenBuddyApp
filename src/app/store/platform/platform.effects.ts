@@ -3,9 +3,10 @@ import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BatteryService } from '../../api/services/battery.service';
 import * as fromPlatformActions from './platform.actions';
-import * as fromSonnenBatterie from '../sonnen-batterie';
 import { exhaustMap, filter, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { SonnenBatterieActions } from '../sonnen-batterie/';
+import { SonnenBatterieSelectors } from 'src/app/store/sonnen-batterie';
 
 @Injectable()
 export class PlatformEffects {
@@ -19,7 +20,7 @@ export class PlatformEffects {
   hasActiveDevice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromPlatformActions.platformReady),
-      concatLatestFrom(() => this.store.select(fromSonnenBatterie.selectDevice)),
+      concatLatestFrom(() => this.store.select(SonnenBatterieSelectors.selectDevice)),
       map(([, device]) => {
         return device === null
           ? fromPlatformActions.noActiveDeviceExists()
@@ -80,13 +81,13 @@ export class PlatformEffects {
   onlineFindDevice$ = createEffect(() =>
     this.actions$.pipe(
       ofType(fromPlatformActions.online),
-      map(() => fromSonnenBatterie.findDevice({ stopAfterFind: false }))
+      map(() => SonnenBatterieActions.findDevice({ stopAfterFind: false }))
     )
   );
 
   findDevicesSuccess$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromSonnenBatterie.findDeviceSuccess),
+      ofType(SonnenBatterieActions.findDeviceSuccess),
       filter(({ stopAfterFind }) => !stopAfterFind),
       map(({ device }) => {
         return !device ? fromPlatformActions.deviceNotFound() : fromPlatformActions.checkActiveDeviceResponding();

@@ -18,6 +18,7 @@
       ],
       "rules": {
         "prettier/prettier": "error",
+        "@typescript-eslint/naming-convention": ["off"],
         "@angular-eslint/component-class-suffix": [
           "error",
           {

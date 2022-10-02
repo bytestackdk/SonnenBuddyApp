@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromPlatform from '../../store/platform';
-import * as fromSonnenBatterie from '../../store/sonnen-batterie';
 import { SettingsPageStore } from './settings-page.store';
 import { ConfigurationKey, OperatingMode } from '../../api/models/battery.model';
+import { SonnenBatterieActions } from '../../store/sonnen-batterie';
 
 @Component({
   selector: 'app-settings',
@@ -28,7 +28,7 @@ export class SettingsPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.store.dispatch(fromSonnenBatterie.refreshConfigurations());
+    this.store.dispatch(SonnenBatterieActions.refreshConfigurations());
   }
 
   toggleOperatingModeModal(show: boolean) {
@@ -39,7 +39,7 @@ export class SettingsPage implements OnInit {
     this.componentStore.toggleOperatingModeModal(false);
 
     this.store.dispatch(
-      fromSonnenBatterie.setConfiguration({ key: ConfigurationKey.EM_OperatingMode, configuration: operatingMode })
+      SonnenBatterieActions.setConfiguration({ key: ConfigurationKey.EM_OperatingMode, configuration: operatingMode })
     );
   }
 
