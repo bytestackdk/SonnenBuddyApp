@@ -18,7 +18,7 @@ const s: ITimeSpan = {
   second: 1,
 };
 
-export function getTimespan(date1: Date, date2: Date) {
+export const getTimespan = (date1: Date, date2: Date) => {
   let difference = Math.abs(date1.getTime() - date2.getTime()) / 1000;
   const timespan: ITimeSpan = {};
 
@@ -28,4 +28,4 @@ export function getTimespan(date1: Date, date2: Date) {
   });
 
   return timespan;
-}
+};

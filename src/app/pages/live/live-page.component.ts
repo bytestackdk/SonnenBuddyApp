@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromStatus from '../../store/status';
+import { StatusSelectors } from '../../store/status';
 import { LivePageFacade } from './live-page.facade';
-import { SonnenBatterieActions } from '../../store/sonnen-batterie';
-import { SonnenBatterieSelectors } from '../../store/sonnen-batterie';
+import { SonnenBatterieActions, SonnenBatterieSelectors } from '../../store/sonnen-batterie';
 
 @Component({
   selector: 'app-live',
@@ -18,31 +17,31 @@ export class LivePage {
   // status$ = this.store.select(fromStatus.selectStatus);
 
   solarCapacity$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatteriePanelCapacity);
-  solarProduction$ = this.store.select(fromStatus.selectSolarProduction);
-  solarUtilization$ = this.store.select(fromStatus.selectSolarUtilization);
-  solarToBattery$ = this.store.select(fromStatus.selectSolarToBattery);
-  solarToInverter$ = this.store.select(fromStatus.selectSolarToInverter);
+  solarProduction$ = this.store.select(StatusSelectors.selectSolarProduction);
+  solarUtilization$ = this.store.select(StatusSelectors.selectSolarUtilization);
+  solarToBattery$ = this.store.select(StatusSelectors.selectSolarToBattery);
+  solarToInverter$ = this.store.select(StatusSelectors.selectSolarToInverter);
 
-  batteryCharge$ = this.store.select(fromStatus.selectBatteryChargePercent);
-  batteryCharging$ = this.store.select(fromStatus.selectBatteryCharging);
-  batteryChargingTime$ = this.store.select(fromStatus.selectBatteryChargingTime);
-  batteryDischarging$ = this.store.select(fromStatus.selectBatteryDischarging);
-  batteryDischargingTime$ = this.store.select(fromStatus.selectBatteryDischargingTime);
-  batteryUtilization$ = this.store.select(fromStatus.selectBatteryUtilization);
-  batteryRemaining$ = this.store.select(fromStatus.selectBatteryRemaining);
-  batteryUsage$ = this.store.select(fromStatus.selectBatteryUsage);
-  batteryToInverter$ = this.store.select(fromStatus.selectBatteryToInverter);
+  batteryCharge$ = this.store.select(StatusSelectors.selectBatteryChargePercent);
+  batteryCharging$ = this.store.select(StatusSelectors.selectBatteryCharging);
+  batteryChargingTime$ = this.store.select(StatusSelectors.selectBatteryChargingTime);
+  batteryDischarging$ = this.store.select(StatusSelectors.selectBatteryDischarging);
+  batteryDischargingTime$ = this.store.select(StatusSelectors.selectBatteryDischargingTime);
+  batteryUtilization$ = this.store.select(StatusSelectors.selectBatteryUtilization);
+  batteryRemaining$ = this.store.select(StatusSelectors.selectBatteryRemaining);
+  batteryUsage$ = this.store.select(StatusSelectors.selectBatteryUsage);
+  batteryToInverter$ = this.store.select(StatusSelectors.selectBatteryToInverter);
 
-  houseConsumption$ = this.store.select(fromStatus.selectHouseConsumption);
+  houseConsumption$ = this.store.select(StatusSelectors.selectHouseConsumption);
 
-  inverterUsage$ = this.store.select(fromStatus.selectInverterCurrentPower);
-  inverterUtilization$ = this.store.select(fromStatus.selectInverterUtilization);
-  inverterToBattery$ = this.store.select(fromStatus.selectInverterToBattery);
-  inverterToHouse$ = this.store.select(fromStatus.selectInverterToHouse);
-  inverterToGrid$ = this.store.select(fromStatus.selectInverterToGrid);
+  inverterUsage$ = this.store.select(StatusSelectors.selectInverterCurrentPower);
+  inverterUtilization$ = this.store.select(StatusSelectors.selectInverterUtilization);
+  inverterToBattery$ = this.store.select(StatusSelectors.selectInverterToBattery);
+  inverterToHouse$ = this.store.select(StatusSelectors.selectInverterToHouse);
+  inverterToGrid$ = this.store.select(StatusSelectors.selectInverterToGrid);
 
-  gridFeedIn$ = this.store.select(fromStatus.selectGridFeedIn);
-  gridToHouse$ = this.store.select(fromStatus.selectGridToHouse);
+  gridFeedIn$ = this.store.select(StatusSelectors.selectGridFeedIn);
+  gridToHouse$ = this.store.select(StatusSelectors.selectGridToHouse);
 
   constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 

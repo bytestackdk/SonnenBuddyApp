@@ -1,6 +1,6 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { SonnenBatterieActions } from './sonnen-batterie.actions';
-import * as fromPlatform from '../platform';
+import { PlatformActions } from '../platform';
 import { IDeviceConfiguration } from '../../shared/models/sonnen-batterie.model';
 import { LoadingState } from 'src/app/shared/models/loading-state.model';
 import { IDevice } from '../../api/models/network.model';
@@ -38,7 +38,7 @@ export const sonnenBatterieFeature = createFeature({
       device,
       configuration,
     })),
-    on(fromPlatform.resetApp, (state) => ({
+    on(PlatformActions.resetApp, (state) => ({
       ...state,
       device: null,
       configuration: null,

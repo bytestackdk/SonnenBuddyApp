@@ -17,7 +17,7 @@
             "allowedCommonJsDependencies": [
               "lodash/cloneDeep",
               "lodash/isPlainObject",
-              "lodash/merge",
+              "lodash/merge"
             ],
             "outputPath": "www",
             "index": "src/index.html",

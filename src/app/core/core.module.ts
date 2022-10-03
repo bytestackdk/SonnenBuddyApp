@@ -6,12 +6,7 @@ import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 
 @NgModule({
   declarations: [],
-  imports: [
-    CommonModule,
-    BrowserModule,
-    HttpClientModule,
-    HttpClientJsonpModule,
-  ],
+  imports: [CommonModule, BrowserModule, HttpClientModule, HttpClientJsonpModule],
   providers: [HTTP],
 })
 export class CoreModule {}

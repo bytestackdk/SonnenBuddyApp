@@ -8,7 +8,7 @@ export interface ISettingsState {
   operatingMode: OperatingMode;
   showOperatingModeModal: boolean;
   loading: boolean;
-  error: any;
+  error: unknown;
 }
 
 export const initialState: ISettingsState = {
@@ -28,6 +28,6 @@ export class SettingsPageStore extends ComponentStore<ISettingsState> {
   }
 
   toggleOperatingModeModal(showOperatingModeModal: boolean) {
-    this.patchState((state) => ({ showOperatingModeModal }));
+    this.patchState(() => ({ showOperatingModeModal }));
   }
 }

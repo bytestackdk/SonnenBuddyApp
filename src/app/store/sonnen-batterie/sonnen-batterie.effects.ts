@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { NetworkService } from '../../api/services/network.service';
 import { SonnenBatterieActions, SonnenBatterieSelectors } from './';
-import * as fromPlatform from '../platform/platform.actions';
+import { PlatformActions } from '../platform';
 import { BatteryService } from '../../api/services/battery.service';
 import { ConfigurationKey } from '../../api/models/battery.model';
 
@@ -39,7 +39,7 @@ export class SonnenBatterieEffects {
   finishWizard$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(SonnenBatterieActions.finishWizard),
-      map(() => fromPlatform.gotoLivePage())
+      map(() => PlatformActions.gotoLivePage())
     );
   });
 

@@ -1,7 +1,7 @@
 import { IBatteryStatus } from '../../api/models/battery.model';
 import { LoadingState } from '../../shared/models/loading-state.model';
 import { createFeature, createReducer, on } from '@ngrx/store';
-import * as fromActions from './status.actions';
+import { StatusActions } from './status.actions';
 
 export interface StatusState extends LoadingState {
   entity: IBatteryStatus;
@@ -17,9 +17,9 @@ export const statusFeature = createFeature({
   reducer: createReducer(
     initialState,
 
-    on(fromActions.getBatteryStatus, (state): StatusState => ({ ...state, ...LoadingState.loading() })),
+    on(StatusActions.getStatus, (state): StatusState => ({ ...state, ...LoadingState.loading() })),
     on(
-      fromActions.getBatteryStatusSuccess,
+      StatusActions.getStatusSuccess,
       (state, { status }): StatusState => ({
         ...state,
         entity: status,
@@ -27,13 +27,13 @@ export const statusFeature = createFeature({
       })
     ),
     on(
-      fromActions.getBatteryStatusFailed,
+      StatusActions.getStatusFailed,
       (state, { error }): StatusState => ({
         ...state,
         ...LoadingState.failed(error),
       })
     ),
-    on(fromActions.clearStatus, (state) => ({
+    on(StatusActions.clearStatus, () => ({
       ...initialState,
     }))
   ),

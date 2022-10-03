@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BatteryService } from '../../api/services/battery.service';
-import * as fromActions from './status.actions';
-import * as fromPlatform from '../platform';
+import { StatusActions } from './status.actions';
+import { PlatformActions } from '../platform';
 import { catchError, exhaustMap, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { interval, of } from 'rxjs';
 
@@ -19,11 +19,11 @@ export class StatusEffects {
 
   getStatus$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.getBatteryStatus),
+      ofType(StatusActions.getStatus),
       exhaustMap(() =>
         this.batteryService.getStatus().pipe(
-          map((status) => fromActions.getBatteryStatusSuccess({ status })),
-          catchError((error) => of(fromActions.getBatteryStatusFailed({ error })))
+          map((status) => StatusActions.getStatusSuccess({ status })),
+          catchError((error) => of(StatusActions.getStatusFailed({ error })))
         )
       )
     );
@@ -31,33 +31,33 @@ export class StatusEffects {
 
   clearStatus$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromPlatform.resetApp),
-      map(() => fromActions.clearStatus())
+      ofType(PlatformActions.resetApp),
+      map(() => StatusActions.clearStatus())
     );
   });
 
   stopPolling$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromPlatform.gotoWizard),
-      map(() => fromActions.stopPolling())
+      ofType(PlatformActions.gotoWizard),
+      map(() => StatusActions.stopPolling())
     );
   });
 
   startPolling$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromPlatform.gotoLivePage, fromPlatform.activeDeviceResponding),
-      map(() => fromActions.startPolling())
+      ofType(PlatformActions.gotoLivePage, PlatformActions.activeDeviceResponding),
+      map(() => StatusActions.startPolling())
     );
   });
 
   polling$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(fromActions.startPolling),
+      ofType(StatusActions.startPolling),
       switchMap(() =>
         interval(POLLING_INTERVAL).pipe(
           startWith(0),
-          takeUntil(this.actions$.pipe(ofType(fromActions.stopPolling))),
-          map(() => fromActions.getBatteryStatus())
+          takeUntil(this.actions$.pipe(ofType(StatusActions.stopPolling))),
+          map(() => StatusActions.getStatus())
         )
       )
     );

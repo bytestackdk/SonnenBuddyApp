@@ -1,20 +1,15 @@
-import { createAction, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IBatteryStatus } from '../../api/models/battery.model';
 
-export const GET_STATUS = '[Battery] Get status';
-export const GET_STATUS_SUCCESS = '[Battery] Get status success';
-export const GET_STATUS_FAILED = '[Battery] Get status failed';
-
-export const getBatteryStatus = createAction(GET_STATUS);
-export const getBatteryStatusSuccess = createAction(GET_STATUS_SUCCESS, props<{ status: IBatteryStatus }>());
-export const getBatteryStatusFailed = createAction(GET_STATUS_FAILED, props<{ error: HttpErrorResponse }>());
-
-export const CLEAR_STATUS = '[Battery] Clear status';
-export const clearStatus = createAction(CLEAR_STATUS);
-
-export const START_POLLING = '[Battery] Start polling';
-export const STOP_POLLING = '[Battery] Stop polling';
-
-export const startPolling = createAction(START_POLLING);
-export const stopPolling = createAction(STOP_POLLING);
+export const StatusActions = createActionGroup({
+  source: 'Battery',
+  events: {
+    'Get Status': emptyProps(),
+    'Get Status Success': props<{ status: IBatteryStatus }>(),
+    'Get Status Failed': props<{ error: HttpErrorResponse }>(),
+    'Clear Status': emptyProps(),
+    'Start Polling': emptyProps(),
+    'Stop Polling': emptyProps(),
+  },
+});

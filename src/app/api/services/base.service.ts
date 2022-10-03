@@ -39,7 +39,7 @@ export class BaseService {
     );
   }
 
-  protected put<T>(url: string, body: any) {
+  protected put<T>(url: string, body: unknown) {
     return this.store.select(SonnenBatterieSelectors.selectSonnenBatterieTokenAndIP).pipe(
       take(1),
       switchMap((device) => {

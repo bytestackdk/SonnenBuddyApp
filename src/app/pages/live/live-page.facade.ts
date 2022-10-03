@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Direction } from '../../shared/components/power-square/power-square.component';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import * as fromStatus from '../../store/status';
+import { StatusSelectors } from '../../store/status';
 import { map } from 'rxjs/operators';
 
 export interface ILivePageViewModel {
@@ -17,10 +17,10 @@ export class LivePageFacade {
   constructor(private readonly store: Store) {
     this.vm = {
       solarToBattery$: this.store
-        .select(fromStatus.selectSolarToBattery)
+        .select(StatusSelectors.selectSolarToBattery)
         .pipe(map((solarToBattery) => (solarToBattery ? Direction.Clockwise : Direction.None))),
       solarToInverter$: this.store
-        .select(fromStatus.selectSolarToInverter)
+        .select(StatusSelectors.selectSolarToInverter)
         .pipe(map((solarToInverter) => (solarToInverter ? Direction.CounterClockwise : Direction.None))),
     };
   }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BatteryService } from '../../api/services/battery.service';
-import * as fromPlatformActions from './platform.actions';
+import { PlatformActions } from './platform.actions';
 import { exhaustMap, filter, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SonnenBatterieActions } from '../sonnen-batterie/';
@@ -19,41 +19,37 @@ export class PlatformEffects {
 
   hasActiveDevice$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromPlatformActions.platformReady),
+      ofType(PlatformActions.platformReady),
       concatLatestFrom(() => this.store.select(SonnenBatterieSelectors.selectDevice)),
       map(([, device]) => {
-        return device === null
-          ? fromPlatformActions.noActiveDeviceExists()
-          : fromPlatformActions.usingKnownActiveDevice();
+        return device === null ? PlatformActions.noActiveDeviceExists() : PlatformActions.usingKnownActiveDevice();
       })
     )
   );
 
   noActiveDeviceExists$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromPlatformActions.noActiveDeviceExists),
-      map(() => fromPlatformActions.gotoWizard())
+      ofType(PlatformActions.noActiveDeviceExists),
+      map(() => PlatformActions.gotoWizard())
     )
   );
 
   currentDeviceKnown$$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromPlatformActions.usingKnownActiveDevice),
-      map(() => fromPlatformActions.checkActiveDeviceResponding())
+      ofType(PlatformActions.usingKnownActiveDevice),
+      map(() => PlatformActions.checkActiveDeviceResponding())
     )
   );
 
   checkCurrentDeviceResponding$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromPlatformActions.checkActiveDeviceResponding),
+      ofType(PlatformActions.checkActiveDeviceResponding),
       exhaustMap(() =>
         this.batteryService
           .check()
           .pipe(
             map((isResponding) =>
-              isResponding
-                ? fromPlatformActions.activeDeviceResponding()
-                : fromPlatformActions.activeDeviceNotResponding()
+              isResponding ? PlatformActions.activeDeviceResponding() : PlatformActions.activeDeviceNotResponding()
             )
           )
       )
@@ -62,8 +58,8 @@ export class PlatformEffects {
 
   currentDeviceNotResponding$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromPlatformActions.activeDeviceNotResponding),
-      map(() => fromPlatformActions.checkOnline())
+      ofType(PlatformActions.activeDeviceNotResponding),
+      map(() => PlatformActions.checkOnline())
     )
   );
 
@@ -80,7 +76,7 @@ export class PlatformEffects {
 
   onlineFindDevice$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromPlatformActions.online),
+      ofType(PlatformActions.online),
       map(() => SonnenBatterieActions.findDevice({ stopAfterFind: false }))
     )
   );
@@ -90,22 +86,22 @@ export class PlatformEffects {
       ofType(SonnenBatterieActions.findDeviceSuccess),
       filter(({ stopAfterFind }) => !stopAfterFind),
       map(({ device }) => {
-        return !device ? fromPlatformActions.deviceNotFound() : fromPlatformActions.checkActiveDeviceResponding();
+        return !device ? PlatformActions.deviceNotFound() : PlatformActions.checkActiveDeviceResponding();
       })
     )
   );
 
   resetApp$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromPlatformActions.resetApp),
-      map(() => fromPlatformActions.gotoWizard())
+      ofType(PlatformActions.resetApp),
+      map(() => PlatformActions.gotoWizard())
     )
   );
 
   gotoWizard$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(fromPlatformActions.gotoWizard),
+        ofType(PlatformActions.gotoWizard),
         map(() => this.router.navigate(['/wizard']))
       ),
     { dispatch: false }
@@ -114,7 +110,7 @@ export class PlatformEffects {
   gotoLivePage$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(fromPlatformActions.gotoLivePage),
+        ofType(PlatformActions.gotoLivePage),
         map(() => this.router.navigate(['/tabs/live']))
       ),
     { dispatch: false }

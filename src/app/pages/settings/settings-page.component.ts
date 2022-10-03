@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import * as fromPlatform from '../../store/platform';
+import { PlatformActions } from '../../store/platform';
 import { SettingsPageStore } from './settings-page.store';
 import { ConfigurationKey, OperatingMode } from '../../api/models/battery.model';
 import { SonnenBatterieActions } from '../../store/sonnen-batterie';
@@ -21,7 +21,7 @@ export class SettingsPage implements OnInit {
 
   OperatingMode = OperatingMode;
 
-  constructor(private readonly store: Store, private readonly componentStore: SettingsPageStore) {}
+  constructor(private readonly store: Store, readonly componentStore: SettingsPageStore) {}
 
   ngOnInit() {
     console.log('TODO: Read configuration from API');
@@ -44,6 +44,6 @@ export class SettingsPage implements OnInit {
   }
 
   resetApp() {
-    this.store.dispatch(fromPlatform.resetApp());
+    this.store.dispatch(PlatformActions.resetApp());
   }
 }

@@ -23,7 +23,7 @@ export interface IWizardState {
   showFindHelp: boolean;
   showTokenHelp: boolean;
   loading: boolean;
-  error: any;
+  error: unknown;
 }
 
 export const initialState: IWizardState = {
@@ -71,23 +71,23 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   }
 
   toggleFindHelp(showFindHelp: boolean) {
-    this.patchState((state) => ({ showFindHelp }));
+    this.patchState(() => ({ showFindHelp }));
   }
 
   toggleTokenHelp(showTokenHelp: boolean) {
-    this.patchState((state) => ({ showTokenHelp }));
+    this.patchState(() => ({ showTokenHelp }));
   }
 
   setToken(apiToken: ApiToken) {
-    this.patchState((state) => ({ apiToken }));
+    this.patchState(() => ({ apiToken }));
   }
 
   setPanelPowerOutput(panelPowerOutput: number) {
-    this.patchState((state) => ({ panelPowerOutput }));
+    this.patchState(() => ({ panelPowerOutput }));
   }
 
   setPanelQuantity(panelQuantity: number) {
-    this.patchState((state) => ({ panelQuantity }));
+    this.patchState(() => ({ panelQuantity }));
   }
 
   finish() {
@@ -107,7 +107,7 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   }
 
   reset() {
-    this.setState((state) => ({ ...initialState }));
+    this.setState(() => ({ ...initialState }));
   }
 
   readonly findDevice = this.effect((trigger$) => {

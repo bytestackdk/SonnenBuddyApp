@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BatteryService } from '../../api/services/battery.service';
-import * as fromActions from './power-meter.actions';
+import { PowerMeterActions } from './power-meter.actions';
 import { catchError, exhaustMap, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -16,11 +16,11 @@ export class PowerMeterEffects {
 
   getPowerMeter$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(fromActions.getPowerMeter),
+      ofType(PowerMeterActions.getPowerMeter),
       exhaustMap(() =>
         this.batteryService.getPowerMeter().pipe(
-          map((powerMeter) => fromActions.getPowerMeterSuccess({ powerMeter })),
-          catchError((error) => of(fromActions.getPowerMeterFailed({ error })))
+          map((powerMeter) => PowerMeterActions.getPowerMeterSuccess({ powerMeter })),
+          catchError((error) => of(PowerMeterActions.getPowerMeterFailed({ error })))
         )
       )
     )

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Platform } from '@ionic/angular';
-import * as fromPlatform from './store/platform';
+import { PlatformActions } from './store/platform';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 
 @Component({
@@ -22,11 +22,11 @@ export class AppComponent implements OnInit, OnDestroy {
         this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
       }
 
-      this.store.dispatch(fromPlatform.platformReady());
+      this.store.dispatch(PlatformActions.platformReady());
     });
   }
 
   ngOnDestroy() {
-    this.store.dispatch(fromPlatform.platformStop());
+    this.store.dispatch(PlatformActions.platformStop());
   }
 }
