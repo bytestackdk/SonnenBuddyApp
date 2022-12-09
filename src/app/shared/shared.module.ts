@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FlexModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { KwPipe } from './pipes/kw.pipe';
@@ -13,11 +12,10 @@ import { TimespanComponent } from './components/timespan/timespan.component';
 
 @NgModule({
   declarations: [KwPipe, OmPipe, UtilizationComponent, BatteryComponent, PowerSquareComponent, TimespanComponent],
-  imports: [CommonModule, IonicModule, FormsModule, FlexModule, SwiperModule],
+  imports: [CommonModule, IonicModule, FormsModule, SwiperModule],
   exports: [
     BatteryComponent,
     CommonModule,
-    FlexModule,
     FormsModule,
     IonicModule,
     KwPipe,

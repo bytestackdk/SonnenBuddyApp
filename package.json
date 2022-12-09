@@ -2,7 +2,7 @@
   "name": "sonnen-buddy",
   "version": "0.0.1",
   "author": "ByteStack",
-  "homepage": "https://ionicframework.com/",
+  "homepage": "https://bytestack.dk/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -15,7 +15,6 @@
   "dependencies": {
     "@angular/common": "^15.0.3",
     "@angular/core": "^15.0.3",
-    "@angular/flex-layout": "^14.0.0-beta.41",
     "@angular/forms": "^15.0.3",
     "@angular/platform-browser": "^15.0.3",
     "@angular/platform-browser-dynamic": "^15.0.3",
@@ -44,7 +43,7 @@
     "install": "^0.13.0",
     "npm": "^8.12.1",
     "rxjs": "~6.6.0",
-    "swiper": "^8.3.2",
+    "swiper": "^8.4.5",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
   },
