@@ -2,8 +2,8 @@
   <swiper class="swiper" #swiper [allowTouchMove]="false">
     <!-- START -->
     <ng-template swiperSlide>
-      <div class="step" fxLayout="column">
-        <div fxFlex>
+      <div class="step ion-flex ion-flex-column ion-justify-content-start">
+        <div class="flex-1">
           <div style="height: 100px">-APP LOGO HERE-</div>
           <h2>Sonnen Buddy</h2>
           <p>
@@ -19,14 +19,14 @@
 
     <!-- FIND -->
     <ng-template swiperSlide>
-      <div class="step" fxLayout="column">
+      <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
           <div style="height: 100px">-SEARCH LOGO HERE-</div>
           <h2>Find your sonnenBatterie</h2>
           <p>Sonnen Buddy will try and find the sonnenBatterie on your network.</p>
         </div>
 
-        <div fxFlex>
+        <div class="flex-1">
           <ion-button (click)="toggleFindHelp(true)">
             <ion-icon name="help-sharp"></ion-icon>
           </ion-button>
@@ -35,6 +35,7 @@
           >
 
           <ion-card
+            class="ion-margin-top"
             *ngIf="
               (componentStore.loading$ | async) || (componentStore.device$ | async) || (componentStore.error$ | async)
             "
@@ -43,9 +44,7 @@
               <ion-spinner *ngIf="componentStore.loading$ | async"></ion-spinner>
 
               <div
-                fxLayout="row"
-                fxLayoutAlign="center center"
-                fxLayoutGap="24px"
+                class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.device$ | async as device"
               >
                 <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
@@ -58,9 +57,7 @@
               </div>
 
               <div
-                fxLayout="row"
-                fxLayoutAlign="center center"
-                fxLayoutGap="24px"
+                class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.error$ | async as error"
               >
                 <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
@@ -77,7 +74,7 @@
 
     <!-- TOKEN -->
     <ng-template swiperSlide>
-      <div class="step" fxLayout="column">
+      <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
           <div style="height: 100px">-TOKEN LOGO HERE-</div>
           <h2>API token</h2>
@@ -88,7 +85,7 @@
           </ion-item>
         </div>
 
-        <div fxFlex>
+        <div class="flex-1">
           <ion-button (click)="toggleTokenHelp(true)">
             <ion-icon name="help-sharp"></ion-icon>
           </ion-button>
@@ -105,9 +102,7 @@
               <ion-spinner *ngIf="componentStore.loading$ | async"></ion-spinner>
 
               <div
-                fxLayout="row"
-                fxLayoutAlign="center center"
-                fxLayoutGap="24px"
+                class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.apiTokenTested$ | async"
               >
                 <p class="ion-text-left">
@@ -119,9 +114,7 @@
               </div>
 
               <div
-                fxLayout="row"
-                fxLayoutAlign="center center"
-                fxLayoutGap="24px"
+                class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.error$ | async as error"
               >
                 <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
@@ -138,13 +131,13 @@
 
     <!-- SOLAR OUTPUT -->
     <ng-template swiperSlide>
-      <div class="step" fxLayout="column">
+      <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
           <div style="height: 100px">-SOLAR LOGO HERE-</div>
           <h2>Solar capacity</h2>
           <p>Please input how many panels you have and the output of a single panel.</p>
         </div>
-        <div fxFlex>
+        <div class="flex-1">
           <ion-item>
             <ion-label class="label half-width" position="fixed">Panel quantity</ion-label>
             <ion-input

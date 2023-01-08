@@ -31,4 +31,23 @@
 .icon {
   width: 24px;
   height: 24px;
+  flex-shrink: 0;
+}
+
+.ion-flex {
+  display: flex;
+  &-column {
+    flex-direction: column;
+  }
+  &.gap {
+    &-1 {
+      gap: 8px;
+    }
+    &-2 {
+      gap: 16px;
+    }
+  }
+  .flex-1 {
+    flex: 1;
+  }
 }

@@ -32,9 +32,9 @@
 
   <!--Weather forecast charging-->
   <!--  <ion-card>-->
-  <!--    <ion-card-content fxLayout="row" fxLayoutAlign="start center">-->
+  <!--    <ion-card-content class="ion-flex ion-align-items-center gap-2">-->
   <!--      <ion-icon class="icon sun ion-margin-end" name="sunny"></ion-icon>-->
-  <!--      <p fxFlex>Use weather forecast for charge management</p>-->
+  <!--      <div>Use weather forecast for charge management</div>-->
   <!--      <ion-toggle class="forecast"></ion-toggle>-->
   <!--    </ion-card-content>-->
   <!--  </ion-card>-->
@@ -76,13 +76,9 @@
                     <li>Export excess power to the grid</li>
                   </ul>
                   <ion-card>
-                    <ion-card-content fxLayout="row" fxLayoutAlign="start center">
-                      <ion-icon
-                        class="icon info ion-margin-end"
-                        name="checkmark-done-circle-outline"
-                        color="success"
-                      ></ion-icon>
-                      <p fxFlex>With this mode you can set schedules</p>
+                    <ion-card-content class="ion-flex ion-align-items-center gap-2">
+                      <ion-icon class="icon" name="checkmark-done-circle-outline" color="success"></ion-icon>
+                      <div>With this mode you can set schedules</div>
                     </ion-card-content>
                   </ion-card>
                 </ng-container>
@@ -109,7 +105,7 @@
                 </ng-container>
               </ng-container>
 
-              <div fxLayout="row" fxLayoutAlign="end center" *ngIf="mode !== currentMode">
+              <div class="ion-flex ion-justify-content-end" *ngIf="mode !== currentMode">
                 <ion-button (click)="setOperatingMode(mode)">Select</ion-button>
               </div>
             </div>
@@ -122,9 +118,9 @@
 
 <ng-template #noScheduleWarning>
   <ion-card>
-    <ion-card-content fxLayout="row" fxLayoutAlign="start center">
-      <ion-icon class="icon ion-margin-end" name="warning-outline" color="warning"></ion-icon>
-      <p fxFlex>This mode will not allow for any schedules to be set</p>
+    <ion-card-content class="ion-flex ion-align-items-center gap-2">
+      <ion-icon class="icon" name="warning-outline" color="warning"></ion-icon>
+      <div>This mode will not allow for any schedules to be set</div>
     </ion-card-content>
   </ion-card>
 </ng-template>

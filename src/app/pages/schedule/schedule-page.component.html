@@ -42,12 +42,12 @@
   <!--Schedules-->
   <ng-template #schedules>
     <ion-card *ngIf="(componentStore.schedules$ | async).length === 0">
-      <ion-card-content fxLayout="row" fxLayoutAlign="start center">
-        <ion-icon class="icon ion-margin-end" color="primary" name="timer-outline"></ion-icon>
-        <p fxFlex>
+      <ion-card-content class="ion-flex ion-align-items-center gap-2">
+        <ion-icon class="icon" color="primary" name="timer-outline"></ion-icon>
+        <div>
           You have no schedules setup. These can be setup to create periods where your battery charges from the grid or
           doesn't discharge.
-        </p>
+        </div>
       </ion-card-content>
     </ion-card>
 
@@ -63,7 +63,7 @@
           <ng-template #charging>Battery charging from grid</ng-template>
         </ion-card-subtitle>
       </ion-card-header>
-      <ion-card-content fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="16px">
+      <ion-card-content class="ion-flex ion-align-items-center gap-1">
         <ion-icon name="flash-outline" *ngIf="schedule.threshold_p_max > 0"></ion-icon>
         <ion-icon name="flash-off-outline" *ngIf="schedule.threshold_p_max === 0"></ion-icon>
         <div>
@@ -93,15 +93,15 @@
       <ion-content class="ion-padding">
         <ion-card>
           <ion-card-content>
-            <div fxLayout="row">
+            <div class="ion-flex ion-justify-content-between">
               <div>
                 <p>Timespan</p>
                 <h1>
                   <b>{{ componentStore.scheduleStart$ | async }} - {{ componentStore.scheduleStop$ | async }}</b>
                 </h1>
               </div>
-              <div fxFlex class="right-align">
-                <p>Power</p>
+              <div>
+                <p class="ion-text-end">Power</p>
                 <h1>
                   <b>{{ componentStore.scheduleThreshold$ | async }}W</b>
                 </h1>
@@ -130,11 +130,11 @@
           <ion-icon slot="start" color="primary" name="flash-outline"></ion-icon>
         </ion-range>
 
-        <div fxLayout="row" fxLayoutGap="16px" class="ion-margin ion-padding-top">
-          <ion-button (click)="remove()" *ngIf="(componentStore.edit$ | async) === true" color="danger" fxFlex
+        <div class="ion-flex ion-justify-content-evenly ion-margin ion-padding-top">
+          <ion-button class="flex-1" (click)="remove()" *ngIf="(componentStore.edit$ | async) === true" color="danger"
             >Remove</ion-button
           >
-          <ion-button (click)="save()" [disabled]="componentStore.unchanged$ | async" fxFlex>Save</ion-button>
+          <ion-button class="flex-1" (click)="save()" [disabled]="componentStore.unchanged$ | async">Save</ion-button>
         </div>
       </ion-content>
     </ng-template>
