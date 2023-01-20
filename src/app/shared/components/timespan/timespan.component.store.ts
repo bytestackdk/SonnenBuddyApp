@@ -38,8 +38,8 @@ export class TimespanComponentStore extends ComponentStore<TimespanState> {
   readonly startIsUpperKnob$ = this.select((state) => state.upperKnob === Knob.start);
 
   initialize(start: string, stop: string) {
-    start = start.length < 5 ? `0${start}` : start;
-    stop = stop.length < 5 ? `0${stop}` : stop;
+    start = start.padStart(5, '0');
+    stop = stop.padStart(5, '0');
 
     const upperKnob = start > stop ? Knob.start : Knob.stop;
     const initialLower = this.timeToNumber(upperKnob === Knob.start ? stop : start);
@@ -130,9 +130,9 @@ export class TimespanComponentStore extends ComponentStore<TimespanState> {
   });
 
   timeToNumber(time: string) {
-    const timeSplit = time.split(':');
-    const hours = parseInt(timeSplit[0], 10);
-    const minutes = parseInt(timeSplit[1], 10);
+    const [hh, mm] = time.split(':');
+    const hours = parseInt(hh, 10);
+    const minutes = parseInt(mm, 10);
 
     return hours * 4 + minutes / 15;
   }
@@ -145,7 +145,7 @@ export class TimespanComponentStore extends ComponentStore<TimespanState> {
     const hours = this.prefixZero(date.getUTCHours());
     const minutes = this.prefixZero(date.getUTCMinutes());
 
-    return `${hours}:${minutes}`;
+    return value > 0 && hours === '00' && minutes === '00' ? '24:00' : `${hours}:${minutes}`;
   }
 
   private prefixZero(hoursOrMinutes: number) {

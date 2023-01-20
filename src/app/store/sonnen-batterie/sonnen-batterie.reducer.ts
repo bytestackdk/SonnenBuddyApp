@@ -7,8 +7,10 @@ import { IDevice } from '../../api/models/network.model';
 import { ConfigurationKey, ISchedule, OperatingMode } from '../../api/models/battery.model';
 
 export const asSchedules = (json: string) => {
-  const schedules: ISchedule[] = JSON.parse(json);
-  return schedules;
+  return (JSON.parse(json) as ISchedule[]).map((schedule) => ({
+    ...schedule,
+    ...((schedule.stop === '23:59' || schedule.stop === '00:00') && { stop: '24:00' }),
+  }));
 };
 
 export interface SonnenBatterieState extends LoadingState {
@@ -78,6 +80,7 @@ export const sonnenBatterieFeature = createFeature({
         configuration: {
           ...state.configuration,
           ...(key === ConfigurationKey.EM_OperatingMode && { operatingMode: configuration as OperatingMode }),
+
           ...(key === ConfigurationKey.EM_ToU_Schedule && { schedules: asSchedules(configuration) }),
           // ...(key === ConfigurationKey.EM_Prognosis_Charging && { prognosisCharging: configuration === '1' }),
         },
