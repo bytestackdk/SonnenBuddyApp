@@ -3,13 +3,18 @@
 }
 
 .utilization-wrapper {
-  width: 50px;
+  //width: 50px;
+}
 
-  .utilization-bar {
-    height: 16px;
-    display: block;
-    width: 100%;
-  }
+.utilization-bar {
+  height: 16px;
+  display: block;
+  width: 50%;
+  min-width: 50px;
+}
+
+.box {
+  border: 2px solid var(--sb-border-color);
 }
 
 .sonnen-box {
