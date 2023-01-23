@@ -40,7 +40,7 @@ export const sonnenBatterieFeature = createFeature({
       device,
       configuration,
     })),
-    on(PlatformActions.resetApp, (state) => ({
+    on(PlatformActions.runWizard, (state) => ({
       ...state,
       device: null,
       configuration: null,

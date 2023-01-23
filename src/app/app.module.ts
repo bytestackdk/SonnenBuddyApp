@@ -8,9 +8,9 @@ import { AppStoreModule } from './store/store.module';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 
 @NgModule({
-    declarations: [AppComponent],
-    imports: [CoreModule, IonicModule.forRoot(), AppRoutingModule, AppStoreModule],
-    providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, ScreenOrientation],
-    bootstrap: [AppComponent]
+  declarations: [AppComponent],
+  imports: [CoreModule, IonicModule.forRoot(), AppRoutingModule, AppStoreModule],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, ScreenOrientation],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

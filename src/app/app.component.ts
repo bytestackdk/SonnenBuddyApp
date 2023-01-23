@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Platform } from '@ionic/angular';
 import { PlatformActions } from './store/platform';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
+import { PreferencesSelectors } from './store/preferences';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,10 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!this.platform.url().startsWith('http')) {
         this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
       }
+
+      this.store.select(PreferencesSelectors.selectDarkMode).subscribe((enabled) => {
+        document.body.classList.toggle('dark', enabled);
+      });
 
       this.store.dispatch(PlatformActions.platformReady());
     });

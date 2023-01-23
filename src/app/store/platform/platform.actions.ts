@@ -17,6 +17,6 @@ export const PlatformActions = createActionGroup({
     'Device Found But No Connection': emptyProps(),
     'Goto Wizard': emptyProps(),
     'Goto Live Page': emptyProps(),
-    'Reset App': emptyProps(),
+    'Run Wizard': emptyProps(),
   },
 });

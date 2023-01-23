@@ -30,16 +30,27 @@
     </ion-card-content>
   </ion-card>
 
+  <h5 class="ion-padding-start ion-padding-top">Preferences</h5>
+
+  <!--Dark mode-->
+  <ion-card>
+    <ion-card-content class="ion-flex ion-align-items-center">
+      <ion-icon class="icon ion-margin-end" name="moon-outline"></ion-icon>
+      <div class="flex-1">Dark mode</div>
+      <ion-toggle (ionChange)="setDarkMode($event)" [checked]="componentStore.darkMode$ | async"></ion-toggle>
+    </ion-card-content>
+  </ion-card>
+
   <!--Weather forecast charging-->
   <!--  <ion-card>-->
-  <!--    <ion-card-content class="ion-flex ion-align-items-center gap-2">-->
+  <!--    <ion-card-content class="ion-flex ion-align-items-center">-->
   <!--      <ion-icon class="icon sun ion-margin-end" name="sunny"></ion-icon>-->
   <!--      <div>Use weather forecast for charge management</div>-->
   <!--      <ion-toggle class="forecast"></ion-toggle>-->
   <!--    </ion-card-content>-->
   <!--  </ion-card>-->
 
-  <ion-button class="ion-margin-horizontal" expand="block" color="danger" (click)="resetApp()">Reset app</ion-button>
+  <ion-button class="ion-margin" expand="block" color="danger" (click)="runWizard()">Run wizard</ion-button>
 
   <!--  Operating mode modal-->
   <ion-modal

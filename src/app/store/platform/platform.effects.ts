@@ -93,7 +93,7 @@ export class PlatformEffects {
 
   resetApp$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(PlatformActions.resetApp),
+      ofType(PlatformActions.runWizard),
       map(() => PlatformActions.gotoWizard())
     )
   );

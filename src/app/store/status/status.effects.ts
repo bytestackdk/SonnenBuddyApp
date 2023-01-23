@@ -31,7 +31,7 @@ export class StatusEffects {
 
   clearStatus$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(PlatformActions.resetApp),
+      ofType(PlatformActions.runWizard),
       map(() => StatusActions.clearStatus())
     );
   });

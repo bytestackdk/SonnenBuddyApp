@@ -36,6 +36,7 @@
 
 .ion-flex {
   display: flex;
+
   &-column {
     flex-direction: column;
   }
@@ -50,4 +51,8 @@
   .flex-1 {
     flex: 1;
   }
+}
+
+.svg-icon {
+  filter: var(--sb-icon-svg-filter);
 }
