@@ -25,7 +25,7 @@ export const selectBatteryUtilization = createSelector(
   selectBatteryUsage,
   (capacity, current) => (!!current ? Math.abs((current / capacity) * 100) : 0)
 );
-export const selectBatteryChargePercent = createSelector(selectStatus, (entity) => entity?.RSOC || 0);
+export const selectBatteryChargePercent = createSelector(selectStatus, (entity) => entity?.USOC || 0);
 export const selectBatteryRemaining = createSelector(selectStatus, (entity) => entity?.RemainingCapacity_Wh);
 export const selectBatteryChargingTime = createSelector(
   selectBatteryCharging,
@@ -64,13 +64,22 @@ export const selectBatteryToInverter = createSelector(selectStatus, (entity) => 
 
 export const selectHouseConsumption = createSelector(selectStatus, (entity) => entity?.Consumption_W);
 
-export const selectInverterCurrentPower = createSelector(selectStatus, (entity) => {
-  if (!entity) return null;
+export const selectInverterToHome = createSelector(
+  selectStatus,
+  (entity) => entity?.FlowConsumptionBattery || entity?.FlowConsumptionProduction
+);
 
-  const { Sac1, Sac2, Sac3 } = entity;
+export const selectInverterCurrentPower = createSelector(
+  selectStatus,
+  selectInverterToHome,
+  (entity, inverterToHouse) => {
+    if (!entity) return null;
 
-  return Sac1 + Sac2 + Sac3;
-});
+    const { Sac1, Sac2, Sac3 } = entity;
+
+    return inverterToHouse ? Sac1 + Sac2 + Sac3 : 0;
+  }
+);
 
 export const selectInverterUtilization = createSelector(
   SonnenBatterieSelectors.selectSonnenBatterieInverterMaxPower,
@@ -78,11 +87,18 @@ export const selectInverterUtilization = createSelector(
   (capacity, current) => (current / capacity) * 100
 );
 export const selectInverterToBattery = createSelector(selectStatus, (entity) => entity?.FlowGridBattery);
-export const selectInverterToHouse = createSelector(
-  selectStatus,
-  (entity) => entity?.FlowConsumptionBattery || entity?.FlowConsumptionProduction
-);
+
 export const selectInverterToGrid = createSelector(selectStatus, (entity) => entity?.FlowProductionGrid);
 
 export const selectGridFeedIn = createSelector(selectStatus, (entity) => entity?.GridFeedIn_W);
-export const selectGridToHouse = createSelector(selectStatus, (entity) => entity?.FlowConsumptionGrid);
+export const selectGridToHome = createSelector(selectStatus, (entity) => entity?.FlowConsumptionGrid);
+export const selectBatteryAndInverter = createSelector(
+  selectBatteryToInverter,
+  selectInverterToBattery,
+  (batteryToInverter, inverterToBattery) => ({ batteryToInverter, inverterToBattery })
+);
+export const selectInverterAndGrid = createSelector(
+  selectInverterToGrid,
+  selectInverterToBattery,
+  (inverterToGrid, gridToInverter) => ({ inverterToGrid, gridToInverter })
+);

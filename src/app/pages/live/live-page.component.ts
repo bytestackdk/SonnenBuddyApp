@@ -37,11 +37,11 @@ export class LivePage {
   inverterUsage$ = this.store.select(StatusSelectors.selectInverterCurrentPower);
   inverterUtilization$ = this.store.select(StatusSelectors.selectInverterUtilization);
   inverterToBattery$ = this.store.select(StatusSelectors.selectInverterToBattery);
-  inverterToHouse$ = this.store.select(StatusSelectors.selectInverterToHouse);
+  inverterToHome$ = this.store.select(StatusSelectors.selectInverterToHome);
   inverterToGrid$ = this.store.select(StatusSelectors.selectInverterToGrid);
 
   gridFeedIn$ = this.store.select(StatusSelectors.selectGridFeedIn);
-  gridToHouse$ = this.store.select(StatusSelectors.selectGridToHouse);
+  gridToHome$ = this.store.select(StatusSelectors.selectGridToHome);
 
   constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 

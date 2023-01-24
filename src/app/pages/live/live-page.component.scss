@@ -2,8 +2,54 @@
   font-size: 0.8em;
 }
 
-.utilization-wrapper {
-  //width: 50px;
+ion-grid,
+ion-row,
+ion-col {
+  //border: 1px solid pink;
+}
+
+.flow {
+  position: absolute;
+  top: 100px;
+  height: 90px;
+  z-index: 0;
+
+  &.solar-to-battery {
+    left: 50%;
+    width: calc(100% - 10px);
+  }
+
+  &.solar-to-inverter {
+    left: 155%;
+    width: calc(100% - 30px);
+  }
+
+  &.battery-and-inverter {
+    left: 50%;
+    top: 120px;
+    width: calc(200% - 24px);
+  }
+
+  &.inverter-and-grid {
+    right: calc(50% - 10px);
+    top: 245px;
+    width: 3px;
+    height: 140px;
+  }
+
+  &.inverter-to-home {
+    right: calc(50% + 10px);
+    top: 245px;
+    width: calc(100% - 27px);
+    height: 100px;
+  }
+
+  &.grid-to-home {
+    right: calc(50% + 10px);
+    top: 355px;
+    width: calc(100% - 27px);
+    height: 30px;
+  }
 }
 
 .utilization-bar {
@@ -15,33 +61,7 @@
 
 .box {
   border: 2px solid var(--sb-border-color);
-}
-
-.sonnen-box {
-  width: 300px;
   height: 200px;
-  padding: 16px;
-  border: 2px solid var(--sb-border-color);
-
-  .battery {
-    margin: auto;
-  }
-
-  .logo {
-  }
-
-  .inverter {
-  }
-}
-
-.consume-box {
-  width: 300px;
-  height: 200px;
-  padding: 16px;
-
-  .grid {
-    margin-top: 90px;
-  }
 }
 
 .power-1 {
@@ -58,11 +78,4 @@ img {
 .utilization {
   height: 30px;
   display: block;
-}
-
-@media (prefers-color-scheme: dark) {
-  // TODO: Remove
-  .flow-item {
-    filter: invert(100%) sepia(0%) saturate(5172%) hue-rotate(123deg) brightness(123%) contrast(113%);
-  }
 }
