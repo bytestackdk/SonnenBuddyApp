@@ -36,7 +36,7 @@
         <div class="ion-flex ion-flex-column ion-align-items-center gap-1">
           <app-utilization class="utilization-bar" [percent]="solarUtilization$ | async"></app-utilization>
           <img src="assets/ph.svg" class="svg-icon" alt="Solar" />
-          <div>{{ solarProduction$ | async | kw }}</div>
+          <div class="solar-production">{{ solarProduction$ | async | kw }}</div>
         </div>
       </ion-col>
       <ion-col>
@@ -80,14 +80,26 @@
     <ion-row>
       <ion-col></ion-col>
       <ion-col class="ion-flex ion-flex-column ion-align-items-center gap-1">
-        <img src="assets/house.svg" class="svg-icon" alt="Home" />
+        <img src="assets/house.svg" class="svg-icon home" alt="Home" />
         <div>{{ houseConsumption$ | async | kw }}</div>
       </ion-col>
       <ion-col></ion-col>
     </ion-row>
     <ion-row>
-      <ion-col></ion-col>
-      <ion-col></ion-col>
+      <ion-col class="information" size="8">
+        <div>
+          <ion-text color="medium">Battery power:</ion-text>
+          {{ batteryRemaining$ | async | kw }}h
+        </div>
+        <div *ngIf="batteryCharging$ | async">
+          <ion-text color="medium">Hours until full charge:</ion-text>
+          {{ batteryChargingTime$ | async }}
+        </div>
+        <div *ngIf="batteryDischarging$ | async">
+          <ion-text color="medium">Hours until discharged:</ion-text>
+          {{ batteryDischargingTime$ | async }}
+        </div>
+      </ion-col>
       <ion-col class="ion-flex ion-flex-column ion-align-items-center gap-1">
         <img src="assets/grid.svg" class="svg-icon grid" alt="Grid" />
         <div>{{ gridFeedIn$ | async | kw }}</div>
@@ -110,55 +122,55 @@
   <!--      &lt;!&ndash;        [direction]="facade.vm.solarToInverter$ | async"&ndash;&gt;-->
   <!--      &lt;!&ndash;      ></app-power-square>&ndash;&gt;-->
 
-  <div class="ion-flex ion-flex-column ion-align-items-center gap-2">
-    <div class="ion-flex">
-      <img src="assets/ph.svg" class="svg-icon" alt="Solar" />
-      <div class="ion-padding-horizontal">
-        <app-utilization class="utilization" [percent]="solarUtilization$ | async"></app-utilization>
-        <div>Utilization: {{ solarUtilization$ | async | number : "1.0-0" }} %</div>
-        <div>Capacity: {{ solarCapacity$ | async | kw }}</div>
-        <div>Production: {{ solarProduction$ | async | kw }}</div>
-        <div>Solar to battery: {{ solarToBattery$ | async }}</div>
-        <div>Solar to inverter: {{ solarToInverter$ | async }}</div>
-      </div>
-    </div>
-    <div class="ion-flex">
-      <app-battery class="battery" [percent]="batteryCharge$ | async"></app-battery>
-      <div class="ion-padding-horizontal">
-        <app-utilization class="utilization" [percent]="batteryUtilization$ | async"></app-utilization>
-        <div>Utilization: {{ batteryUtilization$ | async | number : "1.0-0" }} %</div>
-        <div>Usage: {{ batteryUsage$ | async | kw }}</div>
-        <div>Charge: {{ batteryCharge$ | async }}% / {{ batteryRemaining$ | async | kw }}h</div>
-        <div *ngIf="batteryCharging$ | async">Charging time: {{ batteryChargingTime$ | async }}</div>
-        <div *ngIf="batteryDischarging$ | async">Discharge time: {{ batteryDischargingTime$ | async }}</div>
-        <div>Battery to inverter: {{ batteryToInverter$ | async }}</div>
-      </div>
-    </div>
-    <div class="ion-flex">
-      <img src="assets/sonnen.svg" class="svg-icon" alt="Inverter" />
-      <div class="ion-padding-horizontal">
-        <app-utilization class="utilization" [percent]="inverterUtilization$ | async"></app-utilization>
-        <div>Utilization: {{ inverterUtilization$ | async | number : "1.0-0" }} %</div>
-        <div>Usage: {{ inverterUsage$ | async | kw }}</div>
-        <div>Inverter to battery: {{ inverterToBattery$ | async }}</div>
-        <div>Inverter to house: {{ inverterToHome$ | async }}</div>
-        <div>Inverter to grid: {{ inverterToGrid$ | async }}</div>
-      </div>
-    </div>
-    <div class="ion-flex">
-      <img src="assets/house.svg" class="svg-icon" alt="Home" />
-      <div class="ion-padding-horizontal">
-        <div>Consumption: {{ houseConsumption$ | async | kw }}</div>
-      </div>
-    </div>
-    <div class="ion-flex">
-      <img src="assets/grid.svg" class="svg-icon" alt="Grid" />
-      <div class="ion-padding-horizontal">
-        <div>Grid feed in: {{ gridFeedIn$ | async | kw }}</div>
-        <div>Grid to house: {{ gridToHome$ | async }}</div>
-      </div>
-    </div>
-  </div>
+  <!--  <div class="ion-flex ion-flex-column ion-align-items-center gap-2">-->
+  <!--    <div class="ion-flex">-->
+  <!--      <img src="assets/ph.svg" class="svg-icon" alt="Solar" />-->
+  <!--      <div class="ion-padding-horizontal">-->
+  <!--        <app-utilization class="utilization" [percent]="solarUtilization$ | async"></app-utilization>-->
+  <!--        <div>Utilization: {{ solarUtilization$ | async | number : "1.0-0" }} %</div>-->
+  <!--        <div>Capacity: {{ solarCapacity$ | async | kw }}</div>-->
+  <!--        <div>Production: {{ solarProduction$ | async | kw }}</div>-->
+  <!--        <div>Solar to battery: {{ solarToBattery$ | async }}</div>-->
+  <!--        <div>Solar to inverter: {{ solarToInverter$ | async }}</div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="ion-flex">-->
+  <!--      <app-battery class="battery" [percent]="batteryCharge$ | async"></app-battery>-->
+  <!--      <div class="ion-padding-horizontal">-->
+  <!--        <app-utilization class="utilization" [percent]="batteryUtilization$ | async"></app-utilization>-->
+  <!--        <div>Utilization: {{ batteryUtilization$ | async | number : "1.0-0" }} %</div>-->
+  <!--        <div>Usage: {{ batteryUsage$ | async | kw }}</div>-->
+  <!--        <div>Charge: {{ batteryCharge$ | async }}% / {{ batteryRemaining$ | async | kw }}h</div>-->
+  <!--        <div *ngIf="batteryCharging$ | async">Charging time: {{ batteryChargingTime$ | async }}</div>-->
+  <!--        <div *ngIf="batteryDischarging$ | async">Discharge time: {{ batteryDischargingTime$ | async }}</div>-->
+  <!--        <div>Battery to inverter: {{ batteryToInverter$ | async }}</div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="ion-flex">-->
+  <!--      <img src="assets/sonnen.svg" class="svg-icon" alt="Inverter" />-->
+  <!--      <div class="ion-padding-horizontal">-->
+  <!--        <app-utilization class="utilization" [percent]="inverterUtilization$ | async"></app-utilization>-->
+  <!--        <div>Utilization: {{ inverterUtilization$ | async | number : "1.0-0" }} %</div>-->
+  <!--        <div>Usage: {{ inverterUsage$ | async | kw }}</div>-->
+  <!--        <div>Inverter to battery: {{ inverterToBattery$ | async }}</div>-->
+  <!--        <div>Inverter to house: {{ inverterToHome$ | async }}</div>-->
+  <!--        <div>Inverter to grid: {{ inverterToGrid$ | async }}</div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="ion-flex">-->
+  <!--      <img src="assets/house.svg" class="svg-icon" alt="Home" />-->
+  <!--      <div class="ion-padding-horizontal">-->
+  <!--        <div>Consumption: {{ houseConsumption$ | async | kw }}</div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--    <div class="ion-flex">-->
+  <!--      <img src="assets/grid.svg" class="svg-icon" alt="Grid" />-->
+  <!--      <div class="ion-padding-horizontal">-->
+  <!--        <div>Grid feed in: {{ gridFeedIn$ | async | kw }}</div>-->
+  <!--        <div>Grid to house: {{ gridToHome$ | async }}</div>-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  </div>-->
 
   <!--  <ion-button (click)="findDevices()">Find sonnen-batterie</ion-button>-->
   <!--  <ion-button (click)="setToken()">Set token</ion-button>-->

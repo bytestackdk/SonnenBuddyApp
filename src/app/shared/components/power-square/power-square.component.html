@@ -1,8 +1,14 @@
 <div
-  class="power"
+  class="power s{{ sideCount }}"
   [class.left]="left"
   [class.right]="right"
   [class.top]="top"
   [class.bottom]="bottom"
   [class.active]="direction !== Direction.None"
-></div>
+  [class.cc]="direction === Direction.CounterClockwise"
+>
+  <span class="top" *ngIf="top && direction !== Direction.None"></span>
+  <span class="right" *ngIf="right && direction !== Direction.None"></span>
+  <span class="bottom" *ngIf="bottom && direction !== Direction.None"></span>
+  <span class="left" *ngIf="left && direction !== Direction.None"></span>
+</div>

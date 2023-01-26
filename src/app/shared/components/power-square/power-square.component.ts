@@ -19,4 +19,8 @@ export class PowerSquareComponent {
   @Input() direction = Direction.None;
 
   Direction = Direction;
+
+  get sideCount() {
+    return [this.left, this.right, this.top, this.bottom].filter((side) => side).length;
+  }
 }

@@ -2,20 +2,14 @@
   font-size: 0.8em;
 }
 
-ion-grid,
-ion-row,
-ion-col {
-  //border: 1px solid pink;
-}
-
 .flow {
   position: absolute;
-  top: 100px;
-  height: 90px;
+  top: 96px;
+  height: 94px;
   z-index: 0;
 
   &.solar-to-battery {
-    left: 50%;
+    left: 55%;
     width: calc(100% - 10px);
   }
 
@@ -26,30 +20,35 @@ ion-col {
 
   &.battery-and-inverter {
     left: 50%;
-    top: 120px;
+    top: 109px;
     width: calc(200% - 24px);
   }
 
   &.inverter-and-grid {
-    right: calc(50% - 10px);
+    right: calc(50% - 9px);
     top: 245px;
     width: 3px;
-    height: 140px;
+    height: 159px;
   }
 
   &.inverter-to-home {
-    right: calc(50% + 10px);
+    right: calc(50% + 6px);
     top: 245px;
-    width: calc(100% - 27px);
+    width: calc(100% - 23px);
     height: 100px;
   }
 
   &.grid-to-home {
-    right: calc(50% + 10px);
+    right: calc(50% + 6px);
     top: 355px;
-    width: calc(100% - 27px);
-    height: 30px;
+    width: calc(100% - 23px);
+    height: 49px;
   }
+}
+
+.solar-production {
+  margin-top: -8px;
+  margin-bottom: 8px;
 }
 
 .utilization-bar {
@@ -57,6 +56,11 @@ ion-col {
   display: block;
   width: 50%;
   min-width: 50px;
+}
+
+.information {
+  margin-top: 20px;
+  line-height: 20px;
 }
 
 .box {
@@ -73,6 +77,9 @@ ion-col {
 img {
   width: 50px;
   height: 50px;
+  &.home {
+    margin-top: 5px;
+  }
 }
 
 .utilization {
