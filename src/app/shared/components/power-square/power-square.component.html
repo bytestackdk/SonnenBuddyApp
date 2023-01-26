@@ -7,8 +7,10 @@
   [class.active]="direction !== Direction.None"
   [class.cc]="direction === Direction.CounterClockwise"
 >
-  <span class="top" *ngIf="top && direction !== Direction.None"></span>
-  <span class="right" *ngIf="right && direction !== Direction.None"></span>
-  <span class="bottom" *ngIf="bottom && direction !== Direction.None"></span>
-  <span class="left" *ngIf="left && direction !== Direction.None"></span>
+  <ng-container *ngIf="direction !== Direction.None">
+    <span class="horizontal top" *ngIf="top"></span>
+    <span class="vertical right" *ngIf="right"></span>
+    <span class="horizontal bottom" *ngIf="bottom"></span>
+    <span class="vertical left" *ngIf="left"></span>
+  </ng-container>
 </div>

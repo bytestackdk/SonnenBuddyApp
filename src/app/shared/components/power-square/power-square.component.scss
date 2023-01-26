@@ -7,6 +7,7 @@ $border-active: 2px solid var(--ion-color-medium);
   height: 100%;
   width: 100%;
   position: relative;
+  transition: border 300ms ease-in-out;
 
   &.top {
     border-top: $border;
@@ -38,14 +39,24 @@ $border-active: 2px solid var(--ion-color-medium);
     border-radius: 100vmax;
   }
 
+  .horizontal {
+    height: 6px;
+    width: 0;
+    animation: animateHorizontal 3s linear infinite;
+  }
+
+  .vertical {
+    height: 0;
+    width: 6px;
+    animation: animateVertical 3s linear infinite;
+  }
+
   .top {
     top: -4px;
     left: 0;
-    width: 0;
-    height: 6px;
     background: linear-gradient(90deg, transparent 10%, $orange-fade, $orange);
-    animation: animateHorizontal 3s linear infinite;
   }
+
   &.cc .top {
     left: unset;
     right: 0;
@@ -55,11 +66,9 @@ $border-active: 2px solid var(--ion-color-medium);
   .bottom {
     bottom: -4px;
     right: 0;
-    width: 0;
-    height: 6px;
     background: linear-gradient(270deg, transparent 10%, $orange-fade, $orange);
-    animation: animateHorizontal 3s linear infinite;
   }
+
   &.cc .bottom {
     right: unset;
     left: 0;
@@ -69,11 +78,9 @@ $border-active: 2px solid var(--ion-color-medium);
   .right {
     top: 0;
     right: -4px;
-    width: 6px;
-    height: 0;
     background: linear-gradient(180deg, transparent 10%, $orange-fade, $orange);
-    animation: animateVertical 3s linear infinite;
   }
+
   &.cc .right {
     top: unset;
     bottom: 0;
@@ -83,11 +90,9 @@ $border-active: 2px solid var(--ion-color-medium);
   .left {
     bottom: 0;
     left: -4px;
-    width: 6px;
-    height: 0;
     background: linear-gradient(0deg, transparent 10%, $orange-fade, $orange);
-    animation: animateVertical 3s linear infinite;
   }
+
   &.cc .left {
     bottom: unset;
     top: 0;
@@ -105,7 +110,7 @@ $border-active: 2px solid var(--ion-color-medium);
     opacity: 1;
   }
 
-  90% {
+  85% {
     width: 100%;
     opacity: 1;
   }
@@ -126,7 +131,7 @@ $border-active: 2px solid var(--ion-color-medium);
     opacity: 1;
   }
 
-  90% {
+  85% {
     height: 100%;
     opacity: 1;
   }
