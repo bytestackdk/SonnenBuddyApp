@@ -96,7 +96,12 @@ $border-active: 2px solid var(--ion-color-medium);
 }
 
 @keyframes animateHorizontal {
-  95% {
+  0% {
+    width: 0;
+    opacity: 1;
+  }
+
+  90% {
     width: 100%;
     opacity: 1;
   }
@@ -108,7 +113,12 @@ $border-active: 2px solid var(--ion-color-medium);
 }
 
 @keyframes animateVertical {
-  95% {
+  0% {
+    height: 0;
+    opacity: 1;
+  }
+
+  90% {
     height: 100%;
     opacity: 1;
   }
