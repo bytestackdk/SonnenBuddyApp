@@ -88,15 +88,15 @@
     <ion-row>
       <ion-col class="information" size="8">
         <div>
-          <ion-text color="medium">Battery power:</ion-text>
+          <ion-text color="medium">Battery capacity:</ion-text>
           {{ batteryRemaining$ | async | kw }}h
         </div>
         <div *ngIf="batteryCharging$ | async">
-          <ion-text color="medium">Hours until full charge:</ion-text>
+          <ion-text color="medium">Time until charged:</ion-text>
           {{ batteryChargingTime$ | async }}
         </div>
         <div *ngIf="batteryDischarging$ | async">
-          <ion-text color="medium">Hours until discharged:</ion-text>
+          <ion-text color="medium">Time until discharged:</ion-text>
           {{ batteryDischargingTime$ | async }}
         </div>
       </ion-col>

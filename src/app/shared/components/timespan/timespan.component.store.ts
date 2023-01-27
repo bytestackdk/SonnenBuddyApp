@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore } from '@ngrx/component-store';
+import { numberToTime, timeToNumber } from '../../functions/timespan';
 
 export interface RangeValue {
   lower?: number;
@@ -42,8 +43,8 @@ export class TimespanComponentStore extends ComponentStore<TimespanState> {
     stop = stop.padStart(5, '0');
 
     const upperKnob = start > stop ? Knob.start : Knob.stop;
-    const initialLower = this.timeToNumber(upperKnob === Knob.start ? stop : start);
-    const initialUpper = this.timeToNumber(upperKnob === Knob.start ? start : stop);
+    const initialLower = timeToNumber(upperKnob === Knob.start ? stop : start);
+    const initialUpper = timeToNumber(upperKnob === Knob.start ? start : stop);
 
     this.patchState({
       initialLower,
@@ -61,8 +62,8 @@ export class TimespanComponentStore extends ComponentStore<TimespanState> {
 
   getTimespanChangeEvent(): TimespanChangeEvent {
     const { lower, upper, upperKnob } = this.get();
-    const start = this.numberToTime(upperKnob === Knob.start ? upper : lower);
-    const stop = this.numberToTime(upperKnob === Knob.start ? lower : upper);
+    const start = numberToTime(upperKnob === Knob.start ? upper : lower);
+    const stop = numberToTime(upperKnob === Knob.start ? lower : upper);
 
     return { start, stop };
   }
@@ -128,29 +129,6 @@ export class TimespanComponentStore extends ComponentStore<TimespanState> {
       ...(nextMovingKnob !== Knob.none && { movingKnob: nextMovingKnob }),
     };
   });
-
-  timeToNumber(time: string) {
-    const [hh, mm] = time.split(':');
-    const hours = parseInt(hh, 10);
-    const minutes = parseInt(mm, 10);
-
-    return hours * 4 + minutes / 15;
-  }
-
-  numberToTime(value: number) {
-    const date = new Date(0);
-
-    date.setMinutes(value * 15);
-
-    const hours = this.prefixZero(date.getUTCHours());
-    const minutes = this.prefixZero(date.getUTCMinutes());
-
-    return value > 0 && hours === '00' && minutes === '00' ? '24:00' : `${hours}:${minutes}`;
-  }
-
-  private prefixZero(hoursOrMinutes: number) {
-    return hoursOrMinutes.toString().padStart(2, '0');
-  }
 
   private invertKnob(knob: Knob) {
     return knob === Knob.start ? Knob.stop : Knob.start;

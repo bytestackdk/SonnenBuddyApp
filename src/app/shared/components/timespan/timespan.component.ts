@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
 import { RangeCustomEvent } from '@ionic/angular';
 import { RangeValue, TimespanChangeEvent, TimespanComponentStore } from './timespan.component.store';
+import { numberToTime } from '../../functions/timespan';
 
 @Component({
   selector: 'app-timespan',
@@ -16,7 +17,7 @@ export class TimespanComponent implements OnChanges {
 
   initialValue: RangeValue;
 
-  constructor(private readonly componentStore: TimespanComponentStore) {}
+  constructor(readonly componentStore: TimespanComponentStore) {}
 
   ngOnChanges() {
     this.componentStore.initialize(this.start, this.stop);
@@ -38,6 +39,6 @@ export class TimespanComponent implements OnChanges {
   }
 
   pinFormatter = (value: number) => {
-    return this.componentStore.numberToTime(value);
+    return numberToTime(value);
   };
 }

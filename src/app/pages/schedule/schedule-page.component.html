@@ -139,8 +139,15 @@
           <ion-button class="flex-1" (click)="remove()" *ngIf="(componentStore.edit$ | async) === true" color="danger"
             >Remove</ion-button
           >
-          <ion-button class="flex-1" (click)="save()" [disabled]="componentStore.unchanged$ | async">Save</ion-button>
+          <ion-button class="flex-1" (click)="save()" [disabled]="componentStore.invalid$ | async">Save</ion-button>
         </div>
+
+        <ion-card class="hide" [class.show]="componentStore.invalid$ | async">
+          <ion-card-content class="ion-flex ion-align-items-center gap-1">
+            <ion-icon class="icon" name="alert-circle-outline" color="danger"></ion-icon>
+            <div class="flex-1">This overlaps existing schedule</div>
+          </ion-card-content>
+        </ion-card>
       </ion-content>
     </ng-template>
   </ion-modal>

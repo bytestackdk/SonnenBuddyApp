@@ -18,6 +18,10 @@ const s: ITimeSpan = {
   second: 1,
 };
 
+export const prefixZero = (hoursOrMinutes: number) => {
+  return hoursOrMinutes.toString().padStart(2, '0');
+};
+
 export const getTimespan = (date1: Date, date2: Date) => {
   let difference = Math.abs(date1.getTime() - date2.getTime()) / 1000;
   const timespan: ITimeSpan = {};
@@ -28,4 +32,23 @@ export const getTimespan = (date1: Date, date2: Date) => {
   });
 
   return timespan;
+};
+
+export const timeToNumber = (time: string) => {
+  const [hh, mm] = time.split(':');
+  const hours = parseInt(hh, 10);
+  const minutes = parseInt(mm, 10);
+
+  return hours * 4 + minutes / 15;
+};
+
+export const numberToTime = (value: number) => {
+  const date = new Date(0);
+
+  date.setMinutes(value * 15);
+
+  const hours = prefixZero(date.getUTCHours());
+  const minutes = prefixZero(date.getUTCMinutes());
+
+  return value > 0 && hours === '00' && minutes === '00' ? '24:00' : `${hours}:${minutes}`;
 };

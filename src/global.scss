@@ -60,3 +60,15 @@
 .relative {
   position: relative;
 }
+
+.hide {
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+  &.show {
+    opacity: 1;
+  }
+}
+
+.button-solid {
+  transition: opacity 200ms ease-in-out;
+}

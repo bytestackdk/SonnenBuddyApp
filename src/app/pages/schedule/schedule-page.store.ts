@@ -3,6 +3,7 @@ import { ComponentStore } from '@ngrx/component-store';
 import { ISchedule, ITimespan, OperatingMode } from '../../api/models/battery.model';
 import { Store } from '@ngrx/store';
 import { SonnenBatterieActions, SonnenBatterieSelectors } from './../../store/sonnen-batterie';
+import { timeToNumber } from '../../shared/functions/timespan';
 
 export interface IScheduleState {
   showModal?: boolean;
@@ -20,6 +21,10 @@ export const initialState: IScheduleState = {
   schedule: null,
 };
 
+const between = (x: number, min: number, max: number) => {
+  return x > min && x < max;
+};
+
 @Injectable()
 export class SchedulePageStore extends ComponentStore<IScheduleState> {
   // From global store
@@ -35,6 +40,27 @@ export class SchedulePageStore extends ComponentStore<IScheduleState> {
   // Local selectors
   readonly schedule$ = this.select((state) => state.schedule);
   readonly unchanged$ = this.select((state) => state.unchanged);
+  readonly overlaps$ = this.select(
+    this.schedules$,
+    this.schedule$,
+    (schedules, schedule) =>
+      schedule &&
+      schedules.some(({ start, stop }) => {
+        const existingStart = timeToNumber(start);
+        const existingStop = timeToNumber(stop);
+        const newStart = timeToNumber(schedule.start);
+        const newStop = timeToNumber(schedule.stop);
+
+        return (
+          (existingStart === newStart && existingStop === newStop) ||
+          between(newStart, existingStart, existingStop) ||
+          between(newStop, existingStart, existingStop) ||
+          between(existingStart, newStart, newStop) ||
+          between(existingStop, newStart, newStop)
+        );
+      })
+  );
+  readonly invalid$ = this.select(this.unchanged$, this.overlaps$, (unchanged, overlaps) => unchanged || overlaps);
   readonly edit$ = this.select((state) => state.edit);
   readonly scheduleStart$ = this.select(this.schedule$, (schedule) => schedule?.start || '01:00');
   readonly scheduleStop$ = this.select(this.schedule$, (schedule) => schedule?.stop || '05:00');
