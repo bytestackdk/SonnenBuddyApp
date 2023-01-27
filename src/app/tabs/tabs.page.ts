@@ -9,6 +9,7 @@ import { SonnenBatterieSelectors } from '../store/sonnen-batterie';
 })
 export class TabsPage {
   schedules$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieSchedules);
+  showSchedulesCount$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieShowSchedules);
 
   constructor(private readonly store: Store) {}
 }

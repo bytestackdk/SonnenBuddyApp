@@ -23,6 +23,7 @@ export const initialState: ISettingsState = {
 export class SettingsPageStore extends ComponentStore<ISettingsState> {
   readonly operatingMode$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieOperatingMode);
   readonly darkMode$ = this.store.select(PreferencesSelectors.selectDarkMode);
+  readonly prognosisCharging$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatteriePrognosisCharging);
   readonly showOperatingMode$ = this.select((state) => state.showOperatingModeModal);
 
   constructor(private readonly store: Store) {

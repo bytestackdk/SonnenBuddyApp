@@ -134,6 +134,13 @@ export class SonnenBatterieEffects {
     );
   });
 
+  refreshPrognosisCharging$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(SonnenBatterieActions.refreshConfigurations),
+      map(() => SonnenBatterieActions.getConfiguration({ key: ConfigurationKey.EM_Prognosis_Charging }))
+    );
+  });
+
   // refreshPrognosisCharging$ = createEffect(() => {
   //   return this.actions$.pipe(
   //     ofType(fromSonnenBatterie.refreshConfigurations),

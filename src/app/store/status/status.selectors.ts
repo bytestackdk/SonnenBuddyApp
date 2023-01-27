@@ -3,6 +3,7 @@ import { statusFeature } from './status.reducer';
 import * as fromSonnenBatterie from '../sonnen-batterie/sonnen-batterie.selectors';
 import * as timeFunctions from '../../shared/functions/timespan';
 import { SonnenBatterieSelectors } from '../sonnen-batterie';
+import { capacityReservedPerBatteryModule } from '../sonnen-batterie/sonnen-batterie.selectors';
 
 export const selectStatus = createSelector(statusFeature.selectStatusState, (state) => state.entity);
 export const selectStatusError = createSelector(statusFeature.selectStatusState, (state) => state.error);
@@ -26,7 +27,12 @@ export const selectBatteryUtilization = createSelector(
   (capacity, current) => (!!current ? Math.abs((current / capacity) * 100) : 0)
 );
 export const selectBatteryChargePercent = createSelector(selectStatus, (entity) => entity?.USOC || 0);
-export const selectBatteryRemaining = createSelector(selectStatus, (entity) => entity?.RemainingCapacity_Wh);
+export const selectBatteryRemaining = createSelector(
+  selectStatus,
+  SonnenBatterieSelectors.selectSonnenBatterieConfiguration,
+  (entity, { batteryQuantity }) =>
+    entity?.RemainingCapacity_Wh - batteryQuantity * capacityReservedPerBatteryModule || 0
+);
 export const selectBatteryChargingTime = createSelector(
   selectBatteryCharging,
   SonnenBatterieSelectors.selectSonnenBatterieBatteryCapacity,
@@ -72,12 +78,12 @@ export const selectInverterToHome = createSelector(
 export const selectInverterCurrentPower = createSelector(
   selectStatus,
   selectInverterToHome,
-  (entity, inverterToHouse) => {
+  (entity, inverterToHome) => {
     if (!entity) return null;
 
     const { Sac1, Sac2, Sac3 } = entity;
 
-    return inverterToHouse ? Sac1 + Sac2 + Sac3 : 0;
+    return inverterToHome ? Sac1 + Sac2 + Sac3 : 0;
   }
 );
 

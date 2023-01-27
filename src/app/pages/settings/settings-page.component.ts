@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PlatformActions } from '../../store/platform';
 import { SettingsPageStore } from './settings-page.store';
@@ -13,7 +13,7 @@ import { ToggleChangeEventDetail } from '@ionic/angular';
   styleUrls: ['settings-page.component.scss'],
   providers: [SettingsPageStore],
 })
-export class SettingsPage implements OnInit {
+export class SettingsPage {
   operatingModes = [
     OperatingMode.TimeOfUse,
     OperatingMode.SelfConsumption,
@@ -24,10 +24,6 @@ export class SettingsPage implements OnInit {
   OperatingMode = OperatingMode;
 
   constructor(private readonly store: Store, readonly componentStore: SettingsPageStore) {}
-
-  ngOnInit() {
-    console.log('TODO: Read configuration from API');
-  }
 
   ionViewWillEnter() {
     this.store.dispatch(SonnenBatterieActions.refreshConfigurations());
@@ -47,6 +43,15 @@ export class SettingsPage implements OnInit {
 
   setDarkMode(e: CustomEvent<ToggleChangeEventDetail>) {
     this.store.dispatch(PreferencesActions.setDarkMode({ enabled: e.detail.checked }));
+  }
+
+  setPrognosisCharging(e: CustomEvent<ToggleChangeEventDetail>) {
+    this.store.dispatch(
+      SonnenBatterieActions.setConfiguration({
+        key: ConfigurationKey.EM_Prognosis_Charging,
+        configuration: e.detail.checked ? '1' : '0',
+      })
+    );
   }
 
   runWizard() {

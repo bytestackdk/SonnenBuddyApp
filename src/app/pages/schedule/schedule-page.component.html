@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content class="ion-padding" fullscreen="true">
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="componentStore.scheduleEnabled$ | async">
     <ion-fab-button (click)="showAddModal()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

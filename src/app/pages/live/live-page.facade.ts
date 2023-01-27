@@ -23,9 +23,11 @@ export class LivePageFacade {
       solarToBattery$: this.store
         .select(StatusSelectors.selectSolarToBattery)
         .pipe(map((solarToBattery) => (solarToBattery ? Direction.Clockwise : Direction.None))),
+
       solarToInverter$: this.store
         .select(StatusSelectors.selectSolarToInverter)
         .pipe(map((solarToInverter) => (solarToInverter ? Direction.CounterClockwise : Direction.None))),
+
       batteryAndInverter$: this.store.select(StatusSelectors.selectBatteryAndInverter).pipe(
         map(({ batteryToInverter, inverterToBattery }) => {
           if (batteryToInverter) {
@@ -36,6 +38,7 @@ export class LivePageFacade {
           return Direction.None;
         })
       ),
+
       inverterAndGrid$: this.store.select(StatusSelectors.selectInverterAndGrid).pipe(
         map(({ inverterToGrid, gridToInverter }) => {
           if (inverterToGrid) {
@@ -46,9 +49,11 @@ export class LivePageFacade {
           return Direction.None;
         })
       ),
+
       inverterToHome$: this.store
         .select(StatusSelectors.selectInverterToHome)
         .pipe(map((inverterToHome) => (inverterToHome ? Direction.Clockwise : Direction.None))),
+
       gridToHome$: this.store
         .select(StatusSelectors.selectGridToHome)
         .pipe(map((gridToHome) => (gridToHome ? Direction.CounterClockwise : Direction.None))),

@@ -43,6 +43,10 @@ export class SchedulePageStore extends ComponentStore<IScheduleState> {
     this.operatingMode$,
     (operatingMode) => operatingMode !== OperatingMode.TimeOfUse
   );
+  readonly scheduleEnabled$ = this.select(
+    this.operatingMode$,
+    (operatingMode) => operatingMode === OperatingMode.TimeOfUse
+  );
   readonly showModal$ = this.select((state) => state.showModal);
 
   constructor(private readonly store: Store) {

@@ -80,9 +80,8 @@ export const sonnenBatterieFeature = createFeature({
         configuration: {
           ...state.configuration,
           ...(key === ConfigurationKey.EM_OperatingMode && { operatingMode: configuration as OperatingMode }),
-
           ...(key === ConfigurationKey.EM_ToU_Schedule && { schedules: asSchedules(configuration) }),
-          // ...(key === ConfigurationKey.EM_Prognosis_Charging && { prognosisCharging: configuration === '1' }),
+          ...(key === ConfigurationKey.EM_Prognosis_Charging && { prognosisCharging: configuration === '1' }),
         },
         ...LoadingState.loaded(),
       })
@@ -99,6 +98,7 @@ export const sonnenBatterieFeature = createFeature({
         // Individual mapping from enum names to something meaningful
         ...(key === ConfigurationKey.EM_OperatingMode && { operatingMode: configuration as OperatingMode }),
         ...(key === ConfigurationKey.EM_ToU_Schedule && { schedules: asSchedules(configuration) }),
+        ...(key === ConfigurationKey.EM_Prognosis_Charging && { prognosisCharging: configuration === '1' }),
       },
       ...LoadingState.loading(),
     })),

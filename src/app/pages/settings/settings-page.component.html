@@ -19,18 +19,14 @@
         componentStore.operatingMode$ | async | om
       }}</ion-card-title>
     </ion-card-header>
-
     <ion-card-content>
       <p>
         This can be changed by clicking the button below, which will also provide a brief description for each of the
         operating modes.
       </p>
-
       <ion-button class="ion-float-right ion-margin-bottom" (click)="toggleOperatingModeModal(true)">Change</ion-button>
     </ion-card-content>
   </ion-card>
-
-  <h5 class="ion-padding-start ion-padding-top">Preferences</h5>
 
   <!--Dark mode-->
   <ion-card>
@@ -42,13 +38,17 @@
   </ion-card>
 
   <!--Weather forecast charging-->
-  <!--  <ion-card>-->
-  <!--    <ion-card-content class="ion-flex ion-align-items-center">-->
-  <!--      <ion-icon class="icon sun ion-margin-end" name="sunny"></ion-icon>-->
-  <!--      <div>Use weather forecast for charge management</div>-->
-  <!--      <ion-toggle class="forecast"></ion-toggle>-->
-  <!--    </ion-card-content>-->
-  <!--  </ion-card>-->
+  <ion-card>
+    <ion-card-content class="ion-flex ion-align-items-center">
+      <ion-icon class="icon sun ion-margin-end" name="sunny"></ion-icon>
+      <div class="flex-1">Use weather forecast for charge management</div>
+      <ion-toggle
+        class="forecast"
+        (ionChange)="setPrognosisCharging($event)"
+        [checked]="componentStore.prognosisCharging$ | async"
+      ></ion-toggle>
+    </ion-card-content>
+  </ion-card>
 
   <ion-button class="ion-margin" expand="block" color="danger" (click)="runWizard()">Run setup</ion-button>
 

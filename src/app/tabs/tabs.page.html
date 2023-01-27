@@ -8,7 +8,7 @@
     <ion-tab-button tab="schedule">
       <ion-icon name="time-outline"></ion-icon>
       <ion-label>Schedule</ion-label>
-      <ion-badge color="danger" *ngIf="(schedules$ | async).length > 0">{{ (schedules$ | async).length }}</ion-badge>
+      <ion-badge color="danger" *ngIf="showSchedulesCount$ | async">{{ (schedules$ | async).length }}</ion-badge>
     </ion-tab-button>
 
     <ion-tab-button tab="settings">
