@@ -14,10 +14,6 @@
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Schedule</ion-title>
-      <ion-button slot="end" (click)="clear()" *ngIf="(componentStore.schedules$ | async).length > 1">
-        <ion-icon name="close-outline"></ion-icon>
-        Clear
-      </ion-button>
     </ion-toolbar>
   </ion-header>
 
@@ -72,6 +68,15 @@
       </ion-card-content>
       <ion-ripple-effect></ion-ripple-effect>
     </ion-card>
+
+    <ion-button
+      class="ion-margin"
+      expand="block"
+      color="danger"
+      (click)="clear()"
+      *ngIf="(componentStore.schedules$ | async).length > 0"
+      >Clear schedules</ion-button
+    >
   </ng-template>
 
   <ion-modal
