@@ -45,20 +45,23 @@ export class SchedulePageStore extends ComponentStore<IScheduleState> {
     this.schedule$,
     (schedules, schedule) =>
       schedule &&
-      schedules.some(({ start, stop }) => {
-        const existingStart = timeToNumber(start);
-        const existingStop = timeToNumber(stop);
-        const newStart = timeToNumber(schedule.start);
-        const newStop = timeToNumber(schedule.stop);
+      schedules
+        // Ignore schedule being edited
+        .filter(({ start, stop }) => start !== schedule.start && stop !== schedule.stop)
+        .some(({ start, stop }) => {
+          const existingStart = timeToNumber(start);
+          const existingStop = timeToNumber(stop);
+          const newStart = timeToNumber(schedule.start);
+          const newStop = timeToNumber(schedule.stop);
 
-        return (
-          (existingStart === newStart && existingStop === newStop) ||
-          between(newStart, existingStart, existingStop) ||
-          between(newStop, existingStart, existingStop) ||
-          between(existingStart, newStart, newStop) ||
-          between(existingStop, newStart, newStop)
-        );
-      })
+          return (
+            (existingStart === newStart && existingStop === newStop) ||
+            between(newStart, existingStart, existingStop) ||
+            between(newStop, existingStart, existingStop) ||
+            between(existingStart, newStart, newStop) ||
+            between(existingStop, newStart, newStop)
+          );
+        })
   );
   readonly invalid$ = this.select(this.unchanged$, this.overlaps$, (unchanged, overlaps) => unchanged || overlaps);
   readonly edit$ = this.select((state) => state.edit);

@@ -142,7 +142,7 @@
           <ion-button class="flex-1" (click)="save()" [disabled]="componentStore.invalid$ | async">Save</ion-button>
         </div>
 
-        <ion-card class="hide" [class.show]="componentStore.invalid$ | async">
+        <ion-card class="hide" [class.show]="componentStore.overlaps$ | async">
           <ion-card-content class="ion-flex ion-align-items-center gap-1">
             <ion-icon class="icon" name="alert-circle-outline" color="danger"></ion-icon>
             <div class="flex-1">This overlaps existing schedule</div>
