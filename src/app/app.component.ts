@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { PlatformActions } from './store/platform';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 import { PreferencesSelectors } from './store/preferences';
+import { StatusActions } from './store/status';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,17 @@ export class AppComponent implements OnInit, OnDestroy {
       });
 
       this.store.dispatch(PlatformActions.platformReady());
+    });
+
+    this.platform.pause.subscribe(() => {
+      this.store.dispatch(StatusActions.stopPolling());
+    });
+
+    this.platform.resume.subscribe(() => {
+      // No polling when on wizard - It will start normally after wizard has finished
+      if (!this.platform.url().includes('wizard')) {
+        this.store.dispatch(StatusActions.startPolling());
+      }
     });
   }
 
