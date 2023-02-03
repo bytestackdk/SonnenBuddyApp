@@ -30,6 +30,7 @@
     "@capacitor/status-bar": "^4.0.0",
     "@ionic/angular": "^6.4.0",
     "@larscom/ngrx-store-storagesync": "^14.0.1",
+    "@ngrx/component": "^15.2.1",
     "@ngrx/component-store": "^15.0.0",
     "@ngrx/effects": "^15.0.0",
     "@ngrx/entity": "^15.0.0",

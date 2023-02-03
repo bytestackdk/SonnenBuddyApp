@@ -30,22 +30,24 @@
           <ion-button (click)="toggleFindHelp(true)">
             <ion-icon name="help-sharp"></ion-icon>
           </ion-button>
-          <ion-button (click)="findDevice()" [disabled]="componentStore.loading$ | async"
+          <ion-button (click)="findDevice()" [disabled]="componentStore.loading$ | ngrxPush"
             >Find sonnenBatterie</ion-button
           >
 
           <ion-card
             class="ion-margin-top"
             *ngIf="
-              (componentStore.loading$ | async) || (componentStore.device$ | async) || (componentStore.error$ | async)
+              (componentStore.loading$ | ngrxPush) ||
+              (componentStore.device$ | ngrxPush) ||
+              (componentStore.error$ | ngrxPush)
             "
           >
             <ion-card-content>
-              <ion-spinner *ngIf="componentStore.loading$ | async"></ion-spinner>
+              <ion-spinner *ngIf="componentStore.loading$ | ngrxPush"></ion-spinner>
 
               <div
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
-                *ngIf="componentStore.device$ | async as device"
+                *ngIf="componentStore.device$ | ngrxPush as device"
               >
                 <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
                 <p class="ion-text-left">
@@ -58,7 +60,7 @@
 
               <div
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
-                *ngIf="componentStore.error$ | async as error"
+                *ngIf="componentStore.error$ | ngrxPush as error"
               >
                 <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
                 <p>There was an error<br />Please try again</p>
@@ -68,7 +70,7 @@
           </ion-card>
         </div>
 
-        <ion-button (click)="next()" [disabled]="componentStore.noDevice$ | async">Next</ion-button>
+        <ion-button (click)="next()" [disabled]="componentStore.noDevice$ | ngrxPush">Next</ion-button>
       </div>
     </ng-template>
 
@@ -89,33 +91,35 @@
           <ion-button (click)="toggleTokenHelp(true)">
             <ion-icon name="help-sharp"></ion-icon>
           </ion-button>
-          <ion-button (click)="testToken()" [disabled]="componentStore.apiTokenInvalid$ | async">Test token</ion-button>
+          <ion-button (click)="testToken()" [disabled]="componentStore.apiTokenInvalid$ | ngrxPush"
+            >Test token</ion-button
+          >
 
           <ion-card
             *ngIf="
-              (componentStore.loading$ | async) ||
-              (componentStore.apiTokenTested$ | async) ||
-              (componentStore.error$ | async)
+              (componentStore.loading$ | ngrxPush) ||
+              (componentStore.apiTokenTested$ | ngrxPush) ||
+              (componentStore.error$ | ngrxPush)
             "
           >
             <ion-card-content>
-              <ion-spinner *ngIf="componentStore.loading$ | async"></ion-spinner>
+              <ion-spinner *ngIf="componentStore.loading$ | ngrxPush"></ion-spinner>
 
               <div
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
-                *ngIf="componentStore.apiTokenTested$ | async"
+                *ngIf="componentStore.apiTokenTested$ | ngrxPush"
               >
                 <p class="ion-text-left">
-                  Inverter max power: <b>{{ componentStore.maxPower$ | async }}W</b><br />
-                  Module capacity: <b>{{ componentStore.batteryModuleCapacity$ | async }}W</b><br />
-                  Battery modules: <b>{{ componentStore.batteryQuantity$ | async }}</b>
+                  Inverter max power: <b>{{ componentStore.maxPower$ | ngrxPush }}W</b><br />
+                  Module capacity: <b>{{ componentStore.batteryModuleCapacity$ | ngrxPush }}W</b><br />
+                  Battery modules: <b>{{ componentStore.batteryQuantity$ | ngrxPush }}</b>
                 </p>
                 <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
               </div>
 
               <div
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
-                *ngIf="componentStore.error$ | async as error"
+                *ngIf="componentStore.error$ | ngrxPush as error"
               >
                 <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
                 <p>There was an error<br />Please try again</p>
@@ -125,7 +129,7 @@
           </ion-card>
         </div>
 
-        <ion-button (click)="next()" [disabled]="componentStore.apiTokenUntested$ | async">Next</ion-button>
+        <ion-button (click)="next()" [disabled]="componentStore.apiTokenUntested$ | ngrxPush">Next</ion-button>
       </div>
     </ng-template>
 
@@ -156,17 +160,21 @@
               [step]="5"
             ></ion-input>
           </ion-item>
-          <h2>Capacity: {{ componentStore.panelTotalCapacity$ | async | kw }}</h2>
+          <h2>Capacity: {{ componentStore.panelTotalCapacity$ | ngrxPush | kw }}</h2>
         </div>
 
-        <ion-button (click)="finish()" [disabled]="(componentStore.panelTotalCapacity$ | async) < 100"
+        <ion-button (click)="finish()" [disabled]="(componentStore.panelTotalCapacity$ | ngrxPush) < 100"
           >Finish</ion-button
         >
       </div>
     </ng-template>
   </swiper>
 
-  <ion-modal [isOpen]="componentStore.showFindHelp$ | async" [swipeToClose]="true" (didDismiss)="toggleFindHelp(false)">
+  <ion-modal
+    [isOpen]="componentStore.showFindHelp$ | ngrxPush"
+    [swipeToClose]="true"
+    (didDismiss)="toggleFindHelp(false)"
+  >
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -191,7 +199,7 @@
   </ion-modal>
 
   <ion-modal
-    [isOpen]="componentStore.showTokenHelp$ | async"
+    [isOpen]="componentStore.showTokenHelp$ | ngrxPush"
     [swipeToClose]="true"
     (didDismiss)="toggleTokenHelp(false)"
   >
@@ -209,7 +217,7 @@
         <p>Follow below steps to find your API token and give access to this app.</p>
         <ul class="ion-text-left">
           <li>
-            Open a browser on this address: <b>http://{{ componentStore.lanIp$ | async }}</b>
+            Open a browser on this address: <b>http://{{ componentStore.lanIp$ | ngrxPush }}</b>
           </li>
           <li>
             Select <b>User</b> and try this password: <b>sonnenUser3552</b> (it might be different for your

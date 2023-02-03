@@ -1,5 +1,5 @@
 <ion-range
-  [class.inverted]="componentStore.startIsUpperKnob$ | async"
+  [class.inverted]="componentStore.startIsUpperKnob$ | ngrxPush"
   [dualKnobs]="true"
   [value]="initialValue"
   [pin]="true"

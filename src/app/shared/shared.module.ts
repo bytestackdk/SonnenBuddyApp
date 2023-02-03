@@ -9,18 +9,21 @@ import { PowerSquareComponent } from './components/power-square/power-square.com
 import { SwiperModule } from 'swiper/angular';
 import { OmPipe } from './pipes/om.pipe';
 import { TimespanComponent } from './components/timespan/timespan.component';
+import { LetModule, PushModule } from '@ngrx/component';
 
 @NgModule({
   declarations: [KwPipe, OmPipe, UtilizationComponent, BatteryComponent, PowerSquareComponent, TimespanComponent],
-  imports: [CommonModule, IonicModule, FormsModule, SwiperModule],
+  imports: [CommonModule, IonicModule, FormsModule, SwiperModule, LetModule, PushModule],
   exports: [
     BatteryComponent,
     CommonModule,
     FormsModule,
     IonicModule,
     KwPipe,
+    LetModule,
     OmPipe,
     PowerSquareComponent,
+    PushModule,
     SwiperModule,
     TimespanComponent,
     UtilizationComponent,

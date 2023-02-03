@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content class="ion-padding" fullscreen="true">
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="componentStore.scheduleEnabled$ | async">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="componentStore.scheduleEnabled$ | ngrxPush">
     <ion-fab-button (click)="showAddModal()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
@@ -18,11 +18,11 @@
   </ion-header>
 
   <!--Card schedules can not be used-->
-  <ion-card *ngIf="componentStore.scheduleDisabled$ | async; else schedules">
+  <ion-card *ngIf="componentStore.scheduleDisabled$ | ngrxPush; else schedules">
     <ion-card-header>
       <ion-card-subtitle>Operating Mode</ion-card-subtitle>
       <ion-card-title class="card-title" color="primary">
-        {{ componentStore.operatingMode$ | async | om }}
+        {{ componentStore.operatingMode$ | ngrxPush | om }}
       </ion-card-title>
     </ion-card-header>
 
@@ -37,7 +37,7 @@
 
   <!--Schedules-->
   <ng-template #schedules>
-    <ion-card *ngIf="(componentStore.schedules$ | async).length === 0">
+    <ion-card *ngIf="(componentStore.schedules$ | ngrxPush).length === 0">
       <ion-card-content class="ion-flex ion-align-items-center gap-2">
         <ion-icon class="icon" color="primary" name="timer-outline"></ion-icon>
         <div>
@@ -49,7 +49,7 @@
 
     <ion-card
       class="ion-activatable"
-      *ngFor="let schedule of componentStore.schedules$ | async"
+      *ngFor="let schedule of componentStore.schedules$ | ngrxPush"
       (click)="showEditModal(schedule)"
     >
       <ion-card-header>
@@ -74,22 +74,22 @@
       expand="block"
       color="danger"
       (click)="clear()"
-      *ngIf="(componentStore.schedules$ | async).length > 0"
+      *ngIf="(componentStore.schedules$ | ngrxPush).length > 0"
       >Clear schedules</ion-button
     >
   </ng-template>
 
   <ion-modal
     class="schedule-modal"
-    [isOpen]="componentStore.showModal$ | async"
+    [isOpen]="componentStore.showModal$ | ngrxPush"
     [swipeToClose]="true"
     (didDismiss)="componentStore.toggleModal(false)"
   >
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title *ngIf="(componentStore.edit$ | async) === false">Add schedule</ion-title>
-          <ion-title *ngIf="(componentStore.edit$ | async) === true">Edit schedule</ion-title>
+          <ion-title *ngIf="(componentStore.edit$ | ngrxPush) === false">Add schedule</ion-title>
+          <ion-title *ngIf="(componentStore.edit$ | ngrxPush) === true">Edit schedule</ion-title>
           <ion-buttons slot="end">
             <ion-button (click)="componentStore.toggleModal(false)">Close</ion-button>
           </ion-buttons>
@@ -102,13 +102,13 @@
               <div>
                 <p>Timespan</p>
                 <h1>
-                  <b>{{ componentStore.scheduleStart$ | async }} - {{ componentStore.scheduleStop$ | async }}</b>
+                  <b>{{ componentStore.scheduleStart$ | ngrxPush }} - {{ componentStore.scheduleStop$ | ngrxPush }}</b>
                 </h1>
               </div>
               <div>
                 <p class="ion-text-end">Power</p>
                 <h1>
-                  <b>{{ componentStore.scheduleThreshold$ | async }}W</b>
+                  <b>{{ componentStore.scheduleThreshold$ | ngrxPush }}W</b>
                 </h1>
               </div>
             </div>
@@ -136,13 +136,17 @@
         </ion-range>
 
         <div class="ion-flex ion-justify-content-evenly ion-margin ion-padding-top">
-          <ion-button class="flex-1" (click)="remove()" *ngIf="(componentStore.edit$ | async) === true" color="danger"
+          <ion-button
+            class="flex-1"
+            (click)="remove()"
+            *ngIf="(componentStore.edit$ | ngrxPush) === true"
+            color="danger"
             >Remove</ion-button
           >
-          <ion-button class="flex-1" (click)="save()" [disabled]="componentStore.invalid$ | async">Save</ion-button>
+          <ion-button class="flex-1" (click)="save()" [disabled]="componentStore.invalid$ | ngrxPush">Save</ion-button>
         </div>
 
-        <ion-card class="hide" [class.show]="componentStore.overlaps$ | async">
+        <ion-card class="hide" [class.show]="componentStore.overlaps$ | ngrxPush">
           <ion-card-content class="ion-flex ion-align-items-center gap-1">
             <ion-icon class="icon" name="alert-circle-outline" color="danger"></ion-icon>
             <div class="flex-1">This overlaps existing schedule</div>

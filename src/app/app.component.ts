@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Platform } from '@ionic/angular';
 import { PlatformActions } from './store/platform';
@@ -15,7 +15,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private readonly store: Store,
     private readonly screenOrientation: ScreenOrientation,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly zone: NgZone
   ) {}
 
   ngOnInit() {
@@ -38,7 +39,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.platform.resume.subscribe(() => {
       // No polling when on wizard - It will start normally after wizard has finished
       if (!this.platform.url().includes('wizard')) {
-        this.store.dispatch(StatusActions.startPolling());
+        this.zone.run(() => this.store.dispatch(StatusActions.startPolling()));
       }
     });
   }

@@ -16,7 +16,7 @@
     <ion-card-header>
       <ion-card-subtitle>Operating mode</ion-card-subtitle>
       <ion-card-title class="card-title" color="primary">{{
-        componentStore.operatingMode$ | async | om
+        componentStore.operatingMode$ | ngrxPush | om
       }}</ion-card-title>
     </ion-card-header>
     <ion-card-content>
@@ -33,7 +33,7 @@
     <ion-card-content class="ion-flex ion-align-items-center">
       <ion-icon class="icon ion-margin-end" name="moon-outline"></ion-icon>
       <div class="flex-1">Dark mode</div>
-      <ion-toggle (ionChange)="setDarkMode($event)" [checked]="componentStore.darkMode$ | async"></ion-toggle>
+      <ion-toggle (ionChange)="setDarkMode($event)" [checked]="componentStore.darkMode$ | ngrxPush"></ion-toggle>
     </ion-card-content>
   </ion-card>
 
@@ -45,7 +45,7 @@
       <ion-toggle
         class="forecast"
         (ionChange)="setPrognosisCharging($event)"
-        [checked]="componentStore.prognosisCharging$ | async"
+        [checked]="componentStore.prognosisCharging$ | ngrxPush"
       ></ion-toggle>
     </ion-card-content>
   </ion-card>
@@ -54,7 +54,7 @@
 
   <!--  Operating mode modal-->
   <ion-modal
-    [isOpen]="componentStore.showOperatingMode$ | async"
+    [isOpen]="componentStore.showOperatingMode$ | ngrxPush"
     [swipeToClose]="true"
     (didDismiss)="toggleOperatingModeModal(false)"
   >
@@ -68,7 +68,7 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <ion-accordion-group *ngIf="componentStore.operatingMode$ | async as currentMode" [value]="currentMode">
+        <ion-accordion-group *ngIf="componentStore.operatingMode$ | ngrxPush as currentMode" [value]="currentMode">
           <ion-accordion [value]="mode" *ngFor="let mode of operatingModes">
             <ion-item slot="header" color="light">
               <ion-label>{{ mode | om }}</ion-label>
