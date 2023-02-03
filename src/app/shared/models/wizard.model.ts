@@ -15,7 +15,7 @@ export interface WizardOutput {
    */
   batteryModuleCapacity?: number;
   /**
-   * Capacity of solar installation panel in Watts
+   * Max power output of solar installation in Watts
    */
-  solarCapacity?: number;
+  solarMaxPower?: number;
 }

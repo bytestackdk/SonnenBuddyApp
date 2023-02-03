@@ -11,13 +11,16 @@ export const selectStatusError = createSelector(statusFeature.selectStatusState,
 
 export const selectSolarProduction = createSelector(selectStatus, (entity) => entity?.Production_W || 0);
 export const selectSolarUtilization = createSelector(
-  InputSelectors.selectSolarCapacity,
+  InputSelectors.selectSolarMaxPower,
   selectSolarProduction,
-  (solarCapacity, production) => (production / solarCapacity) * 100
+  (solarMaxPower, production) => (production / solarMaxPower) * 100
 );
 
 export const selectSolarToBattery = createSelector(selectStatus, (entity) => entity?.FlowProductionBattery);
-export const selectSolarToInverter = createSelector(selectStatus, (entity) => entity?.FlowConsumptionProduction);
+export const selectSolarToInverter = createSelector(
+  selectStatus,
+  (entity) => entity?.FlowConsumptionProduction && entity?.Production_W >= 50
+);
 export const selectBatteryCharging = createSelector(selectStatus, (entity) => entity?.BatteryCharging);
 export const selectBatteryDischarging = createSelector(selectStatus, (entity) => entity?.BatteryDischarging);
 export const selectBatteryUsage = createSelector(selectStatus, (entity) => entity?.Pac_total_W);

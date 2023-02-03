@@ -11,12 +11,12 @@ import { BatteryService } from '../../api/services/battery.service';
 import { ConfigurationKey } from '../../api/models/battery.model';
 import { WizardActions } from '../../store/wizard/wizard.actions';
 import { ApiToken, WizardOutput } from '../../shared/models/wizard.model';
+import { InputSelectors } from 'src/app/store/input';
 
 export interface IWizardState {
   device: Device;
   apiToken: ApiToken;
-  panelPowerOutput: number;
-  panelQuantity: number;
+  solarMaxPower: number;
   maxPower: number;
   batteryQuantity: number;
   batteryModuleCapacity: number;
@@ -29,8 +29,7 @@ export interface IWizardState {
 export const initialState: IWizardState = {
   device: null,
   apiToken: null,
-  panelPowerOutput: null,
-  panelQuantity: null,
+  solarMaxPower: null,
   maxPower: null,
   batteryQuantity: null,
   batteryModuleCapacity: null,
@@ -56,7 +55,7 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   readonly maxPower$ = this.select((state) => state.maxPower);
   readonly batteryQuantity$ = this.select((state) => state.batteryQuantity);
   readonly batteryModuleCapacity$ = this.select((state) => state.batteryModuleCapacity);
-  readonly panelTotalCapacity$ = this.select((state) => state.panelPowerOutput * state.panelQuantity);
+  readonly solarPowerOutput$ = this.select((state) => state.solarMaxPower);
   readonly showFindHelp$ = this.select((state) => state.showFindHelp);
   readonly showTokenHelp$ = this.select((state) => state.showTokenHelp);
   readonly loading$ = this.select((state) => state.loading);
@@ -82,23 +81,18 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
     this.patchState(() => ({ apiToken }));
   }
 
-  setPanelPowerOutput(panelPowerOutput: number) {
-    this.patchState(() => ({ panelPowerOutput }));
-  }
-
-  setPanelQuantity(panelQuantity: number) {
-    this.patchState(() => ({ panelQuantity }));
+  setSolarPowerOutput(solarMaxPower: number) {
+    this.patchState(() => ({ solarMaxPower }));
   }
 
   finish() {
-    const { device, panelPowerOutput, panelQuantity, apiToken, maxPower, batteryQuantity, batteryModuleCapacity } =
-      this.get();
+    const { device, solarMaxPower, apiToken, maxPower, batteryQuantity, batteryModuleCapacity } = this.get();
     const output: WizardOutput = {
       apiToken,
       maxPower,
       batteryQuantity,
       batteryModuleCapacity,
-      solarCapacity: panelPowerOutput * panelQuantity,
+      solarMaxPower,
     };
 
     this.store.dispatch(WizardActions.finishWizard({ device, output }));
@@ -108,8 +102,12 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
     this.setState(() => ({ ...initialState }));
   }
 
-  readonly findDevice = this.effect((trigger$) => {
-    return trigger$.pipe(
+  readonly findPreviousApiToken = this.effect(() =>
+    this.store.select(InputSelectors.selectApiToken).pipe(tap((apiToken: ApiToken) => this.patchState({ apiToken })))
+  );
+
+  readonly findDevice = this.effect((trigger$) =>
+    trigger$.pipe(
       tap(() => this.patchState({ device: null, loading: true, error: null })),
       switchMap(() =>
         this.networkService.find().pipe(
@@ -119,11 +117,11 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
           )
         )
       )
-    );
-  });
+    )
+  );
 
-  readonly testToken = this.effect((trigger$) => {
-    return trigger$.pipe(
+  readonly testToken = this.effect((trigger$) =>
+    trigger$.pipe(
       tap(() =>
         this.patchState({
           maxPower: null,
@@ -166,6 +164,6 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
           )
         )
       )
-    );
-  });
+    )
+  );
 }

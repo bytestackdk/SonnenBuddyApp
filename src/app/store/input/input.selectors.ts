@@ -1,3 +1,3 @@
 import { inputFeature } from './input.reducer';
 
-export const { selectInputState, selectDarkMode, selectSolarCapacity, selectApiToken } = inputFeature;
+export const { selectInputState, selectDarkMode, selectSolarMaxPower, selectApiToken } = inputFeature;

@@ -1,18 +1,26 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { SwiperComponent } from 'swiper/angular';
 import { WizardPageStore } from './wizard-page.store';
 import { ApiToken } from '../../shared/models/wizard.model';
+import { enterFadeAnimation } from '../../shared/utilities/animations';
 
 @Component({
   selector: 'app-wizard',
   templateUrl: './wizard-page.component.html',
   styleUrls: ['./wizard-page.component.scss'],
   providers: [WizardPageStore],
+  animations: [enterFadeAnimation()],
 })
-export class WizardPage {
+export class WizardPage implements OnInit {
   @ViewChild('swiper', { static: false }) swiper?: SwiperComponent;
 
+  presentingElement = null;
+
   constructor(public readonly componentStore: WizardPageStore) {}
+
+  ngOnInit() {
+    this.presentingElement = document.querySelector('.ion-content');
+  }
 
   next() {
     this.swiper.swiperRef.slideNext(100);
@@ -38,19 +46,11 @@ export class WizardPage {
     this.componentStore.setToken(e.detail.value.trim());
   }
 
-  updatePanelQuantity(e: CustomEvent<{ value: number }>) {
-    const panelQuantity = e.detail.value;
+  updateSolarPowerOutput(e: CustomEvent<{ value: string }>) {
+    const solarPowerOutput = parseInt(e.detail.value, 10);
 
-    if (!isNaN(panelQuantity)) {
-      this.componentStore.setPanelQuantity(e.detail.value);
-    }
-  }
-
-  updatePanelPowerOutput(e: CustomEvent<{ value: number }>) {
-    const panelPowerOutput = e.detail.value;
-
-    if (!isNaN(panelPowerOutput)) {
-      this.componentStore.setPanelPowerOutput(e.detail.value);
+    if (!isNaN(solarPowerOutput)) {
+      this.componentStore.setSolarPowerOutput(solarPowerOutput);
     }
   }
 

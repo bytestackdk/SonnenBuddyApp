@@ -1,6 +1,6 @@
-<ion-content [fullscreen]="true" [scrollY]="false">
+<ion-content class="ion-content" [fullscreen]="true" [scrollY]="false">
   <swiper class="swiper" #swiper [allowTouchMove]="false">
-    <!-- START -->
+    <!-- First slide -->
     <ng-template swiperSlide>
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div class="flex-1">
@@ -17,7 +17,7 @@
       </div>
     </ng-template>
 
-    <!-- FIND -->
+    <!-- Find SonnenBatterie-->
     <ng-template swiperSlide>
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
@@ -41,6 +41,7 @@
               (componentStore.device$ | ngrxPush) ||
               (componentStore.error$ | ngrxPush)
             "
+            @enterFadeAnimation
           >
             <ion-card-content>
               <ion-spinner *ngIf="componentStore.loading$ | ngrxPush"></ion-spinner>
@@ -74,7 +75,7 @@
       </div>
     </ng-template>
 
-    <!-- TOKEN -->
+    <!-- Input ApiToken -->
     <ng-template swiperSlide>
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
@@ -83,7 +84,7 @@
           <p>Please provide the API token to communicate with your sonnenBatterie.</p>
           <ion-item>
             <ion-label position="floating">API Token</ion-label>
-            <ion-input (ionChange)="updateToken($event)" value="5cb9e400-dac7-4211-942d-c03eeaaed186"></ion-input>
+            <ion-input (ionChange)="updateToken($event)" value="{{ componentStore.apiToken$ | ngrxPush }}"></ion-input>
           </ion-item>
         </div>
 
@@ -101,13 +102,15 @@
               (componentStore.apiTokenTested$ | ngrxPush) ||
               (componentStore.error$ | ngrxPush)
             "
+            @enterFadeAnimation
           >
             <ion-card-content>
-              <ion-spinner *ngIf="componentStore.loading$ | ngrxPush"></ion-spinner>
+              <ion-spinner *ngIf="componentStore.loading$ | ngrxPush" @enterFadeAnimation></ion-spinner>
 
               <div
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.apiTokenTested$ | ngrxPush"
+                @enterFadeAnimation
               >
                 <p class="ion-text-left">
                   Inverter max power: <b>{{ componentStore.maxPower$ | ngrxPush }}W</b><br />
@@ -133,46 +136,52 @@
       </div>
     </ng-template>
 
-    <!-- SOLAR OUTPUT -->
+    <!-- Input solar capacity -->
     <ng-template swiperSlide>
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
           <div style="height: 100px">-SOLAR LOGO HERE-</div>
-          <h2>Solar capacity</h2>
-          <p>Please input how many panels you have and the output of a single panel.</p>
+          <h2>Max solar output</h2>
+          <p>To calculate solar utilization, we need to know the max output of your system.</p>
         </div>
-        <div class="flex-1">
+        <div class="flex-1 ion-padding-top">
           <ion-item>
-            <ion-label class="label half-width" position="fixed">Panel quantity</ion-label>
-            <ion-input
-              type="number"
-              placeholder="Enter quantity"
-              (ionChange)="updatePanelQuantity($event)"
-              [step]="1"
-            ></ion-input>
+            <ion-label class="label half-width" position="fixed">Max solar output</ion-label>
+            <ion-input type="number" placeholder="Watts" (ionChange)="updateSolarPowerOutput($event)"></ion-input>
           </ion-item>
-          <ion-item>
-            <ion-label class="label half-width" position="fixed">Power per panel</ion-label>
-            <ion-input
-              type="number"
-              placeholder="Watts"
-              (ionChange)="updatePanelPowerOutput($event)"
-              [step]="5"
-            ></ion-input>
-          </ion-item>
-          <h2>Capacity: {{ componentStore.panelTotalCapacity$ | ngrxPush | kw }}</h2>
+          <h2>{{ componentStore.solarPowerOutput$ | ngrxPush | kw }}</h2>
+
+          <ion-card>
+            <ion-card-content>
+              <div class="ion-flex ion-align-items-center gap-2">
+                <ion-icon class="icon" name="information-circle-outline" color="primary"></ion-icon>
+                <div class="ion-text-left">
+                  <p>
+                    This can be calculated by multiplying the number of solar panels you have with the output per panel
+                    in Watts.
+                  </p>
+                  <p>
+                    E.g. you might have <b>16 panels</b> that each have an output of <b>400W</b> meaning:
+                    <b>16 x 400W = 6400W</b>
+                  </p>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
         </div>
 
-        <ion-button (click)="finish()" [disabled]="(componentStore.panelTotalCapacity$ | ngrxPush) < 100"
+        <ion-button (click)="finish()" [disabled]="(componentStore.solarPowerOutput$ | ngrxPush) < 100"
           >Finish</ion-button
         >
       </div>
     </ng-template>
   </swiper>
 
+  <!--Find SonnenBatterie Help-->
   <ion-modal
     [isOpen]="componentStore.showFindHelp$ | ngrxPush"
-    [swipeToClose]="true"
+    [canDismiss]="true"
+    [presentingElement]="presentingElement"
     (didDismiss)="toggleFindHelp(false)"
   >
     <ng-template>
@@ -198,9 +207,11 @@
     </ng-template>
   </ion-modal>
 
+  <!--Find ApiToken Help-->
   <ion-modal
     [isOpen]="componentStore.showTokenHelp$ | ngrxPush"
-    [swipeToClose]="true"
+    [canDismiss]="true"
+    [presentingElement]="presentingElement"
     (didDismiss)="toggleTokenHelp(false)"
   >
     <ng-template>

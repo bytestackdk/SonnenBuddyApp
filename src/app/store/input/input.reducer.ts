@@ -9,15 +9,15 @@ export interface InputState {
    */
   apiToken: ApiToken;
   /**
-   * Capacity of solar installation panel in Watts
+   * Max power of solar installation in Watts
    */
-  solarCapacity: number;
+  solarMaxPower: number;
   darkMode: boolean;
 }
 
 export const initialState: InputState = {
   apiToken: null,
-  solarCapacity: null,
+  solarMaxPower: null,
   darkMode: false,
 };
 
@@ -26,10 +26,10 @@ export const inputFeature = createFeature({
   reducer: createReducer(
     initialState,
 
-    on(WizardActions.finishWizard, (state, { output: { apiToken, solarCapacity } }) => ({
+    on(WizardActions.finishWizard, (state, { output: { apiToken, solarMaxPower } }) => ({
       ...state,
       apiToken,
-      solarCapacity,
+      solarMaxPower,
     })),
     on(InputActions.setDarkMode, (state, { enabled }) => ({
       ...state,

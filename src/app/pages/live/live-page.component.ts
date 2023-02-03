@@ -17,7 +17,7 @@ export class LivePage {
   // powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
   // status$ = this.store.select(fromStatus.selectStatus);
 
-  solarCapacity$ = this.store.select(InputSelectors.selectSolarCapacity);
+  solarMaxPower$ = this.store.select(InputSelectors.selectSolarMaxPower);
   solarProduction$ = this.store.select(StatusSelectors.selectSolarProduction);
   solarUtilization$ = this.store.select(StatusSelectors.selectSolarUtilization);
   solarToBattery$ = this.store.select(StatusSelectors.selectSolarToBattery);

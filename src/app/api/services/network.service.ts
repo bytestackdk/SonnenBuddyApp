@@ -24,6 +24,7 @@ export class NetworkService extends BaseService {
 
     const devices: Device[] = [
       {
+        // IP is irrelevant here as all /api calls are proxied regardless when developing
         lanIp: '192.168.1.130',
         ca20: true,
         info: 'sonnenBatterie',
