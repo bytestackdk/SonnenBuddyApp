@@ -90,9 +90,17 @@ export const selectInverterUtilization = createSelector(
   selectInverterCurrentPower,
   (capacity, current) => (current / capacity) * 100
 );
-export const selectInverterToBattery = createSelector(selectStatus, (entity) => entity?.FlowGridBattery);
+export const selectInverterToBattery = createSelector(
+  selectStatus,
+  // Sometimes grid flows to battery even though we're exporting power
+  (entity) => entity?.FlowGridBattery && entity?.GridFeedIn_W <= -50
+);
 export const selectInverterToGrid = createSelector(selectStatus, (entity) => entity?.FlowProductionGrid);
-export const selectGridToHome = createSelector(selectStatus, (entity) => entity?.FlowConsumptionGrid);
+export const selectGridToHome = createSelector(
+  selectStatus,
+  // We don't want to show feed in below 50W as that shows as 0.1 kW
+  (entity) => entity?.FlowConsumptionGrid && entity?.GridFeedIn_W <= -50
+);
 export const selectBatteryAndInverter = createSelector(
   selectBatteryToInverter,
   selectInverterToBattery,
