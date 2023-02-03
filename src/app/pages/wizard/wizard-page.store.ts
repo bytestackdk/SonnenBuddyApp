@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
-import { ApiToken, IDeviceConfiguration } from '../../shared/models/sonnen-batterie.model';
 import { NetworkService } from '../../api/services/network.service';
 import { Store } from '@ngrx/store';
 import { switchMap, tap } from 'rxjs/operators';
-import { IDevice } from '../../api/models/network.model';
+import { Device } from '../../api/models/network.model';
 import { forkJoin } from 'rxjs';
 import { concatLatestFrom } from '@ngrx/effects';
 import { Guid } from 'guid-typescript';
-import { SonnenBatterieActions } from '../../store/sonnen-batterie';
 import { BatteryService } from '../../api/services/battery.service';
 import { ConfigurationKey } from '../../api/models/battery.model';
+import { WizardActions } from '../../store/wizard/wizard.actions';
+import { ApiToken, WizardOutput } from '../../shared/models/wizard.model';
 
 export interface IWizardState {
-  device: IDevice;
+  device: Device;
   apiToken: ApiToken;
   panelPowerOutput: number;
   panelQuantity: number;
@@ -91,19 +91,17 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   }
 
   finish() {
-    const { apiToken, device, maxPower, batteryQuantity, batteryModuleCapacity, panelPowerOutput, panelQuantity } =
+    const { device, panelPowerOutput, panelQuantity, apiToken, maxPower, batteryQuantity, batteryModuleCapacity } =
       this.get();
-
-    const panelCapacity = panelPowerOutput * panelQuantity;
-    const configuration: IDeviceConfiguration = {
+    const output: WizardOutput = {
       apiToken,
       maxPower,
       batteryQuantity,
       batteryModuleCapacity,
-      panelCapacity,
+      solarCapacity: panelPowerOutput * panelQuantity,
     };
 
-    this.store.dispatch(SonnenBatterieActions.finishWizard({ device, configuration }));
+    this.store.dispatch(WizardActions.finishWizard({ device, output }));
   }
 
   reset() {

@@ -14,7 +14,7 @@ export interface INetworkDevice {
 /**
  * Mapped model with a bit more meaningful property names
  */
-export interface IDevice {
+export interface Device {
   lanIp: IP;
   ca20: boolean;
   info: string;
@@ -23,7 +23,7 @@ export interface IDevice {
 
 export const mapToDevice = (networkDevice: INetworkDevice) => {
   const { lanip, ca20, info, device } = networkDevice;
-  const battery: IDevice = {
+  const battery: Device = {
     lanIp: lanip,
     ca20,
     info,

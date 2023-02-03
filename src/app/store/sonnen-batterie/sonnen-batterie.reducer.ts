@@ -1,10 +1,11 @@
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { SonnenBatterieActions } from './sonnen-batterie.actions';
 import { PlatformActions } from '../platform';
-import { IDeviceConfiguration } from '../../shared/models/sonnen-batterie.model';
+import { DeviceConfiguration } from '../../shared/models/sonnen-batterie.model';
 import { LoadingState } from 'src/app/shared/models/loading-state.model';
-import { IDevice } from '../../api/models/network.model';
+import { Device } from '../../api/models/network.model';
 import { ConfigurationKey, ISchedule, OperatingMode } from '../../api/models/battery.model';
+import { WizardActions } from '../wizard/wizard.actions';
 
 export const asSchedules = (json: string) => {
   return (JSON.parse(json) as ISchedule[]).map((schedule) => ({
@@ -14,9 +15,9 @@ export const asSchedules = (json: string) => {
 };
 
 export interface SonnenBatterieState extends LoadingState {
-  device: IDevice;
-  previousConfiguration: IDeviceConfiguration;
-  configuration: IDeviceConfiguration;
+  device: Device;
+  previousConfiguration: DeviceConfiguration;
+  configuration: DeviceConfiguration;
 }
 
 export const initialState: SonnenBatterieState = {
@@ -31,14 +32,21 @@ export const sonnenBatterieFeature = createFeature({
   reducer: createReducer(
     initialState,
 
+    on(
+      WizardActions.finishWizard,
+      (state, { device, output: { maxPower, batteryQuantity, batteryModuleCapacity } }) => ({
+        ...state,
+        device,
+        configuration: {
+          maxPower,
+          batteryQuantity,
+          batteryModuleCapacity,
+        },
+      })
+    ),
     on(SonnenBatterieActions.clearDevice, (state) => ({
       ...state,
       device: null,
-    })),
-    on(SonnenBatterieActions.finishWizard, (state, { device, configuration }) => ({
-      ...state,
-      device,
-      configuration,
     })),
     on(PlatformActions.runWizard, (state) => ({
       ...state,

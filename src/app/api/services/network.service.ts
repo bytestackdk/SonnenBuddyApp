@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HTTP } from '@awesome-cordova-plugins/http/ngx';
 import { of } from 'rxjs';
-import { IDevice, INetworkDevice, mapToDevice } from '../models/network.model';
+import { Device, INetworkDevice, mapToDevice } from '../models/network.model';
 import { HttpClient } from '@angular/common/http';
 import { Capacitor } from '@capacitor/core';
 import { BaseService } from './base.service';
@@ -22,7 +22,7 @@ export class NetworkService extends BaseService {
       );
     }
 
-    const devices: IDevice[] = [
+    const devices: Device[] = [
       {
         lanIp: '192.168.1.130',
         ca20: true,

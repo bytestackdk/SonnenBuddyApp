@@ -5,9 +5,9 @@ import { Store } from '@ngrx/store';
 import { from, iif, Observable, of } from 'rxjs';
 import { map, mergeMap, switchMap, take } from 'rxjs/operators';
 import { Capacitor } from '@capacitor/core';
-import { ApiToken } from '../../shared/models/sonnen-batterie.model';
 import { IP } from '../models/network.model';
 import { SonnenBatterieSelectors } from 'src/app/store/sonnen-batterie';
+import { ApiToken } from '../../shared/models/wizard.model';
 
 @Directive()
 export class BaseService {

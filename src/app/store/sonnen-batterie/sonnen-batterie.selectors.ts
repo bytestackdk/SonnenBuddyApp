@@ -1,7 +1,8 @@
 import { sonnenBatterieFeature } from './sonnen-batterie.reducer';
 import { createSelector } from '@ngrx/store';
-import { ISonnenBatterie } from '../../shared/models/sonnen-batterie.model';
+import { SonnenBatterie } from '../../shared/models/sonnen-batterie.model';
 import { OperatingMode } from '../../api/models/battery.model';
+import { InputSelectors } from '../input';
 
 // https://www.myenergy.dk/wp-content/uploads/2021/06/Operating-instructions-sonnenBatterie-hybrid-9.53_22358_UK507EN.pdf
 export const capacityReservedPerBatteryModule = 250;
@@ -16,7 +17,7 @@ export const selectDeviceError = selectError;
 
 export const selectSonnenBatterie = createSelector(
   selectSonnenBatterieState,
-  (state): ISonnenBatterie => ({
+  (state): SonnenBatterie => ({
     ...state.device,
     ...state.configuration,
   })
@@ -27,15 +28,14 @@ export const selectSonnenBatterieConfiguration = createSelector(
   (state) => state.configuration
 );
 
-export const selectSonnenBatterieTokenAndIP = createSelector(selectSonnenBatterie, (sonnenBatterie) => {
-  const { apiToken, lanIp } = sonnenBatterie;
-  return { apiToken, lanIp };
-});
-
-export const selectSonnenBatteriePanelCapacity = createSelector(
+export const selectSonnenBatterieTokenAndIP = createSelector(
   selectSonnenBatterie,
-  (sonnenBatterie) => sonnenBatterie.panelCapacity
+  InputSelectors.selectApiToken,
+  ({ lanIp }, apiToken) => {
+    return { lanIp, apiToken };
+  }
 );
+
 export const selectSonnenBatterieInverterMaxPower = createSelector(
   selectSonnenBatterie,
   (sonnenBatterie) => sonnenBatterie.maxPower
@@ -74,5 +74,5 @@ export const selectSonnenBatterieSchedules = createSelector(
 export const selectSonnenBatterieShowSchedules = createSelector(
   selectSonnenBatterie,
   selectSonnenBatterieOperatingMode,
-  (sonnenBatterie, operatingMode) => operatingMode === OperatingMode.TimeOfUse && sonnenBatterie.schedules.length
+  (sonnenBatterie, operatingMode) => operatingMode === OperatingMode.TimeOfUse && sonnenBatterie.schedules?.length
 );

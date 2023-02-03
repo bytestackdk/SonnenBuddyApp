@@ -88,6 +88,10 @@
     <ion-row>
       <ion-col class="information" size="8">
         <div>
+          <ion-text color="medium">Updated:</ion-text>
+          {{ updated$ | async }}
+        </div>
+        <div>
           <ion-text color="medium">Battery capacity:</ion-text>
           {{ batteryRemaining$ | async | kw }}h
         </div>

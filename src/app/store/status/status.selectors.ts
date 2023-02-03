@@ -4,20 +4,20 @@ import * as fromSonnenBatterie from '../sonnen-batterie/sonnen-batterie.selector
 import * as timeFunctions from '../../shared/functions/timespan';
 import { SonnenBatterieSelectors } from '../sonnen-batterie';
 import { capacityReservedPerBatteryModule } from '../sonnen-batterie/sonnen-batterie.selectors';
+import { InputSelectors } from '../input';
 
 export const selectStatus = createSelector(statusFeature.selectStatusState, (state) => state.entity);
 export const selectStatusError = createSelector(statusFeature.selectStatusState, (state) => state.error);
 
 export const selectSolarProduction = createSelector(selectStatus, (entity) => entity?.Production_W || 0);
 export const selectSolarUtilization = createSelector(
-  SonnenBatterieSelectors.selectSonnenBatteriePanelCapacity,
+  InputSelectors.selectSolarCapacity,
   selectSolarProduction,
-  (capacity, production) => (production / capacity) * 100
+  (solarCapacity, production) => (production / solarCapacity) * 100
 );
 
 export const selectSolarToBattery = createSelector(selectStatus, (entity) => entity?.FlowProductionBattery);
 export const selectSolarToInverter = createSelector(selectStatus, (entity) => entity?.FlowConsumptionProduction);
-
 export const selectBatteryCharging = createSelector(selectStatus, (entity) => entity?.BatteryCharging);
 export const selectBatteryDischarging = createSelector(selectStatus, (entity) => entity?.BatteryDischarging);
 export const selectBatteryUsage = createSelector(selectStatus, (entity) => entity?.Pac_total_W);
@@ -30,8 +30,8 @@ export const selectBatteryChargePercent = createSelector(selectStatus, (entity) 
 export const selectBatteryRemaining = createSelector(
   selectStatus,
   SonnenBatterieSelectors.selectSonnenBatterieConfiguration,
-  (entity, { batteryQuantity }) =>
-    entity?.RemainingCapacity_Wh - batteryQuantity * capacityReservedPerBatteryModule || 0
+  (entity, configuration) =>
+    entity?.RemainingCapacity_Wh - configuration?.batteryQuantity * capacityReservedPerBatteryModule || 0
 );
 export const selectBatteryChargingTime = createSelector(
   selectBatteryCharging,
@@ -67,36 +67,31 @@ export const selectBatteryDischargingTime = createSelector(
 );
 
 export const selectBatteryToInverter = createSelector(selectStatus, (entity) => entity?.FlowConsumptionBattery);
-
 export const selectHouseConsumption = createSelector(selectStatus, (entity) => entity?.Consumption_W);
-
 export const selectInverterToHome = createSelector(
   selectStatus,
   (entity) => entity?.FlowConsumptionBattery || entity?.FlowConsumptionProduction
 );
-
+export const selectGridFeedIn = createSelector(selectStatus, (entity) => entity?.GridFeedIn_W);
 export const selectInverterCurrentPower = createSelector(
   selectStatus,
   selectInverterToHome,
-  (entity, inverterToHome) => {
+  selectBatteryUsage,
+  (entity, inverterToHome, batteryUsage) => {
     if (!entity) return null;
 
-    const { Sac1, Sac2, Sac3 } = entity;
+    const { Apparent_output } = entity;
 
-    return inverterToHome ? Sac1 + Sac2 + Sac3 : 0;
+    return inverterToHome || batteryUsage < 0 ? Apparent_output : 0;
   }
 );
-
 export const selectInverterUtilization = createSelector(
   SonnenBatterieSelectors.selectSonnenBatterieInverterMaxPower,
   selectInverterCurrentPower,
   (capacity, current) => (current / capacity) * 100
 );
 export const selectInverterToBattery = createSelector(selectStatus, (entity) => entity?.FlowGridBattery);
-
 export const selectInverterToGrid = createSelector(selectStatus, (entity) => entity?.FlowProductionGrid);
-
-export const selectGridFeedIn = createSelector(selectStatus, (entity) => entity?.GridFeedIn_W);
 export const selectGridToHome = createSelector(selectStatus, (entity) => entity?.FlowConsumptionGrid);
 export const selectBatteryAndInverter = createSelector(
   selectBatteryToInverter,
@@ -108,3 +103,4 @@ export const selectInverterAndGrid = createSelector(
   selectInverterToBattery,
   (inverterToGrid, gridToInverter) => ({ inverterToGrid, gridToInverter })
 );
+export const selectTimestamp = createSelector(selectStatus, (entity) => entity?.Timestamp.split(' ')[1]);

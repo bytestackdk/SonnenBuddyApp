@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Platform } from '@ionic/angular';
 import { PlatformActions } from './store/platform';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
-import { PreferencesSelectors } from './store/preferences';
+import { InputSelectors } from './store/input';
 import { StatusActions } from './store/status';
 
 @Component({
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
       }
 
-      this.store.select(PreferencesSelectors.selectDarkMode).subscribe((enabled) => {
+      this.store.select(InputSelectors.selectDarkMode).subscribe((enabled) => {
         document.body.classList.toggle('dark', enabled);
       });
 

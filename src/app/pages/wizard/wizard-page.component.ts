@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { SwiperComponent } from 'swiper/angular';
 import { WizardPageStore } from './wizard-page.store';
-import { ApiToken } from '../../shared/models/sonnen-batterie.model';
+import { ApiToken } from '../../shared/models/wizard.model';
 
 @Component({
   selector: 'app-wizard',
@@ -12,7 +12,7 @@ import { ApiToken } from '../../shared/models/sonnen-batterie.model';
 export class WizardPage {
   @ViewChild('swiper', { static: false }) swiper?: SwiperComponent;
 
-  constructor(private readonly componentStore: WizardPageStore) {}
+  constructor(public readonly componentStore: WizardPageStore) {}
 
   next() {
     this.swiper.swiperRef.slideNext(100);

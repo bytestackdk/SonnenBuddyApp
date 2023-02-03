@@ -13,7 +13,7 @@ import {
 import { BaseService } from './base.service';
 import { catchError, map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
-import { ApiToken } from '../../shared/models/sonnen-batterie.model';
+import { ApiToken } from '../../shared/models/wizard.model';
 import { IP } from '../models/network.model';
 
 @Injectable({ providedIn: 'root' })

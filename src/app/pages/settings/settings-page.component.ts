@@ -4,7 +4,7 @@ import { PlatformActions } from '../../store/platform';
 import { SettingsPageStore } from './settings-page.store';
 import { ConfigurationKey, OperatingMode } from '../../api/models/battery.model';
 import { SonnenBatterieActions } from '../../store/sonnen-batterie';
-import { PreferencesActions } from '../../store/preferences/preferences.actions';
+import { InputActions } from '../../store/input/input.actions';
 import { ToggleChangeEventDetail } from '@ionic/angular';
 
 @Component({
@@ -42,7 +42,7 @@ export class SettingsPage {
   }
 
   setDarkMode(e: CustomEvent<ToggleChangeEventDetail>) {
-    this.store.dispatch(PreferencesActions.setDarkMode({ enabled: e.detail.checked }));
+    this.store.dispatch(InputActions.setDarkMode({ enabled: e.detail.checked }));
   }
 
   setPrognosisCharging(e: CustomEvent<ToggleChangeEventDetail>) {

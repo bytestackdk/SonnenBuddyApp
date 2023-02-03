@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StatusSelectors } from '../../store/status';
 import { LivePageFacade } from './live-page.facade';
-import { SonnenBatterieActions, SonnenBatterieSelectors } from '../../store/sonnen-batterie';
+import { SonnenBatterieActions } from '../../store/sonnen-batterie';
+import { InputSelectors } from 'src/app/store/input';
 
 @Component({
   selector: 'app-live',
@@ -16,7 +17,7 @@ export class LivePage {
   // powerMeter$ = this.store.select(fromPowerMeter.selectPowerMeter);
   // status$ = this.store.select(fromStatus.selectStatus);
 
-  solarCapacity$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatteriePanelCapacity);
+  solarCapacity$ = this.store.select(InputSelectors.selectSolarCapacity);
   solarProduction$ = this.store.select(StatusSelectors.selectSolarProduction);
   solarUtilization$ = this.store.select(StatusSelectors.selectSolarUtilization);
   solarToBattery$ = this.store.select(StatusSelectors.selectSolarToBattery);
@@ -42,6 +43,8 @@ export class LivePage {
 
   gridFeedIn$ = this.store.select(StatusSelectors.selectGridFeedIn);
   gridToHome$ = this.store.select(StatusSelectors.selectGridToHome);
+
+  updated$ = this.store.select(StatusSelectors.selectTimestamp);
 
   constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 

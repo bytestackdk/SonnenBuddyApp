@@ -8,6 +8,7 @@ import { SonnenBatterieActions, SonnenBatterieSelectors } from './';
 import { PlatformActions } from '../platform';
 import { BatteryService } from '../../api/services/battery.service';
 import { ConfigurationKey } from '../../api/models/battery.model';
+import { WizardActions } from '../wizard/wizard.actions';
 
 @Injectable()
 export class SonnenBatterieEffects {
@@ -38,7 +39,7 @@ export class SonnenBatterieEffects {
 
   finishWizard$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(SonnenBatterieActions.finishWizard),
+      ofType(WizardActions.finishWizard),
       map(() => PlatformActions.gotoLivePage())
     );
   });
@@ -140,11 +141,4 @@ export class SonnenBatterieEffects {
       map(() => SonnenBatterieActions.getConfiguration({ key: ConfigurationKey.EM_Prognosis_Charging }))
     );
   });
-
-  // refreshPrognosisCharging$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(fromSonnenBatterie.refreshConfigurations),
-  //     map(() => fromSonnenBatterie.getConfiguration({ key: ConfigurationKey.EM_Prognosis_Charging }))
-  //   );
-  // });
 }
