@@ -4,14 +4,11 @@
     <ng-template swiperSlide>
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div class="flex-1">
-          <div style="height: 100px">-APP LOGO HERE-</div>
-          <h2>Sonnen Buddy</h2>
-          <p>
+          <app-step-header icon="house.svg" title="Sonnen Buddy">
             This app will allow you to do realtime monitoring of your sonnenBatterie and make changes to its
             configuration
-          </p>
-          <br />
-          <p>Let's get started</p>
+          </app-step-header>
+          <p class="ion-padding-top">Let's get started</p>
         </div>
         <ion-button (click)="next()">Next</ion-button>
       </div>
@@ -21,12 +18,12 @@
     <ng-template swiperSlide>
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
-          <div style="height: 100px">-SEARCH LOGO HERE-</div>
-          <h2>Find your sonnenBatterie</h2>
-          <p>Sonnen Buddy will try and find the sonnenBatterie on your network.</p>
+          <app-step-header icon="sonnen.svg" title="Find your sonnenBatterie">
+            Sonnen Buddy will try and find the sonnenBatterie on your network.
+          </app-step-header>
         </div>
 
-        <div class="flex-1">
+        <div class="flex-1 ion-padding-top">
           <ion-button (click)="toggleFindHelp(true)">
             <ion-icon name="help-sharp"></ion-icon>
           </ion-button>
@@ -41,7 +38,6 @@
               (componentStore.device$ | ngrxPush) ||
               (componentStore.error$ | ngrxPush)
             "
-            @enterFadeAnimation
           >
             <ion-card-content>
               <ion-spinner *ngIf="componentStore.loading$ | ngrxPush"></ion-spinner>
@@ -49,19 +45,20 @@
               <div
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.device$ | ngrxPush as device"
+                @enterFadeAnimation
               >
-                <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
+                <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
                 <p class="ion-text-left">
                   IP: <b>{{ device.lanIp }}</b
                   ><br />
                   Serial number: <b>{{ device.serialNumber }}</b>
                 </p>
-                <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
               </div>
 
               <div
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.error$ | ngrxPush as error"
+                @enterFadeAnimation
               >
                 <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
                 <p>There was an error<br />Please try again</p>
@@ -79,9 +76,10 @@
     <ng-template swiperSlide>
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
-          <div style="height: 100px">-TOKEN LOGO HERE-</div>
-          <h2>API token</h2>
-          <p>Please provide the API token to communicate with your sonnenBatterie.</p>
+          <app-step-header icon="lock-open-outline.svg" title="API token">
+            Please provide the API token to communicate with your sonnenBatterie.
+          </app-step-header>
+
           <ion-item>
             <ion-label position="floating">API Token</ion-label>
             <ion-input (ionChange)="updateToken($event)" value="{{ componentStore.apiToken$ | ngrxPush }}"></ion-input>
@@ -112,20 +110,19 @@
                 *ngIf="componentStore.apiTokenTested$ | ngrxPush"
                 @enterFadeAnimation
               >
+                <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
                 <p class="ion-text-left">
                   Inverter max power: <b>{{ componentStore.maxPower$ | ngrxPush }}W</b><br />
                   Module capacity: <b>{{ componentStore.batteryModuleCapacity$ | ngrxPush }}W</b><br />
                   Battery modules: <b>{{ componentStore.batteryQuantity$ | ngrxPush }}</b>
                 </p>
-                <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
               </div>
 
               <div
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.error$ | ngrxPush as error"
               >
-                <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
-                <p>There was an error<br />Please try again</p>
+                <p class="ion-text-left">There was an error<br />Please try again</p>
                 <ion-icon class="icon" name="alert-sharp" color="danger"></ion-icon>
               </div>
             </ion-card-content>
@@ -140,17 +137,9 @@
     <ng-template swiperSlide>
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
-          <div style="height: 100px">-SOLAR LOGO HERE-</div>
-          <h2>Max solar output</h2>
-          <p>To calculate solar utilization, we need to know the max output of your system.</p>
-        </div>
-        <div class="flex-1 ion-padding-top">
-          <ion-item>
-            <ion-label class="label half-width" position="fixed">Max solar output</ion-label>
-            <ion-input type="number" placeholder="Watts" (ionChange)="updateSolarPowerOutput($event)"></ion-input>
-          </ion-item>
-          <h2>{{ componentStore.solarPowerOutput$ | ngrxPush | kw }}</h2>
-
+          <app-step-header icon="ph.svg" title="Max solar output">
+            To calculate solar utilization, we need to know the max output of your system.
+          </app-step-header>
           <ion-card>
             <ion-card-content>
               <div class="ion-flex ion-align-items-center gap-2">
@@ -168,6 +157,13 @@
               </div>
             </ion-card-content>
           </ion-card>
+        </div>
+        <div class="flex-1 ion-padding-top">
+          <ion-item>
+            <ion-label class="label half-width" position="fixed">Max solar output</ion-label>
+            <ion-input type="number" placeholder="Watts" (ionChange)="updateSolarPowerOutput($event)"></ion-input>
+          </ion-item>
+          <h2>{{ componentStore.solarPowerOutput$ | ngrxPush | kw }}</h2>
         </div>
 
         <ion-button (click)="finish()" [disabled]="(componentStore.solarPowerOutput$ | ngrxPush) < 100"
@@ -234,9 +230,10 @@
             Select <b>User</b> and try this password: <b>sonnenUser3552</b> (it might be different for your
             sonnenBatterie)
           </li>
-          <li>Go to Software-Integration and enable <b>Read API</b> and <b>Write API</b></li>
+          <li>Go to Software-Integration</li>
+          <li>Enable <b>Read API</b> and <b>Write API</b></li>
           <li>Find the <b>API token</b> on the same page</li>
-          <li>Close this help and type the <b>API token</b> into the text box</li>
+          <li>Close this help and type/paste the <b>API token</b> into the text box</li>
         </ul>
       </ion-content>
     </ng-template>

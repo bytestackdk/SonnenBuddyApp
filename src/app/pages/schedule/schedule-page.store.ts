@@ -67,8 +67,11 @@ export class SchedulePageStore extends ComponentStore<IScheduleState> {
     this.schedule$,
     this.unchanged$,
     this.overlaps$,
-    ({ start, stop }, unchanged, overlaps) =>
-      unchanged || overlaps || start === stop || (start === '24:00' && stop === '00:00')
+    (schedule, unchanged, overlaps) =>
+      unchanged ||
+      overlaps ||
+      (schedule && schedule.start === schedule.stop) ||
+      (schedule && schedule.start === '24:00' && schedule.stop === '00:00')
   );
   readonly edit$ = this.select((state) => state.edit);
   readonly scheduleStart$ = this.select(this.schedule$, (schedule) => schedule?.start || '01:00');
