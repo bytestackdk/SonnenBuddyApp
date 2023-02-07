@@ -34,6 +34,9 @@ export const inputFeature = createFeature({
     on(InputActions.setDarkMode, (state, { enabled }) => ({
       ...state,
       darkMode: enabled,
+    })),
+    on(InputActions.clearInput, () => ({
+      ...initialState,
     }))
   ),
 });

@@ -1,7 +1,12 @@
 <div class="battery">
   <div class="tip"></div>
   <div class="container">
-    <div class="bar">
+    <div
+      class="bar"
+      [class.over25]="percent > 25"
+      [class.from11to25]="percent >= 11 && percent <= 25"
+      [class.from0to10]="percent <= 10"
+    >
       <div class="usage" [style.height]="100 - percent + '%'"></div>
     </div>
   </div>

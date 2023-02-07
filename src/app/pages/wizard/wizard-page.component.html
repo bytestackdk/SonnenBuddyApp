@@ -18,7 +18,7 @@
     <ng-template swiperSlide>
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
-          <app-step-header icon="sonnen.svg" title="Find your sonnenBatterie">
+          <app-step-header icon="sonnen-wizard.svg" title="Find your sonnenBatterie">
             Sonnen Buddy will try and find the sonnenBatterie on your network.
           </app-step-header>
         </div>
@@ -140,23 +140,28 @@
           <app-step-header icon="ph.svg" title="Max solar output">
             To calculate solar utilization, we need to know the max output of your system.
           </app-step-header>
-          <ion-card>
-            <ion-card-content>
-              <div class="ion-flex ion-align-items-center gap-2">
-                <ion-icon class="icon" name="information-circle-outline" color="primary"></ion-icon>
-                <div class="ion-text-left">
-                  <p>
-                    This can be calculated by multiplying the number of solar panels you have with the output per panel
-                    in Watts.
-                  </p>
-                  <p>
-                    E.g. you might have <b>16 panels</b> that each have an output of <b>400W</b> meaning:
-                    <b>16 x 400W = 6400W</b>
-                  </p>
-                </div>
-              </div>
-            </ion-card-content>
-          </ion-card>
+
+          <ion-button (click)="toggleFindHelp(true)">
+            <ion-icon name="help-sharp"></ion-icon>
+          </ion-button>
+
+          <!--          <ion-card>-->
+          <!--            <ion-card-content>-->
+          <!--              <div class="ion-flex ion-align-items-center gap-2">-->
+          <!--                <ion-icon class="icon" name="information-circle-outline" color="primary"></ion-icon>-->
+          <!--                <div class="ion-text-left">-->
+          <!--                  <p>-->
+          <!--                    This can be calculated by multiplying the number of solar panels you have with the output per panel-->
+          <!--                    in Watts.-->
+          <!--                  </p>-->
+          <!--                  <p>-->
+          <!--                    E.g. you might have <b>16 panels</b> that each have an output of <b>400W</b> meaning:-->
+          <!--                    <b>16 x 400W = 6400W</b>-->
+          <!--                  </p>-->
+          <!--                </div>-->
+          <!--              </div>-->
+          <!--            </ion-card-content>-->
+          <!--          </ion-card>-->
         </div>
         <div class="flex-1 ion-padding-top">
           <ion-item>

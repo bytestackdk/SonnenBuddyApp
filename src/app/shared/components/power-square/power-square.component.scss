@@ -1,7 +1,7 @@
-$orange: rgb(255, 172, 28);
-$orange-fade: rgba(255, 172, 28, 0.5);
-$border: 2px solid var(--ion-color-light);
-$border-active: 2px solid var(--ion-color-medium);
+$power: var(--sb-power-color);
+$power-fade: var(--sb-power-color-fade);
+$border: 2px solid var(--ion-color-light-shade);
+$border-active: 2px solid var(--ion-color-medium-shade);
 
 .power {
   height: 100%;
@@ -54,49 +54,49 @@ $border-active: 2px solid var(--ion-color-medium);
   .top {
     top: -4px;
     left: 0;
-    background: linear-gradient(90deg, transparent 10%, $orange-fade, $orange);
+    background: linear-gradient(90deg, transparent 10%, $power-fade, $power);
   }
 
   &.cc .top {
     left: unset;
     right: 0;
-    background: linear-gradient(270deg, transparent 10%, $orange-fade, $orange);
+    background: linear-gradient(270deg, transparent 10%, $power-fade, $power);
   }
 
   .bottom {
     bottom: -4px;
     right: 0;
-    background: linear-gradient(270deg, transparent 10%, $orange-fade, $orange);
+    background: linear-gradient(270deg, transparent 10%, $power-fade, $power);
   }
 
   &.cc .bottom {
     right: unset;
     left: 0;
-    background: linear-gradient(90deg, transparent 10%, $orange-fade, $orange);
+    background: linear-gradient(90deg, transparent 10%, $power-fade, $power);
   }
 
   .right {
     top: 0;
     right: -4px;
-    background: linear-gradient(180deg, transparent 10%, $orange-fade, $orange);
+    background: linear-gradient(180deg, transparent 10%, $power-fade, $power);
   }
 
   &.cc .right {
     top: unset;
     bottom: 0;
-    background: linear-gradient(0deg, transparent 10%, $orange-fade, $orange);
+    background: linear-gradient(0deg, transparent 10%, $power-fade, $power);
   }
 
   .left {
     bottom: 0;
     left: -4px;
-    background: linear-gradient(0deg, transparent 10%, $orange-fade, $orange);
+    background: linear-gradient(0deg, transparent 10%, $power-fade, $power);
   }
 
   &.cc .left {
     bottom: unset;
     top: 0;
-    background: linear-gradient(180deg, transparent 10%, $orange-fade, $orange);
+    background: linear-gradient(180deg, transparent 10%, $power-fade, $power);
   }
 }
 

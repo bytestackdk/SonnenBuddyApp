@@ -24,7 +24,9 @@
         This can be changed by clicking the button below, which will also provide a brief description for each of the
         operating modes.
       </p>
-      <ion-button class="ion-float-right ion-margin-bottom" (click)="toggleOperatingModeModal(true)">Change</ion-button>
+      <ion-button class="ion-float-right ion-margin-vertical" (click)="toggleOperatingModeModal(true)"
+        >Change</ion-button
+      >
     </ion-card-content>
   </ion-card>
 
@@ -32,7 +34,9 @@
   <ion-card>
     <ion-card-content class="ion-flex ion-align-items-center">
       <ion-icon class="icon ion-margin-end" name="moon-outline"></ion-icon>
-      <div class="flex-1">Dark mode</div>
+      <div class="flex-1">
+        <p>Dark mode</p>
+      </div>
       <ion-toggle (ionChange)="setDarkMode($event)" [checked]="componentStore.darkMode$ | ngrxPush"></ion-toggle>
     </ion-card-content>
   </ion-card>
@@ -41,7 +45,9 @@
   <ion-card>
     <ion-card-content class="ion-flex ion-align-items-center">
       <ion-icon class="icon sun ion-margin-end" name="sunny"></ion-icon>
-      <div class="flex-1">Use weather forecast for charge management</div>
+      <div class="flex-1">
+        <p>Use weather forecast for charge management</p>
+      </div>
       <ion-toggle
         class="forecast"
         (ionChange)="setPrognosisCharging($event)"
@@ -50,12 +56,13 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-button class="ion-margin" expand="block" color="danger" (click)="runWizard()">Run setup</ion-button>
+  <ion-button class="ion-margin" expand="block" color="danger" (click)="runWizard()">RESET AND RUN SETUP</ion-button>
 
   <!--  Operating mode modal-->
   <ion-modal
     [isOpen]="componentStore.showOperatingMode$ | ngrxPush"
-    [swipeToClose]="true"
+    [canDismiss]="true"
+    [presentingElement]="presentingElement"
     (didDismiss)="toggleOperatingModeModal(false)"
   >
     <ng-template>
@@ -89,7 +96,7 @@
                   <ion-card>
                     <ion-card-content class="ion-flex ion-align-items-center gap-2">
                       <ion-icon class="icon" name="checkmark-done-circle-outline" color="success"></ion-icon>
-                      <div>With this mode you can set schedules</div>
+                      <p>With this mode you can set schedules</p>
                     </ion-card-content>
                   </ion-card>
                 </ng-container>
@@ -131,7 +138,7 @@
   <ion-card>
     <ion-card-content class="ion-flex ion-align-items-center gap-2">
       <ion-icon class="icon" name="warning-outline" color="warning"></ion-icon>
-      <div>This mode will not allow for any schedules to be set</div>
+      <p>This mode will not allow for any schedules to be set</p>
     </ion-card-content>
   </ion-card>
 </ng-template>

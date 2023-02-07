@@ -6,7 +6,7 @@
     </ion-tab-button>
 
     <ion-tab-button tab="schedule">
-      <ion-icon name="time-outline"></ion-icon>
+      <ion-icon name="timer-outline"></ion-icon>
       <ion-label>Schedule</ion-label>
       <ion-badge color="danger" *ngIf="showSchedulesCount$ | ngrxPush">{{ (schedules$ | async).length }}</ion-badge>
     </ion-tab-button>

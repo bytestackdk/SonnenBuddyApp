@@ -38,12 +38,13 @@
   <!--Schedules-->
   <ng-template #schedules>
     <ion-card *ngIf="(componentStore.schedules$ | ngrxPush).length === 0">
-      <ion-card-content class="ion-flex ion-align-items-center gap-2">
-        <ion-icon class="icon" color="primary" name="timer-outline"></ion-icon>
-        <div>
-          You have no schedules setup. These can be setup to create periods where your battery charges from the grid or
-          doesn't discharge.
-        </div>
+      <ion-card-header>
+        <ion-card-title class="card-title ion-flex ion-align-items-center gap-1" color="primary">
+          You have no schedules
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>These can be setup to create periods where your battery charges from the grid or doesn't discharge.</p>
       </ion-card-content>
     </ion-card>
 
@@ -60,10 +61,12 @@
         </ion-card-subtitle>
       </ion-card-header>
       <ion-card-content class="ion-flex ion-align-items-center gap-1">
-        <ion-icon name="flash-outline" *ngIf="schedule.threshold_p_max > 0"></ion-icon>
-        <ion-icon name="flash-off-outline" *ngIf="schedule.threshold_p_max === 0"></ion-icon>
+        <ion-icon name="flash-outline" color="primary" *ngIf="schedule.threshold_p_max > 0"></ion-icon>
+        <ion-icon name="flash-off-outline" color="primary" *ngIf="schedule.threshold_p_max === 0"></ion-icon>
         <div>
-          <b>{{ schedule.threshold_p_max }}W</b>
+          <ion-text color="primary">
+            <b>{{ schedule.threshold_p_max }}W</b>
+          </ion-text>
         </div>
       </ion-card-content>
       <ion-ripple-effect></ion-ripple-effect>
@@ -82,7 +85,8 @@
   <ion-modal
     class="schedule-modal"
     [isOpen]="componentStore.showModal$ | ngrxPush"
-    [swipeToClose]="true"
+    [canDismiss]="true"
+    [presentingElement]="presentingElement"
     (didDismiss)="componentStore.toggleModal(false)"
   >
     <ng-template>
@@ -100,13 +104,17 @@
           <ion-card-content>
             <div class="ion-flex ion-justify-content-between">
               <div>
-                <p>Timespan</p>
+                <p>
+                  <ion-text color="primary">Timespan</ion-text>
+                </p>
                 <h1>
                   <b>{{ componentStore.scheduleStart$ | ngrxPush }} - {{ componentStore.scheduleStop$ | ngrxPush }}</b>
                 </h1>
               </div>
               <div>
-                <p class="ion-text-end">Power</p>
+                <p class="ion-text-end">
+                  <ion-text color="primary">Power</ion-text>
+                </p>
                 <h1>
                   <b>{{ componentStore.scheduleThreshold$ | ngrxPush }}W</b>
                 </h1>
@@ -117,7 +125,10 @@
 
         <div class="ion-margin">
           <ion-text color="medium">
-            Select a timespan and set the charge power for the battery. Setting it to 0W will prevent battery discharge.
+            <p>
+              Select a timespan and set the charge power for the battery. Setting it to 0W will prevent battery
+              discharge.
+            </p>
           </ion-text>
         </div>
 

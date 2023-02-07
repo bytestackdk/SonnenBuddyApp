@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PlatformActions } from '../../store/platform';
 import { SettingsPageStore } from './settings-page.store';
 import { ConfigurationKey, OperatingMode } from '../../api/models/battery.model';
 import { SonnenBatterieActions } from '../../store/sonnen-batterie';
 import { InputActions } from '../../store/input/input.actions';
-import { ToggleChangeEventDetail } from '@ionic/angular';
+import { Platform, ToggleChangeEventDetail } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -13,7 +13,7 @@ import { ToggleChangeEventDetail } from '@ionic/angular';
   styleUrls: ['settings-page.component.scss'],
   providers: [SettingsPageStore],
 })
-export class SettingsPage {
+export class SettingsPage implements OnInit {
   operatingModes = [
     OperatingMode.TimeOfUse,
     OperatingMode.SelfConsumption,
@@ -23,7 +23,17 @@ export class SettingsPage {
 
   OperatingMode = OperatingMode;
 
-  constructor(private readonly store: Store, readonly componentStore: SettingsPageStore) {}
+  presentingElement = null;
+
+  constructor(
+    private readonly store: Store,
+    readonly componentStore: SettingsPageStore,
+    private readonly platform: Platform
+  ) {}
+
+  ngOnInit() {
+    this.presentingElement = document.querySelector('.ion-content');
+  }
 
   ionViewWillEnter() {
     this.store.dispatch(SonnenBatterieActions.refreshConfigurations());
@@ -56,5 +66,10 @@ export class SettingsPage {
 
   runWizard() {
     this.store.dispatch(PlatformActions.runWizard());
+
+    if (!this.platform.url().startsWith('http')) {
+      // When running on device also clear all input
+      this.store.dispatch(InputActions.clearInput());
+    }
   }
 }

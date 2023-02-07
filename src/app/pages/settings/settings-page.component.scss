@@ -1,18 +1,9 @@
-.card-title {
-  font-size: 1.5em;
-}
-
-p,
-ul {
-  font-size: 14px;
-}
-
 ion-toggle {
   &.forecast {
-    --background-checked: orange;
+    --background-checked: var(--ion-color-warning);
   }
 }
 
 .sun {
-  color: orange;
+  color: var(--ion-color-warning);
 }

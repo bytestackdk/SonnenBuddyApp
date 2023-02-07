@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SchedulePageStore } from './schedule-page.store';
 import { ISchedule, OperatingMode } from '../../api/models/battery.model';
 import { SonnenBatterieActions } from '../../store/sonnen-batterie';
@@ -11,14 +11,20 @@ import { TimespanChangeEvent } from '../../shared/components/timespan/timespan.c
   styleUrls: ['schedule-page.component.scss'],
   providers: [SchedulePageStore],
 })
-export class SchedulePage {
+export class SchedulePage implements OnInit {
   OperatingMode = OperatingMode;
 
   start: string;
   stop: string;
   threshold: string;
 
+  presentingElement = null;
+
   constructor(private readonly store: Store, public readonly componentStore: SchedulePageStore) {}
+
+  ngOnInit() {
+    this.presentingElement = document.querySelector('.ion-content');
+  }
 
   ionViewWillEnter() {
     this.store.dispatch(SonnenBatterieActions.refreshConfigurations());

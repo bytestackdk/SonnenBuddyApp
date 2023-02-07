@@ -15,13 +15,13 @@
 
   &.solar-to-inverter {
     left: 155%;
-    width: calc(100% - 30px);
+    width: calc(100% - 24px);
   }
 
   &.battery-and-inverter {
     left: 50%;
     top: 109px;
-    width: calc(200% - 24px);
+    width: calc(200% - 18px);
   }
 
   &.inverter-and-grid {
@@ -75,10 +75,19 @@
 }
 
 img {
-  width: 50px;
+  //width: 50px;
   height: 50px;
+  &.solar {
+    width: 50px;
+  }
+  &.inverter {
+    //margin-top: 2px;
+  }
   &.home {
+    width: 50px;
     margin-top: 5px;
+  }
+  &.grid {
   }
 }
 
