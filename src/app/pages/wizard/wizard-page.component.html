@@ -148,14 +148,17 @@
         <div class="flex-1 ion-padding-top">
           <ion-item>
             <ion-label class="label half-width" position="fixed">Max solar output</ion-label>
-            <ion-input type="number" placeholder="Watts" (ionChange)="updateSolarPowerOutput($event)"></ion-input>
+            <ion-input
+              type="number"
+              placeholder="Watts"
+              (ionChange)="updateSolarPowerOutput($event)"
+              value="{{ componentStore.solarMaxPower$ | ngrxPush }}"
+            ></ion-input>
           </ion-item>
-          <h2>{{ componentStore.solarPowerOutput$ | ngrxPush | kw }}</h2>
+          <h2>{{ componentStore.solarMaxPower$ | ngrxPush | kw }}</h2>
         </div>
 
-        <ion-button (click)="finish()" [disabled]="(componentStore.solarPowerOutput$ | ngrxPush) < 100"
-          >Finish</ion-button
-        >
+        <ion-button (click)="finish()" [disabled]="(componentStore.solarMaxPower$ | ngrxPush) < 100">Finish</ion-button>
       </div>
     </ng-template>
   </swiper>

@@ -57,7 +57,7 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   readonly maxPower$ = this.select((state) => state.maxPower);
   readonly batteryQuantity$ = this.select((state) => state.batteryQuantity);
   readonly batteryModuleCapacity$ = this.select((state) => state.batteryModuleCapacity);
-  readonly solarPowerOutput$ = this.select((state) => state.solarMaxPower);
+  readonly solarMaxPower$ = this.select((state) => state.solarMaxPower);
   readonly showFindHelp$ = this.select((state) => state.showFindHelp);
   readonly showTokenHelp$ = this.select((state) => state.showTokenHelp);
   readonly showMaxSolarHelp$ = this.select((state) => state.showMaxSolarHelp);
@@ -110,7 +110,15 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   }
 
   readonly findPreviousApiToken = this.effect(() =>
-    this.store.select(InputSelectors.selectApiToken).pipe(tap((apiToken: ApiToken) => this.patchState({ apiToken })))
+    this.store
+      .select(InputSelectors.selectApiToken)
+      .pipe(tap((apiToken: ApiToken) => this.patchState({ ...(apiToken && { apiToken }) })))
+  );
+
+  readonly findPreviousSolarMaxPower = this.effect(() =>
+    this.store
+      .select(InputSelectors.selectSolarMaxPower)
+      .pipe(tap((solarMaxPower: number) => this.patchState({ ...(solarMaxPower && { solarMaxPower }) })))
   );
 
   readonly findDevice = this.effect((trigger$) =>
