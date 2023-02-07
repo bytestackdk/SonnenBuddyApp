@@ -36,7 +36,9 @@
         <div class="ion-flex ion-flex-column ion-align-items-center gap-1">
           <app-utilization class="utilization-bar" [percent]="solarUtilization$ | ngrxPush"></app-utilization>
           <img src="assets/ph.svg" class="svg-icon solar" alt="Solar" />
-          <div class="solar-production">{{ solarProduction$ | ngrxPush | kw }}</div>
+          <div class="solar-production kw">
+            {{ solarProduction$ | ngrxPush | kw }}
+          </div>
         </div>
       </ion-col>
       <ion-col>
@@ -63,8 +65,10 @@
       <ion-col class="ion-flex ion-flex-column ion-align-items-center ion-justify-content-center gap-1">
         <app-utilization class="utilization-bar" [percent]="batteryUtilization$ | ngrxPush"></app-utilization>
         <app-battery class="battery" [percent]="batteryCharge$ | ngrxPush"></app-battery>
-        <div>{{ batteryCharge$ | ngrxPush }}%</div>
-        <div>{{ batteryUsage$ | ngrxPush | kw }}</div>
+        <div class="kw">{{ batteryCharge$ | ngrxPush }}%</div>
+        <div class="kw">
+          {{ batteryUsage$ | ngrxPush | kw }}
+        </div>
         <!--          <div>{{ batteryRemaining$ | ngrxPush | kw }}h</div>-->
       </ion-col>
       <ion-col class="ion-flex ion-flex-column ion-align-items-center ion-justify-content-end">
@@ -73,15 +77,19 @@
       <ion-col class="ion-flex ion-flex-column ion-align-items-center ion-justify-content-center gap-1">
         <app-utilization class="utilization-bar" [percent]="inverterUtilization$ | ngrxPush"></app-utilization>
         <img src="assets/sonnen.svg" class="svg-icon inverter" alt="Inverter" />
-        <div>{{ inverterUsage$ | ngrxPush | kw }}</div>
-        <div>&nbsp;</div>
+        <div class="kw">
+          {{ inverterUsage$ | ngrxPush | kw }}
+        </div>
+        <div>&nbsp;<!--Intentionally here and blank for flex--></div>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col></ion-col>
       <ion-col class="ion-flex ion-flex-column ion-align-items-center gap-1">
         <img src="assets/house.svg" class="svg-icon home" alt="Home" />
-        <div>{{ houseConsumption$ | ngrxPush | kw }}</div>
+        <div class="kw">
+          {{ houseConsumption$ | ngrxPush | kw }}
+        </div>
       </ion-col>
       <ion-col></ion-col>
     </ion-row>
@@ -106,7 +114,9 @@
       </ion-col>
       <ion-col class="ion-flex ion-flex-column ion-align-items-center gap-1">
         <img src="assets/grid.svg" class="svg-icon grid" alt="Grid" />
-        <div>{{ gridFeedIn$ | ngrxPush | kw }}</div>
+        <div class="kw">
+          {{ gridFeedIn$ | ngrxPush | kw }}
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>
