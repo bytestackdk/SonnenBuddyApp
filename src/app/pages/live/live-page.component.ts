@@ -4,7 +4,6 @@ import { StatusSelectors } from '../../store/status';
 import { LivePageFacade } from './live-page.facade';
 import { SonnenBatterieActions } from '../../store/sonnen-batterie';
 import { InputSelectors } from 'src/app/store/input';
-import { PlatformActions } from '../../store/platform';
 
 @Component({
   selector: 'app-live',
@@ -51,14 +50,6 @@ export class LivePage {
 
   ionViewWillEnter() {
     this.store.dispatch(SonnenBatterieActions.refreshConfigurations());
-  }
-
-  disconnect() {
-    this.store.dispatch(PlatformActions.wifiConnectionChange({ status: { connected: false, connectionType: 'wifi' } }));
-  }
-
-  connect() {
-    this.store.dispatch(PlatformActions.wifiConnectionChange({ status: { connected: true, connectionType: 'wifi' } }));
   }
 
   // findDevices() {
