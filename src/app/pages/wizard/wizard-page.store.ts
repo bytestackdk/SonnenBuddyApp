@@ -22,6 +22,7 @@ export interface IWizardState {
   batteryModuleCapacity: number;
   showFindHelp: boolean;
   showTokenHelp: boolean;
+  showMaxSolarHelp: boolean;
   loading: boolean;
   error: unknown;
 }
@@ -35,6 +36,7 @@ export const initialState: IWizardState = {
   batteryModuleCapacity: null,
   showFindHelp: false,
   showTokenHelp: false,
+  showMaxSolarHelp: false,
   loading: false,
   error: null,
 };
@@ -58,6 +60,7 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   readonly solarPowerOutput$ = this.select((state) => state.solarMaxPower);
   readonly showFindHelp$ = this.select((state) => state.showFindHelp);
   readonly showTokenHelp$ = this.select((state) => state.showTokenHelp);
+  readonly showMaxSolarHelp$ = this.select((state) => state.showMaxSolarHelp);
   readonly loading$ = this.select((state) => state.loading);
   readonly error$ = this.select((state) => state.error);
 
@@ -75,6 +78,10 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
 
   toggleTokenHelp(showTokenHelp: boolean) {
     this.patchState(() => ({ showTokenHelp }));
+  }
+
+  toggleMaxSolarHelp(showMaxSolarHelp: boolean) {
+    this.patchState(() => ({ showMaxSolarHelp }));
   }
 
   setToken(apiToken: ApiToken) {

@@ -39,9 +39,7 @@
   <ng-template #schedules>
     <ion-card *ngIf="(componentStore.schedules$ | ngrxPush).length === 0">
       <ion-card-header>
-        <ion-card-title class="card-title ion-flex ion-align-items-center gap-1" color="primary">
-          You have no schedules
-        </ion-card-title>
+        <ion-card-title class="card-title" color="primary"> You have no schedules </ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <p>These can be setup to create periods where your battery charges from the grid or doesn't discharge.</p>

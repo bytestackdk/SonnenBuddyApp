@@ -38,6 +38,10 @@ export class WizardPage implements OnInit {
     this.componentStore.toggleTokenHelp(show);
   }
 
+  toggleMaxSolarHelp(show: boolean) {
+    this.componentStore.toggleMaxSolarHelp(show);
+  }
+
   testToken() {
     this.componentStore.testToken();
   }

@@ -141,27 +141,9 @@
             To calculate solar utilization, we need to know the max output of your system.
           </app-step-header>
 
-          <ion-button (click)="toggleFindHelp(true)">
+          <ion-button (click)="toggleMaxSolarHelp(true)">
             <ion-icon name="help-sharp"></ion-icon>
           </ion-button>
-
-          <!--          <ion-card>-->
-          <!--            <ion-card-content>-->
-          <!--              <div class="ion-flex ion-align-items-center gap-2">-->
-          <!--                <ion-icon class="icon" name="information-circle-outline" color="primary"></ion-icon>-->
-          <!--                <div class="ion-text-left">-->
-          <!--                  <p>-->
-          <!--                    This can be calculated by multiplying the number of solar panels you have with the output per panel-->
-          <!--                    in Watts.-->
-          <!--                  </p>-->
-          <!--                  <p>-->
-          <!--                    E.g. you might have <b>16 panels</b> that each have an output of <b>400W</b> meaning:-->
-          <!--                    <b>16 x 400W = 6400W</b>-->
-          <!--                  </p>-->
-          <!--                </div>-->
-          <!--              </div>-->
-          <!--            </ion-card-content>-->
-          <!--          </ion-card>-->
         </div>
         <div class="flex-1 ion-padding-top">
           <ion-item>
@@ -194,16 +176,22 @@
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding" [scrollY]="false">
-        <h2>Finding your sonnenBatterie</h2>
-        <p>Hopefully it's easily found, but in case you get errors, here's some help to try and troubleshoot.</p>
-        <ul class="ion-text-left">
-          <li>Check that you're on WIFI</li>
-          <li>Check that you have access to the internet</li>
-          <li>Check you're connected to the same network as the sonnenBatterie</li>
-          <li>Check you don't have any VPN software running or blocking the local network access</li>
-          <li>Check you have allowed this app to access the local network (you will be asked when trying)</li>
-        </ul>
+      <ion-content [scrollY]="false">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title class="card-title" color="primary">Finding your sonnenBatterie</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Hopefully it's easily found, but in case you get errors, here's some help to try and troubleshoot.</p>
+            <ul class="ion-text-left">
+              <li>Check that you're on WIFI</li>
+              <li>Check that you have access to the internet</li>
+              <li>Check you're connected to the same network as the sonnenBatterie</li>
+              <li>Check you don't have any VPN software running or blocking the local network access</li>
+              <li>Check you have allowed this app to access the local network (you will be asked when trying)</li>
+            </ul>
+          </ion-card-content>
+        </ion-card>
       </ion-content>
     </ng-template>
   </ion-modal>
@@ -224,22 +212,70 @@
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
-      <ion-content class="ion-padding" [scrollY]="false">
-        <h2>How to find the API token</h2>
-        <p>Follow below steps to find your API token and give access to this app.</p>
-        <ul class="ion-text-left">
-          <li>
-            Open a browser on this address: <b>http://{{ componentStore.lanIp$ | ngrxPush }}</b>
-          </li>
-          <li>
-            Select <b>User</b> and try this password: <b>sonnenUser3552</b> (it might be different for your
-            sonnenBatterie)
-          </li>
-          <li>Go to Software-Integration</li>
-          <li>Enable <b>Read API</b> and <b>Write API</b></li>
-          <li>Find the <b>API token</b> on the same page</li>
-          <li>Close this help and type/paste the <b>API token</b> into the text box</li>
-        </ul>
+      <ion-content [scrollY]="false">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title class="card-title" color="primary">Find the API token</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>Follow below steps to find your API token and give access to this app.</p>
+            <ul class="ion-text-left">
+              <li>
+                Open a browser on this address:
+                <ion-text color="primary">http://{{ componentStore.lanIp$ | ngrxPush }}</ion-text>
+              </li>
+              <li>
+                Select <ion-text color="primary">User</ion-text> and try this password:
+                <ion-text color="primary">sonnenUser3552</ion-text> (it might be different for your sonnenBatterie)
+              </li>
+              <li>Go to <ion-text color="primary">Software-Integration</ion-text></li>
+              <li>
+                Enable <ion-text color="primary">Read API</ion-text> and <ion-text color="primary">Write API</ion-text>
+              </li>
+              <li>Find the <ion-text color="primary">API token</ion-text> on the same page</li>
+              <li>
+                Close this help and type/paste the <ion-text color="primary">API token</ion-text> into the text box
+              </li>
+            </ul>
+          </ion-card-content>
+        </ion-card>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <!--Max Solar Output Help-->
+  <ion-modal
+    [isOpen]="componentStore.showMaxSolarHelp$ | ngrxPush"
+    [canDismiss]="true"
+    [presentingElement]="presentingElement"
+    (didDismiss)="toggleMaxSolarHelp(false)"
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Help</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="toggleMaxSolarHelp(false)">Close</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [scrollY]="false">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title class="card-title" color="primary">Calculating max solar output</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <p>
+              This can be calculated by multiplying the number of solar panels you have with the output per panel in
+              Watts.
+            </p>
+            <p>
+              E.g. you might have <ion-text color="primary">16 panels</ion-text> that each have an output of
+              <ion-text color="primary">400W</ion-text> meaning: <ion-text color="primary">16 x 400W</ion-text> =
+              <ion-text color="primary">6400W</ion-text>
+            </p>
+          </ion-card-content>
+        </ion-card>
       </ion-content>
     </ng-template>
   </ion-modal>
