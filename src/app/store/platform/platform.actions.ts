@@ -1,10 +1,12 @@
-import { createActionGroup, emptyProps } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { ConnectionStatus } from '@capacitor/network';
 
 export const PlatformActions = createActionGroup({
   source: 'Platform',
   events: {
     'Platform Ready': emptyProps(),
     'Platform Stop': emptyProps(),
+    'Wifi Connection Change': props<{ status: ConnectionStatus }>(),
     'Using Known Active Device': emptyProps(),
     'No Active Device Exists': emptyProps(),
     'Check Active Device Responding': emptyProps(),
