@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { ComponentStore, tapResponse } from '@ngrx/component-store';
 import { NetworkService } from '../../api/services/network.service';
 import { Store } from '@ngrx/store';
-import { switchMap, tap } from 'rxjs/operators';
+import { catchError, switchMap, tap } from 'rxjs/operators';
 import { Device } from '../../api/models/network.model';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { concatLatestFrom } from '@ngrx/effects';
 import { Guid } from 'guid-typescript';
 import { BatteryService } from '../../api/services/battery.service';
@@ -135,8 +135,9 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
     )
   );
 
-  readonly testToken = this.effect((trigger$) =>
-    trigger$.pipe(
+  readonly testToken = this.effect((trigger$) => {
+    return trigger$.pipe(
+      concatLatestFrom(() => [this.apiToken$, this.lanIp$]),
       tap(() =>
         this.patchState({
           maxPower: null,
@@ -146,39 +147,35 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
           loading: true,
         })
       ),
-      concatLatestFrom(() => [this.apiToken$, this.lanIp$]),
       switchMap(([, apiToken, lanIp]) =>
-        forkJoin({
-          maxPower: this.batteryService.getConfigurationAsNumber(
-            ConfigurationKey.IC_InverterMaxPower_w,
-            apiToken,
-            lanIp
+        // This ping is redundant unless user haven't given permissions to local area network access
+        this.batteryService.pingLan(apiToken, lanIp).pipe(
+          switchMap(() =>
+            forkJoin([
+              this.batteryService.getConfigurationAsNumber(ConfigurationKey.IC_InverterMaxPower_w, apiToken, lanIp),
+              this.batteryService.getConfigurationAsNumber(ConfigurationKey.IC_BatteryModules, apiToken, lanIp),
+              this.batteryService.getConfigurationAsNumber(
+                ConfigurationKey.CM_MarketingModuleCapacity,
+                apiToken,
+                lanIp
+              ),
+            ]).pipe(
+              tapResponse(
+                ([maxPower, batteryQuantity, batteryModuleCapacity]) => {
+                  this.patchState({
+                    maxPower,
+                    batteryQuantity,
+                    batteryModuleCapacity,
+                    loading: false,
+                  });
+                },
+                (error) => this.patchState({ error, loading: false })
+              )
+            )
           ),
-          batteryQuantity: this.batteryService.getConfigurationAsNumber(
-            ConfigurationKey.IC_BatteryModules,
-            apiToken,
-            lanIp
-          ),
-          batteryModuleCapacity: this.batteryService.getConfigurationAsNumber(
-            ConfigurationKey.CM_MarketingModuleCapacity,
-            apiToken,
-            lanIp
-          ),
-        }).pipe(
-          tapResponse(
-            (configurations) => {
-              const { maxPower, batteryQuantity, batteryModuleCapacity } = configurations;
-              this.patchState({
-                maxPower,
-                batteryQuantity,
-                batteryModuleCapacity,
-                loading: false,
-              });
-            },
-            (error) => this.patchState({ error, loading: false })
-          )
+          catchError((error) => of({}).pipe(tap(() => this.patchState({ error, loading: false }))))
         )
       )
-    )
-  );
+    );
+  });
 }

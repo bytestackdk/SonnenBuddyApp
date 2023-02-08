@@ -60,9 +60,8 @@
                 *ngIf="componentStore.error$ | ngrxPush as error"
                 @enterFadeAnimation
               >
-                <img src="assets/sonnen.svg" class="svg-icon" alt="sonnenBatterie" />
-                <p>There was an error<br />Please try again</p>
                 <ion-icon class="icon" name="alert-sharp" color="danger"></ion-icon>
+                <p class="ion-text-left">There was an error<br />Please try again</p>
               </div>
             </ion-card-content>
           </ion-card>
@@ -122,8 +121,8 @@
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.error$ | ngrxPush as error"
               >
-                <p class="ion-text-left">There was an error<br />Please try again</p>
                 <ion-icon class="icon" name="alert-sharp" color="danger"></ion-icon>
+                <p class="ion-text-left">There was an error<br />Please try again</p>
               </div>
             </ion-card-content>
           </ion-card>

@@ -22,8 +22,12 @@ export class BatteryService extends BaseService {
     super(angularHttp, nativeHttp, store);
   }
 
-  check(): Observable<boolean> {
-    return this.getStatus().pipe(
+  pingLan(apiToken: ApiToken, lanIp: IP) {
+    return this.get(`api/v2/status`, apiToken, lanIp);
+  }
+
+  check(apiToken?: ApiToken, lanIp?: IP): Observable<boolean> {
+    return this.get(`api/v2/status`, apiToken, lanIp).pipe(
       map((response) => !!response),
       catchError(() => of(false))
     );

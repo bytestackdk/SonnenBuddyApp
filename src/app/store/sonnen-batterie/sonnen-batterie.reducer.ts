@@ -48,10 +48,8 @@ export const sonnenBatterieFeature = createFeature({
       ...state,
       device: null,
     })),
-    on(PlatformActions.runWizard, (state) => ({
-      ...state,
-      device: null,
-      configuration: null,
+    on(PlatformActions.runWizard, () => ({
+      ...initialState,
     })),
 
     // Loading
