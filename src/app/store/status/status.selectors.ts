@@ -23,7 +23,9 @@ export const selectSolarToInverter = createSelector(
 );
 export const selectBatteryCharging = createSelector(selectStatus, (entity) => entity?.BatteryCharging);
 export const selectBatteryDischarging = createSelector(selectStatus, (entity) => entity?.BatteryDischarging);
-export const selectBatteryUsage = createSelector(selectStatus, (entity) => entity?.Pac_total_W);
+export const selectBatteryUsage = createSelector(selectStatus, (entity) =>
+  Math.abs(entity?.Pac_total_W || 0) >= 50 ? entity.Pac_total_W : 0
+);
 export const selectBatteryUtilization = createSelector(
   fromSonnenBatterie.selectSonnenBatterieBatteryMaxPower,
   selectBatteryUsage,
@@ -76,16 +78,18 @@ export const selectInverterToHome = createSelector(
   (entity) => entity?.FlowConsumptionBattery || entity?.FlowConsumptionProduction
 );
 export const selectGridFeedIn = createSelector(selectStatus, (entity) => entity?.GridFeedIn_W);
+export const selectInverterToGrid = createSelector(selectStatus, (entity) => entity?.FlowProductionGrid);
 export const selectInverterCurrentPower = createSelector(
   selectStatus,
   selectInverterToHome,
+  selectInverterToGrid,
   selectBatteryUsage,
-  (entity, inverterToHome, batteryUsage) => {
+  (entity, inverterToHome, inverterToGrid, batteryUsage) => {
     if (!entity) return null;
 
     const { Apparent_output } = entity;
 
-    return inverterToHome || batteryUsage < 0 ? Apparent_output : 0;
+    return inverterToHome || inverterToGrid || batteryUsage < 0 ? Apparent_output : 0;
   }
 );
 export const selectInverterUtilization = createSelector(
@@ -98,7 +102,6 @@ export const selectInverterToBattery = createSelector(
   // Sometimes grid flows to battery even though we're exporting power
   (entity) => entity?.FlowGridBattery && entity?.GridFeedIn_W <= -50
 );
-export const selectInverterToGrid = createSelector(selectStatus, (entity) => entity?.FlowProductionGrid);
 export const selectGridToHome = createSelector(
   selectStatus,
   // We don't want to show feed in below 50W as that shows as 0.1 kW
