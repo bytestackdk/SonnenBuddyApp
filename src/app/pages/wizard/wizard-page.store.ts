@@ -173,7 +173,8 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
               )
             )
           ),
-          catchError((error) => of({}).pipe(tap(() => this.patchState({ error, loading: false }))))
+          // If pingLan fails we're on iOS and the user was permission prompted
+          catchError(() => of({}).pipe(tap(() => this.patchState({ loading: false }))))
         )
       )
     );
