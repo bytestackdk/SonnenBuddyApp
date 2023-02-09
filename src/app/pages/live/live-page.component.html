@@ -95,22 +95,25 @@
     </ion-row>
     <ion-row>
       <ion-col class="information" size="8">
-        <div>
-          <ion-text color="medium">Updated:</ion-text>
-          {{ updated$ | ngrxPush }}
-        </div>
-        <div>
-          <ion-text color="medium">Battery capacity:</ion-text>
-          {{ batteryRemaining$ | ngrxPush | kw }}h
-        </div>
-        <div *ngIf="batteryCharging$ | ngrxPush">
-          <ion-text color="medium">Time until charged:</ion-text>
-          {{ batteryChargingTime$ | ngrxPush }}
-        </div>
-        <div *ngIf="batteryDischarging$ | ngrxPush">
-          <ion-text color="medium">Time until discharged:</ion-text>
-          {{ batteryDischargingTime$ | ngrxPush }}
-        </div>
+        <table class="key-value">
+          <tr>
+            <td><ion-text color="medium">Updated:</ion-text></td>
+            <td>{{ updated$ | ngrxPush }}</td>
+          </tr>
+          <tr>
+            <td><ion-text color="medium">Battery capacity:</ion-text></td>
+            <td>{{ batteryRemaining$ | ngrxPush | kw }}h</td>
+          </tr>
+
+          <tr *ngIf="batteryCharging$ | ngrxPush">
+            <td><ion-text color="medium">Time until charged:</ion-text></td>
+            <td>{{ batteryChargingTime$ | ngrxPush }}</td>
+          </tr>
+          <tr *ngIf="batteryDischarging$ | ngrxPush">
+            <td><ion-text color="medium">Time until discharged:</ion-text></td>
+            <td>{{ batteryDischargingTime$ | ngrxPush }}</td>
+          </tr>
+        </table>
       </ion-col>
       <ion-col class="ion-flex ion-flex-column ion-align-items-center gap-1">
         <img src="assets/grid.svg" class="svg-icon grid" alt="Grid" />

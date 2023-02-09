@@ -21,10 +21,12 @@ export const initialState: ISettingsState = {
 
 @Injectable()
 export class SettingsPageStore extends ComponentStore<ISettingsState> {
+  readonly showOperatingMode$ = this.select((state) => state.showOperatingModeModal);
+
   readonly operatingMode$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieOperatingMode);
   readonly darkMode$ = this.store.select(InputSelectors.selectDarkMode);
   readonly prognosisCharging$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatteriePrognosisCharging);
-  readonly showOperatingMode$ = this.select((state) => state.showOperatingModeModal);
+  readonly device$ = this.store.select(SonnenBatterieSelectors.selectDevice);
 
   constructor(private readonly store: Store) {
     super({ ...initialState });

@@ -56,6 +56,25 @@
     </ion-card-content>
   </ion-card>
 
+  <!--Device information-->
+  <ion-card *ngrxLet="componentStore.device$ as device">
+    <ion-card-content class="device-info ion-flex ion-align-items-center gap-2">
+      <img src="assets/sonnen-ico.svg" class="svg-icon" alt="Sonnen device" />
+      <div class="flex-1">
+        <table class="key-value">
+          <tr>
+            <td>IP:</td>
+            <td>{{ device?.lanIp }}</td>
+          </tr>
+          <tr>
+            <td>S/N:</td>
+            <td>{{ device?.serialNumber }}</td>
+          </tr>
+        </table>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
   <ion-button class="ion-margin" expand="block" color="danger" (click)="runWizard()">RESET AND RUN SETUP</ion-button>
 
   <!--  Operating mode modal-->
