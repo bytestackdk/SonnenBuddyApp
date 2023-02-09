@@ -19,24 +19,6 @@ export class SonnenBatterieEffects {
     private readonly batteryService: BatteryService
   ) {}
 
-  findDevices$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(SonnenBatterieActions.findDevice),
-      exhaustMap(({ stopAfterFind }) =>
-        this.deviceService.find().pipe(
-          map((devices) =>
-            SonnenBatterieActions.findDeviceSuccess({
-              // For now just picking first device always
-              device: devices[0],
-              stopAfterFind,
-            })
-          ),
-          catchError((error) => of(SonnenBatterieActions.findDeviceFailed({ error })))
-        )
-      )
-    );
-  });
-
   finishWizard$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(WizardActions.finishWizard),

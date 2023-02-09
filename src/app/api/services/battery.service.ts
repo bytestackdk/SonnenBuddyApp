@@ -11,8 +11,8 @@ import {
   OperatingMode,
 } from '../models/battery.model';
 import { BaseService } from './base.service';
-import { catchError, map } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { ApiToken } from '../../shared/models/wizard.model';
 import { IP } from '../models/network.model';
 
@@ -22,15 +22,8 @@ export class BatteryService extends BaseService {
     super(angularHttp, nativeHttp, store);
   }
 
-  pingLan(apiToken: ApiToken, lanIp: IP) {
+  pingLan(apiToken?: ApiToken, lanIp?: IP) {
     return this.get(`api/v2/status`, apiToken, lanIp);
-  }
-
-  check(apiToken?: ApiToken, lanIp?: IP): Observable<boolean> {
-    return this.get(`api/v2/status`, apiToken, lanIp).pipe(
-      map((response) => !!response),
-      catchError(() => of(false))
-    );
   }
 
   getStatus() {

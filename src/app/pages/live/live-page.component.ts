@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StatusSelectors } from '../../store/status';
 import { LivePageFacade } from './live-page.facade';
-import { SonnenBatterieActions } from '../../store/sonnen-batterie';
+import { SonnenBatterieActions, SonnenBatterieSelectors } from '../../store/sonnen-batterie';
 import { InputSelectors } from 'src/app/store/input';
 
 @Component({
@@ -46,10 +46,16 @@ export class LivePage {
 
   updated$ = this.store.select(StatusSelectors.selectTimestamp);
 
+  device$ = this.store.select(SonnenBatterieSelectors.selectDevice);
+
   constructor(private readonly store: Store, readonly facade: LivePageFacade) {}
 
   ionViewWillEnter() {
     this.store.dispatch(SonnenBatterieActions.refreshConfigurations());
+  }
+
+  changeIp() {
+    this.store.dispatch(SonnenBatterieActions.setIp());
   }
 
   // findDevices() {

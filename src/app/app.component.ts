@@ -4,7 +4,6 @@ import { Platform } from '@ionic/angular';
 import { PlatformActions } from './store/platform';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 import { InputSelectors } from './store/input';
-import { StatusActions } from './store/status';
 import { Network } from '@capacitor/network';
 import { SubSink } from 'subsink';
 
@@ -14,7 +13,7 @@ import { SubSink } from 'subsink';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
-  subs = new SubSink();
+  private readonly subs = new SubSink();
 
   constructor(
     private readonly store: Store,
@@ -30,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
         Network.getStatus().then((status) => this.store.dispatch(PlatformActions.wifiConnectionChange({ status })));
         Network.addListener('networkStatusChange', (status) =>
-          this.zone.run(() => this.store.dispatch(PlatformActions.wifiConnectionChange({ status })))
+          this.store.dispatch(PlatformActions.wifiConnectionChange({ status }))
         );
       }
 
@@ -40,25 +39,29 @@ export class AppComponent implements OnInit, OnDestroy {
         })
       );
 
-      this.store.dispatch(PlatformActions.platformReady());
+      // READY (DOM ready when not running on native)
+      this.store.dispatch(PlatformActions.ready());
     });
 
     this.subs.add(
+      // PAUSE (Only on native)
       this.platform.pause.subscribe(() => {
-        this.store.dispatch(StatusActions.stopPolling());
+        this.store.dispatch(PlatformActions.pause());
       }),
 
+      // RESUME (Only on native)
       this.platform.resume.subscribe(() => {
-        // No polling when on wizard - It will start normally after wizard has finished
+        // Wizard doesn't need resume action as all are disabled there anyway
         if (!this.platform.url().includes('wizard')) {
-          this.zone.run(() => this.store.dispatch(StatusActions.startPolling()));
+          this.zone.run(() => this.store.dispatch(PlatformActions.resume()));
         }
       })
     );
   }
 
   ngOnDestroy() {
-    this.store.dispatch(PlatformActions.platformStop());
+    // STOP
+    this.store.dispatch(PlatformActions.stop());
     this.subs.unsubscribe();
     Network.removeAllListeners();
   }

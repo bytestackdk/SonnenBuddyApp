@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { SonnenBatterieActions } from '../sonnen-batterie';
-import { StatusActions } from '../status';
 import { tap } from 'rxjs/operators';
 import { ToastController } from '@ionic/angular';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -21,11 +20,7 @@ export class ToastEffects {
   showErrorToast$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(
-          SonnenBatterieActions.findDeviceFailed,
-          SonnenBatterieActions.setConfigurationFailed,
-          StatusActions.getStatusFailed
-        ),
+        ofType(SonnenBatterieActions.setConfigurationFailed),
         tap(async ({ error }) => {
           const httpError = typeof error !== 'string' ? (error as HttpErrorResponse) : null;
           const message = httpError

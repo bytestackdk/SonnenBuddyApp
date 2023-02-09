@@ -3,10 +3,13 @@ import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BatteryService } from '../../api/services/battery.service';
 import { PlatformActions } from './platform.actions';
-import { exhaustMap, filter, map } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SonnenBatterieActions } from '../sonnen-batterie/';
 import { SonnenBatterieSelectors } from 'src/app/store/sonnen-batterie';
+import { StatusActions } from '../status';
+import { of } from 'rxjs';
+import { NetworkService } from '../../api/services/network.service';
 
 @Injectable()
 export class PlatformEffects {
@@ -14,80 +17,49 @@ export class PlatformEffects {
     private readonly actions$: Actions,
     private readonly store: Store,
     private readonly batteryService: BatteryService,
+    private readonly networkService: NetworkService,
     private readonly router: Router
   ) {}
 
-  hasActiveDevice$ = createEffect(() =>
+  pause$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(PlatformActions.platformReady),
+      ofType(PlatformActions.pause),
+      map(() => StatusActions.stopPolling())
+    )
+  );
+
+  readyOrResume$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PlatformActions.ready, PlatformActions.resume),
       concatLatestFrom(() => this.store.select(SonnenBatterieSelectors.selectDevice)),
-      map(([, device]) => {
-        return device === null ? PlatformActions.noActiveDeviceExists() : PlatformActions.usingKnownActiveDevice();
+      switchMap(([, currentDevice]) => {
+        console.log('currentDevice', JSON.stringify(currentDevice));
+        if (!currentDevice) {
+          return of(PlatformActions.gotoWizard());
+        }
+
+        console.log('pingLan');
+        return this.batteryService.pingLan().pipe(
+          tap(() => console.log('startPolling')),
+          map(() => StatusActions.startPolling()),
+          catchError((error) => {
+            console.log('error', JSON.stringify(error));
+
+            // Ignore error as we might be on a different WI-FI with no sonnenBatterie
+            return this.networkService.find().pipe(
+              tap((devices) => console.log('devices', JSON.stringify(devices[0]))),
+              map((devices) => SonnenBatterieActions.updateDevice({ device: devices[0] }))
+            );
+          })
+        );
       })
     )
   );
 
-  noActiveDeviceExists$ = createEffect(() =>
+  startPolling$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(PlatformActions.noActiveDeviceExists),
-      map(() => PlatformActions.gotoWizard())
-    )
-  );
-
-  currentDeviceKnown$$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PlatformActions.usingKnownActiveDevice),
-      map(() => PlatformActions.checkActiveDeviceResponding())
-    )
-  );
-
-  checkCurrentDeviceResponding$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PlatformActions.checkActiveDeviceResponding),
-      exhaustMap(() =>
-        this.batteryService
-          .check()
-          .pipe(
-            map((isResponding) =>
-              isResponding ? PlatformActions.activeDeviceResponding() : PlatformActions.activeDeviceNotResponding()
-            )
-          )
-      )
-    )
-  );
-
-  currentDeviceNotResponding$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PlatformActions.activeDeviceNotResponding),
-      map(() => PlatformActions.checkOnline())
-    )
-  );
-
-  // checkOnline$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(fromPlatformActions.checkOnline),
-  //     map(() => {
-  //       // TODO
-  //       console.log('TODO: Do online check!');
-  //       return fromPlatformActions.online();
-  //     })
-  //   )
-  // );
-
-  onlineFindDevice$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(PlatformActions.online),
-      map(() => SonnenBatterieActions.findDevice({ stopAfterFind: false }))
-    )
-  );
-
-  findDevicesSuccess$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(SonnenBatterieActions.findDeviceSuccess),
-      filter(({ stopAfterFind }) => !stopAfterFind),
-      map(({ device }) => {
-        return !device ? PlatformActions.deviceNotFound() : PlatformActions.checkActiveDeviceResponding();
-      })
+      ofType(SonnenBatterieActions.updateDevice),
+      map(() => StatusActions.startPolling())
     )
   );
 

@@ -45,7 +45,7 @@ export class StatusEffects {
 
   startPolling$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(PlatformActions.gotoLivePage, PlatformActions.activeDeviceResponding),
+      ofType(PlatformActions.gotoLivePage),
       map(() => StatusActions.startPolling())
     );
   });

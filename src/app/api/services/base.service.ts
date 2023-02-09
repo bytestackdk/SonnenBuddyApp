@@ -57,10 +57,22 @@ export class BaseService {
     );
   }
 
-  protected nativeGet<T>(absoluteUrl: string, parameters = {}, headers = {}) {
-    return from(this.nativeHttp.get(absoluteUrl, parameters, headers)).pipe(
-      map((response) => JSON.parse(response.data) as T)
-    );
+  protected nativeGet<T>(absoluteUrl: string, params = {}, headers = {}) {
+    const timeoutInSeconds = 5;
+
+    /* eslint-disable  @typescript-eslint/no-explicit-any */
+    return from(
+      // Cast to any because type is incorrect
+      // https://github.com/silkimen/cordova-plugin-advanced-http/issues/471
+      this.nativeHttp.sendRequest(absoluteUrl, {
+        method: 'get',
+        headers,
+        params,
+        timeout: timeoutInSeconds,
+        connectTimeout: timeoutInSeconds,
+        readTimeout: timeoutInSeconds,
+      } as any)
+    ).pipe(map((response) => JSON.parse(response.data) as T));
   }
 
   protected nativePut<T>(absoluteUrl: string, body = {}, headers = {}) {

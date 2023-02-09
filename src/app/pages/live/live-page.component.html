@@ -121,6 +121,10 @@
     </ion-row>
   </ion-grid>
 
+  <ion-button (click)="changeIp()">Change IP</ion-button>
+
+  <pre>{{ device$ | ngrxPush | json }}</pre>
+
   <!--      &lt;!&ndash;      <app-power-square&ndash;&gt;-->
   <!--      &lt;!&ndash;        class="power-1"&ndash;&gt;-->
   <!--      &lt;!&ndash;        [right]="true"&ndash;&gt;-->

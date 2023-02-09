@@ -32,6 +32,18 @@ export const sonnenBatterieFeature = createFeature({
   reducer: createReducer(
     initialState,
 
+    on(SonnenBatterieActions.setIp, (state) => ({
+      ...state,
+      device: {
+        ...state.device,
+        lanIp: '192.168.1.200',
+      },
+    })),
+
+    on(SonnenBatterieActions.updateDevice, (state, { device }) => ({
+      ...state,
+      device,
+    })),
     on(
       WizardActions.finishWizard,
       (state, { device, output: { maxPower, batteryQuantity, batteryModuleCapacity } }) => ({
@@ -51,31 +63,6 @@ export const sonnenBatterieFeature = createFeature({
     on(PlatformActions.runWizard, () => ({
       ...initialState,
     })),
-
-    // Loading
-    // ====================================================================================
-    on(SonnenBatterieActions.findDevice, SonnenBatterieActions.getConfiguration, (state) => ({
-      ...state,
-      ...LoadingState.loading(),
-    })),
-
-    // Failed
-    // ====================================================================================
-    on(SonnenBatterieActions.findDeviceFailed, SonnenBatterieActions.getConfigurationFailed, (state, { error }) => ({
-      ...state,
-      ...LoadingState.failed(error),
-    })),
-
-    // Find device
-    // ====================================================================================
-    on(
-      SonnenBatterieActions.findDeviceSuccess,
-      (state, { device }): SonnenBatterieState => ({
-        ...state,
-        device,
-        ...LoadingState.loaded(),
-      })
-    ),
 
     // Get configuration
     // ====================================================================================
