@@ -29,8 +29,5 @@ export const SonnenBatterieActions = createActionGroup({
     'Set Configuration Failed': props<{ error?: string | HttpErrorResponse }>(),
 
     'Refresh Configurations': emptyProps(),
-
-    'Set IP': emptyProps(),
-    'Fucking Crap': emptyProps(),
   },
 });

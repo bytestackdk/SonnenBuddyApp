@@ -54,10 +54,6 @@ export class LivePage {
     this.store.dispatch(SonnenBatterieActions.refreshConfigurations());
   }
 
-  changeIp() {
-    this.store.dispatch(SonnenBatterieActions.setIp());
-  }
-
   // findDevices() {
   //   this.store.dispatch(fromSonnenBatterie.findDevices({ stopAfterFind: true }));
   // }

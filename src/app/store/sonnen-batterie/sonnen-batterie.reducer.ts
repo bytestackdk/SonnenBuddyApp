@@ -32,14 +32,6 @@ export const sonnenBatterieFeature = createFeature({
   reducer: createReducer(
     initialState,
 
-    on(SonnenBatterieActions.setIp, (state) => ({
-      ...state,
-      device: {
-        ...state.device,
-        lanIp: '192.168.1.200',
-      },
-    })),
-
     on(SonnenBatterieActions.updateDevice, (state, { device }) => ({
       ...state,
       device,
