@@ -222,9 +222,11 @@
           <ion-card-content>
             <p>Follow below steps to find your API token and give access to this app.</p>
             <ul class="ion-text-left">
-              <li>
-                Open a browser on this address:
-                <ion-text color="primary">http://{{ componentStore.lanIp$ | ngrxPush }}</ion-text>
+              <li *ngrxLet="componentStore.lanIp$ as lanIp">
+                Click to open a browser on this address or visit the same address on a computer:
+                <a href="http://{{ lanIp }}" target="_blank">
+                  <ion-text color="primary">http://{{ lanIp }}</ion-text>
+                </a>
               </li>
               <li>
                 Select <ion-text color="primary">User</ion-text> and try this password:
