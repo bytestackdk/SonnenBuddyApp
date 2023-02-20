@@ -106,11 +106,11 @@
           </tr>
 
           <tr *ngIf="batteryCharging$ | ngrxPush">
-            <td><ion-text color="medium">Time until charged:</ion-text></td>
+            <td><ion-text color="medium">Charge time:</ion-text></td>
             <td>{{ batteryChargingTime$ | ngrxPush }}</td>
           </tr>
           <tr *ngIf="batteryDischarging$ | ngrxPush">
-            <td><ion-text color="medium">Time until discharged:</ion-text></td>
+            <td><ion-text color="medium">Discharge time:</ion-text></td>
             <td>{{ batteryDischargingTime$ | ngrxPush }}</td>
           </tr>
         </table>
