@@ -36,7 +36,7 @@ export class StatusEffects {
     );
   });
 
-  stopPolling$ = createEffect(() => {
+  stopPollingWhenGoingToWizard$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PlatformActions.gotoWizard),
       map(() => StatusActions.stopPolling())

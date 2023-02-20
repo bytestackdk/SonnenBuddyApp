@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BatteryService } from '../../api/services/battery.service';
 import { PlatformActions } from './platform.actions';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { SonnenBatterieActions } from '../sonnen-batterie/';
-import { SonnenBatterieSelectors } from 'src/app/store/sonnen-batterie';
+import { SonnenBatterieActions, sonnenBatterieFeature } from '../sonnen-batterie/';
 import { StatusActions } from '../status';
 import { of } from 'rxjs';
 import { NetworkService } from '../../api/services/network.service';
@@ -31,26 +30,23 @@ export class PlatformEffects {
   readyOrResume$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PlatformActions.ready, PlatformActions.resume),
-      concatLatestFrom(() => this.store.select(SonnenBatterieSelectors.selectDevice)),
-      switchMap(([, currentDevice]) => {
-        console.log('currentDevice', JSON.stringify(currentDevice));
+      switchMap(() => {
+        // Use localStorage directly as sometimes meta reducer hasn't picked up state yet
+        const sonnenBatterie = localStorage.getItem(sonnenBatterieFeature.name);
+        const currentDevice = sonnenBatterie ? JSON.parse(sonnenBatterie)?.device : null;
+
         if (!currentDevice) {
           return of(PlatformActions.gotoWizard());
         }
 
-        console.log('pingLan');
         return this.batteryService.pingLan().pipe(
-          tap(() => console.log('startPolling')),
           map(() => StatusActions.startPolling()),
-          catchError((error) => {
-            console.log('error', JSON.stringify(error));
-
-            // Ignore error as we might be on a different WI-FI with no sonnenBatterie
-            return this.networkService.find().pipe(
-              tap((devices) => console.log('devices', JSON.stringify(devices[0]))),
-              map((devices) => SonnenBatterieActions.updateDevice({ device: devices[0] }))
-            );
-          })
+          // Ignore error as we might be on a different WI-FI with no sonnenBatterie
+          catchError(() =>
+            this.networkService
+              .find()
+              .pipe(map((devices) => SonnenBatterieActions.updateDevice({ device: devices[0] })))
+          )
         );
       })
     )
