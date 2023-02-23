@@ -52,3 +52,15 @@ export const numberToTime = (value: number) => {
 
   return value > 0 && hours === '00' && minutes === '00' ? '24:00' : `${hours}:${minutes}`;
 };
+
+export const timeSpanToLabel = (timespan: ITimeSpan) => {
+  if (timespan.day > 0) {
+    return `${timespan.day} day(s)`;
+  }
+
+  if (timespan.hour > 0) {
+    return `${timespan.hour} hour(s)`;
+  }
+
+  return `${timespan.minute.toString()} minute(s)`;
+};

@@ -101,16 +101,16 @@
             <td>{{ updated$ | ngrxPush }}</td>
           </tr>
           <tr>
-            <td><ion-text color="medium">Battery capacity:</ion-text></td>
+            <td><ion-text color="medium">Battery charge:</ion-text></td>
             <td>{{ batteryRemaining$ | ngrxPush | kw }}h</td>
           </tr>
 
           <tr *ngIf="batteryCharging$ | ngrxPush">
-            <td><ion-text color="medium">Charge time:</ion-text></td>
+            <td><ion-text color="medium">Battery full:</ion-text></td>
             <td>{{ batteryChargingTime$ | ngrxPush }}</td>
           </tr>
           <tr *ngIf="batteryDischarging$ | ngrxPush">
-            <td><ion-text color="medium">Discharge time:</ion-text></td>
+            <td><ion-text color="medium">Battery empty:</ion-text></td>
             <td>{{ batteryDischargingTime$ | ngrxPush }}</td>
           </tr>
         </table>

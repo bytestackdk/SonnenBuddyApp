@@ -21,7 +21,7 @@
     </ion-card-header>
     <ion-card-content>
       <p>
-        This can be changed by clicking the button below, which will also provide a brief description for each of the
+        This can be changed by clicking the button below, which will also provide a brief description of each of the
         operating modes.
       </p>
       <ion-button class="ion-float-right ion-margin-vertical" (click)="toggleOperatingModeModal(true)"
@@ -124,11 +124,10 @@
                 <ng-container *ngSwitchCase="OperatingMode.Manual">
                   <p>Manual charging or discharging via API.</p>
                   <p>Manual charge/discharge can be reverted by setting mode to self consumption.</p>
-                  <ng-container *ngTemplateOutlet="noScheduleWarning"></ng-container>
+                  <ng-container *ngTemplateOutlet="notSupported"></ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="OperatingMode.BatteryModuleExtension">
-                  <p>TODO: Describe battery module extension...</p>
-                  <ng-container *ngTemplateOutlet="noScheduleWarning"></ng-container>
+                  <ng-container *ngTemplateOutlet="notSupported"></ng-container>
                 </ng-container>
                 <ng-container *ngSwitchCase="OperatingMode.SelfConsumption">
                   <p>
@@ -144,7 +143,12 @@
                 </ng-container>
               </ng-container>
 
-              <div class="ion-flex ion-justify-content-end" *ngIf="mode !== currentMode">
+              <div
+                class="ion-flex ion-justify-content-end"
+                *ngIf="
+                  mode !== currentMode && mode !== OperatingMode.Manual && mode !== OperatingMode.BatteryModuleExtension
+                "
+              >
                 <ion-button (click)="setOperatingMode(mode)">Select</ion-button>
               </div>
             </div>
@@ -158,8 +162,17 @@
 <ng-template #noScheduleWarning>
   <ion-card>
     <ion-card-content class="ion-flex ion-align-items-center gap-2">
-      <ion-icon class="icon" name="warning-outline" color="warning"></ion-icon>
+      <ion-icon class="icon" name="information-circle-outline" color="primary"></ion-icon>
       <p>This mode will not allow for any schedules to be set</p>
+    </ion-card-content>
+  </ion-card>
+</ng-template>
+
+<ng-template #notSupported>
+  <ion-card>
+    <ion-card-content class="ion-flex ion-align-items-center gap-2">
+      <ion-icon class="icon" name="warning-outline" color="warning"></ion-icon>
+      <p>This mode is not supported yet</p>
     </ion-card-content>
   </ion-card>
 </ng-template>

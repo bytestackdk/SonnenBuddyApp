@@ -76,7 +76,7 @@
       color="danger"
       (click)="clear()"
       *ngIf="(componentStore.schedules$ | ngrxPush).length > 0"
-      >Clear schedules</ion-button
+      >CLEAR SCHEDULES</ion-button
     >
   </ng-template>
 
@@ -111,9 +111,9 @@
               </div>
               <div>
                 <p class="ion-text-end">
-                  <ion-text color="primary">Power</ion-text>
+                  <ion-text color="primary">Power limit</ion-text>
                 </p>
-                <h1>
+                <h1 class="ion-text-right">
                   <b>{{ componentStore.scheduleThreshold$ | ngrxPush }}W</b>
                 </h1>
               </div>
@@ -123,10 +123,12 @@
 
         <div class="ion-margin">
           <ion-text color="medium">
+            <p>Select a timespan and power limit for the charge.</p>
             <p>
-              Select a timespan and set the charge power for the battery. Setting it to 0W will prevent battery
-              discharge.
+              The power limit is the max power drawn from the grid, so the battery might not charge if set too low and
+              you also have something else drawing power, like charging a car.
             </p>
+            <p>Set it to <ion-text color="primary">0W</ion-text> to stop battery discharge.</p>
           </ion-text>
         </div>
 

@@ -51,7 +51,7 @@ export const selectBatteryChargingTime = createSelector(
     const fullTime = new Date(now.getTime() + chargeTimeInSeconds * 1000);
     const timespan = timeFunctions.getTimespan(now, fullTime);
 
-    return timespan.day > 0 ? '> 1 day' : `${timespan.hour}:${timespan.minute.toString().padStart(2, '0')}`;
+    return timeFunctions.timeSpanToLabel(timespan);
   }
 );
 
@@ -67,7 +67,7 @@ export const selectBatteryDischargingTime = createSelector(
     const drainedTime = new Date(now.getTime() + dischargeTimeInSeconds * 1000);
     const timespan = timeFunctions.getTimespan(now, drainedTime);
 
-    return timespan.day > 0 ? '> 1 day' : `${timespan.hour}:${timespan.minute.toString().padStart(2, '0')}`;
+    return timeFunctions.timeSpanToLabel(timespan);
   }
 );
 
