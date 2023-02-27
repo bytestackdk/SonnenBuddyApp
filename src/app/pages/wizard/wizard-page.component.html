@@ -76,7 +76,9 @@
       <div class="step ion-flex ion-flex-column ion-justify-content-start">
         <div>
           <app-step-header icon="lock-open-outline.svg" title="API token">
-            Please provide the API token to communicate with your sonnenBatterie.
+            Please provide the <ion-text color="primary">API token</ion-text> and enable
+            <ion-text color="primary">Read API</ion-text> and <ion-text color="primary">Write API</ion-text> to enable
+            communication with your sonnenBatterie.
           </app-step-header>
 
           <ion-item>
@@ -228,7 +230,11 @@
             <ion-card-title class="card-title" color="primary">Find the API token</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <p>Follow below steps to find your API token and give access to this app.</p>
+            <p>
+              Follow below steps to find your <ion-text color="primary">API token</ion-text> and give
+              <ion-text color="primary">Read API</ion-text> and <ion-text color="primary">Write API</ion-text> access to
+              this app.
+            </p>
             <ul class="ion-text-left">
               <li *ngrxLet="componentStore.lanIp$ as lanIp">
                 Click to open a browser on this address or visit the same address on a computer:
@@ -241,9 +247,8 @@
                 <ion-text color="primary">sonnenUser3552</ion-text> (it might be different for your sonnenBatterie)
               </li>
               <li>Go to <ion-text color="primary">Software-Integration</ion-text></li>
-              <li>
-                Enable <ion-text color="primary">Read API</ion-text> and <ion-text color="primary">Write API</ion-text>
-              </li>
+              <li>Enable <ion-text color="primary">Read API</ion-text></li>
+              <li>Enable <ion-text color="primary">Write API</ion-text></li>
               <li>Find the <ion-text color="primary">API token</ion-text> on the same page</li>
               <li><ion-text color="primary">Copy</ion-text> the API token</li>
               <li>

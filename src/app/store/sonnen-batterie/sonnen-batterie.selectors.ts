@@ -50,12 +50,12 @@ export const selectSonnenBatterieBatteryMaxPower = createSelector(selectSonnenBa
   return 3300;
 });
 
-export const selectSonnenBatterieBatteryCapacity = createSelector(
+export const selectSonnenBatterieBatteryUsableCapacity = createSelector(
   selectSonnenBatterie,
   ({ batteryQuantity, batteryModuleCapacity }) =>
     // Max. capacity   2.5 kWh  5.0 kWh  7.5 kWh  10.0 kWh  12.5 kWh  15.0 kWh
     // Usable capacity 2.25 kWh 4.5 kWh  6.75 kWh  9.0 kWh  11.25 kWh 13.5 kWh
-    // -> For every module there's 250Wh that's not usable
+    // -> For every module there's 250Wh that's not usable = 10%
     batteryQuantity * (batteryModuleCapacity - capacityReservedPerBatteryModule)
 );
 export const selectSonnenBatterieOperatingMode = createSelector(
