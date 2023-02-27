@@ -69,7 +69,7 @@
             </td>
           </tr>
           <tr>
-            <td>S/N:</td>
+            <td>Serial:</td>
             <td>{{ device?.serialNumber }}</td>
           </tr>
         </table>
@@ -79,7 +79,7 @@
 
   <ion-button class="ion-margin" expand="block" color="danger" (click)="runWizard()">RESET AND RUN SETUP</ion-button>
 
-  <!--  Operating mode modal-->
+  <!--Operating mode modal-->
   <ion-modal
     [isOpen]="componentStore.showOperatingMode$ | ngrxPush"
     [canDismiss]="true"

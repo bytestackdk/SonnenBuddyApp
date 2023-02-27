@@ -22,6 +22,10 @@ export class NetworkService extends BaseService {
       );
     }
 
+    // const devices: Device[] = [
+    //   { lanIp: '192.168.86.21', ca20: true, info: 'sonnenBatterie', serialNumber: 182643 },
+    //   { lanIp: '192.168.1.40', ca20: true, info: 'sonnenBatterie', serialNumber: 216262 },
+    // ];
     const devices: Device[] = [
       {
         // IP is irrelevant here as all /api calls are proxied regardless when developing

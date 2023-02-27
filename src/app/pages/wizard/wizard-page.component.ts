@@ -22,28 +22,12 @@ export class WizardPage implements OnInit {
     this.presentingElement = document.querySelector('.ion-content');
   }
 
+  previous() {
+    this.swiper.swiperRef.slidePrev(100);
+  }
+
   next() {
     this.swiper.swiperRef.slideNext(100);
-  }
-
-  findDevice() {
-    this.componentStore.findDevice();
-  }
-
-  toggleFindHelp(show: boolean) {
-    this.componentStore.toggleFindHelp(show);
-  }
-
-  toggleTokenHelp(show: boolean) {
-    this.componentStore.toggleTokenHelp(show);
-  }
-
-  toggleMaxSolarHelp(show: boolean) {
-    this.componentStore.toggleMaxSolarHelp(show);
-  }
-
-  testToken() {
-    this.componentStore.testToken();
   }
 
   updateToken(e: CustomEvent<{ value: ApiToken }>) {

@@ -43,9 +43,13 @@ export class PlatformEffects {
           map(() => StatusActions.startPolling()),
           // Ignore error as we might be on a different WI-FI with no sonnenBatterie
           catchError(() =>
-            this.networkService
-              .find()
-              .pipe(map((devices) => SonnenBatterieActions.updateDevice({ device: devices[0] })))
+            this.networkService.find().pipe(
+              map((devices) =>
+                SonnenBatterieActions.updateDevice({
+                  device: devices.find(({ serialNumber }) => serialNumber === currentDevice.serialNumber),
+                })
+              )
+            )
           )
         );
       })

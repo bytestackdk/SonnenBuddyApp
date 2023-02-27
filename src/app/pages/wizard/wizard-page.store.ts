@@ -14,6 +14,7 @@ import { ApiToken, WizardOutput } from '../../shared/models/wizard.model';
 import { InputSelectors } from 'src/app/store/input';
 
 export interface IWizardState {
+  devices: Device[];
   device: Device;
   apiToken: ApiToken;
   solarMaxPower: number;
@@ -21,6 +22,7 @@ export interface IWizardState {
   batteryQuantity: number;
   batteryModuleCapacity: number;
   showFindHelp: boolean;
+  showSelectDevice: boolean;
   showTokenHelp: boolean;
   showMaxSolarHelp: boolean;
   loading: boolean;
@@ -28,6 +30,7 @@ export interface IWizardState {
 }
 
 export const initialState: IWizardState = {
+  devices: null,
   device: null,
   apiToken: null,
   solarMaxPower: null,
@@ -35,6 +38,7 @@ export const initialState: IWizardState = {
   batteryQuantity: null,
   batteryModuleCapacity: null,
   showFindHelp: false,
+  showSelectDevice: false,
   showTokenHelp: false,
   showMaxSolarHelp: false,
   loading: false,
@@ -43,7 +47,10 @@ export const initialState: IWizardState = {
 
 @Injectable()
 export class WizardPageStore extends ComponentStore<IWizardState> {
+  readonly devices$ = this.select((state) => state.devices);
   readonly device$ = this.select((state) => state.device);
+  readonly deviceSelected$ = this.select(this.device$, (device) => !!device);
+  readonly multipleDevices$ = this.select(this.devices$, (devices) => devices?.length > 1);
   readonly noDevice$ = this.select((state) => !state.device);
   readonly apiToken$ = this.select((state) => state.apiToken);
   readonly apiTokenInvalid$ = this.select(this.apiToken$, (apiToken) => !Guid.isGuid(apiToken || ''));
@@ -59,6 +66,7 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
   readonly batteryModuleCapacity$ = this.select((state) => state.batteryModuleCapacity);
   readonly solarMaxPower$ = this.select((state) => state.solarMaxPower);
   readonly showFindHelp$ = this.select((state) => state.showFindHelp);
+  readonly showSelectDevice$ = this.select((state) => state.showSelectDevice);
   readonly showTokenHelp$ = this.select((state) => state.showTokenHelp);
   readonly showMaxSolarHelp$ = this.select((state) => state.showMaxSolarHelp);
   readonly loading$ = this.select((state) => state.loading);
@@ -70,6 +78,17 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
     private readonly store: Store
   ) {
     super({ ...initialState });
+  }
+
+  selectDevice(device: Device) {
+    this.patchState({ device });
+
+    // ion-modal needs device set and modal dismiss in separate operations to work, thus this hack
+    setTimeout(() => this.patchState({ showSelectDevice: false }));
+  }
+
+  toggleSelectDevice() {
+    this.patchState({ showSelectDevice: !this.get().showSelectDevice });
   }
 
   toggleFindHelp(showFindHelp: boolean) {
@@ -121,13 +140,19 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
       .pipe(tap((solarMaxPower: number) => this.patchState({ ...(solarMaxPower && { solarMaxPower }) })))
   );
 
-  readonly findDevice = this.effect((trigger$) =>
+  readonly findDevices = this.effect((trigger$) =>
     trigger$.pipe(
-      tap(() => this.patchState({ device: null, loading: true, error: null })),
+      tap(() => this.patchState({ devices: null, loading: true, error: null })),
       switchMap(() =>
         this.networkService.find().pipe(
           tapResponse(
-            (devices) => this.patchState({ device: devices[0], loading: false }),
+            (devices) =>
+              this.patchState({
+                devices,
+                ...(devices?.length === 1 && { device: devices[0] }),
+                ...(devices?.length > 1 && { showSelectDevice: true }),
+                loading: false,
+              }),
             (error) => this.patchState({ error, loading: false })
           )
         )

@@ -24,10 +24,10 @@
         </div>
 
         <div class="flex-1 ion-padding-top">
-          <ion-button (click)="toggleFindHelp(true)">
+          <ion-button (click)="componentStore.toggleFindHelp(true)">
             <ion-icon name="help-sharp"></ion-icon>
           </ion-button>
-          <ion-button (click)="findDevice()" [disabled]="componentStore.loading$ | ngrxPush"
+          <ion-button (click)="componentStore.findDevices()" [disabled]="componentStore.loading$ | ngrxPush"
             >Find sonnenBatterie</ion-button
           >
 
@@ -42,17 +42,23 @@
             <ion-card-content>
               <ion-spinner *ngIf="componentStore.loading$ | ngrxPush"></ion-spinner>
 
+              <!--Device-->
               <div
                 class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
                 *ngIf="componentStore.device$ | ngrxPush as device"
                 @enterFadeAnimation
               >
                 <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
-                <p class="ion-text-left">
+                <p class="ion-text-left" [class.flex-1]="componentStore.multipleDevices$ | ngrxPush">
                   IP: <b>{{ device.lanIp }}</b
                   ><br />
-                  Serial number: <b>{{ device.serialNumber }}</b>
+                  Serial: <b>{{ device.serialNumber }}</b>
                 </p>
+                <ion-button
+                  (click)="componentStore.toggleSelectDevice()"
+                  *ngIf="componentStore.multipleDevices$ | ngrxPush"
+                  >Change</ion-button
+                >
               </div>
 
               <div
@@ -88,10 +94,10 @@
         </div>
 
         <div class="flex-1">
-          <ion-button (click)="toggleTokenHelp(true)">
+          <ion-button (click)="componentStore.toggleTokenHelp(true)">
             <ion-icon name="help-sharp"></ion-icon>
           </ion-button>
-          <ion-button (click)="testToken()" [disabled]="componentStore.apiTokenInvalid$ | ngrxPush"
+          <ion-button (click)="componentStore.testToken()" [disabled]="componentStore.apiTokenInvalid$ | ngrxPush"
             >Test token</ion-button
           >
 
@@ -130,7 +136,14 @@
           </ion-card>
         </div>
 
-        <ion-button (click)="next()" [disabled]="componentStore.apiTokenUntested$ | ngrxPush">Next</ion-button>
+        <div class="ion-flex gap-1">
+          <ion-button class="flex-1" (click)="previous()" *ngIf="componentStore.multipleDevices$ | ngrxPush"
+            >Previous</ion-button
+          >
+          <ion-button class="flex-1" (click)="next()" [disabled]="componentStore.apiTokenUntested$ | ngrxPush"
+            >Next</ion-button
+          >
+        </div>
       </div>
     </ng-template>
 
@@ -142,7 +155,7 @@
             To calculate solar utilization, we need to know the max output of your system.
           </app-step-header>
 
-          <ion-button (click)="toggleMaxSolarHelp(true)">
+          <ion-button (click)="componentStore.toggleMaxSolarHelp(true)">
             <ion-icon name="help-sharp"></ion-icon>
           </ion-button>
         </div>
@@ -169,14 +182,14 @@
     [isOpen]="componentStore.showFindHelp$ | ngrxPush"
     [canDismiss]="true"
     [presentingElement]="presentingElement"
-    (didDismiss)="toggleFindHelp(false)"
+    (didDismiss)="componentStore.toggleFindHelp(false)"
   >
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-title>Help</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="toggleFindHelp(false)">Close</ion-button>
+            <ion-button (click)="componentStore.toggleFindHelp(false)">Close</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -208,19 +221,51 @@
     </ng-template>
   </ion-modal>
 
+  <!--Select devices (if multiple found)-->
+  <ion-modal
+    [isOpen]="componentStore.showSelectDevice$ | ngrxPush"
+    [canDismiss]="componentStore.deviceSelected$ | ngrxPush"
+    [presentingElement]="presentingElement"
+  >
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Select sonnenBatterie</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content [scrollY]="false">
+        <div class="ion-margin-horizontal">
+          <ion-card *ngFor="let device of componentStore.devices$ | ngrxPush">
+            <ion-card-content>
+              <div class="ion-flex ion-align-items-center ion-justify-content-center gap-2" @enterFadeAnimation>
+                <img src="assets/sonnen-ico.svg" class="svg-icon" alt="sonnenBatterie" />
+                <p class="ion-text-left flex-1">
+                  IP: <b>{{ device.lanIp }}</b
+                  ><br />
+                  Serial: <b>{{ device.serialNumber }}</b>
+                </p>
+                <ion-button (click)="componentStore.selectDevice(device)">Select</ion-button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
   <!--Find ApiToken Help-->
   <ion-modal
     [isOpen]="componentStore.showTokenHelp$ | ngrxPush"
     [canDismiss]="true"
     [presentingElement]="presentingElement"
-    (didDismiss)="toggleTokenHelp(false)"
+    (didDismiss)="componentStore.toggleTokenHelp(false)"
   >
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-title>Help</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="toggleTokenHelp(false)">Close</ion-button>
+            <ion-button (click)="componentStore.toggleTokenHelp(false)">Close</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
@@ -267,14 +312,14 @@
     [isOpen]="componentStore.showMaxSolarHelp$ | ngrxPush"
     [canDismiss]="true"
     [presentingElement]="presentingElement"
-    (didDismiss)="toggleMaxSolarHelp(false)"
+    (didDismiss)="componentStore.toggleMaxSolarHelp(false)"
   >
     <ng-template>
       <ion-header>
         <ion-toolbar>
           <ion-title>Help</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="toggleMaxSolarHelp(false)">Close</ion-button>
+            <ion-button (click)="componentStore.toggleMaxSolarHelp(false)">Close</ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
