@@ -55,6 +55,10 @@ export class AppComponent implements OnInit, OnDestroy {
         if (!this.platform.url().includes('wizard')) {
           this.zone.run(() => this.store.dispatch(PlatformActions.resume()));
         }
+      }),
+
+      this.platform.backButton.subscribeWithPriority(9999, () => {
+        // Ignore back button on Android
       })
     );
   }
