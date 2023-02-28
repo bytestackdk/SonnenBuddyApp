@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { BatteryService } from '../../api/services/battery.service';
 import { PlatformActions } from './platform.actions';
-import { catchError, map, switchMap } from 'rxjs/operators';
+import { catchError, filter, map, switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SonnenBatterieActions, sonnenBatterieFeature } from '../sonnen-batterie/';
 import { StatusActions } from '../status';
@@ -41,9 +41,10 @@ export class PlatformEffects {
 
         return this.batteryService.pingLan().pipe(
           map(() => StatusActions.startPolling()),
-          // Ignore error as we might be on a different WI-FI with no sonnenBatterie
           catchError(() =>
             this.networkService.find().pipe(
+              // If devices is empty we just ignore it as we might just be off WI-FI or on a different WI-FI
+              filter((devices) => devices.length > 0),
               map((devices) =>
                 SonnenBatterieActions.updateDevice({
                   device: devices.find(({ serialNumber }) => serialNumber === currentDevice.serialNumber),
