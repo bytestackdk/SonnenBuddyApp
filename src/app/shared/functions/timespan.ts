@@ -62,5 +62,5 @@ export const timeSpanToLabel = (timespan: ITimeSpan) => {
     return `${timespan.hour} hour(s)`;
   }
 
-  return `${timespan.minute.toString()} minute(s)`;
+  return `${timespan.minute.toString()} min(s)`;
 };

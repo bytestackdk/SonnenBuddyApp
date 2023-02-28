@@ -4,6 +4,7 @@ import { ISchedule, ITimespan, OperatingMode } from '../../api/models/battery.mo
 import { Store } from '@ngrx/store';
 import { SonnenBatterieActions, SonnenBatterieSelectors } from './../../store/sonnen-batterie';
 import { timeToNumber } from '../../shared/functions/timespan';
+import { map } from 'rxjs/operators';
 
 export interface IScheduleState {
   showModal?: boolean;
@@ -28,26 +29,26 @@ const between = (x: number, min: number, max: number) => {
 @Injectable()
 export class SchedulePageStore extends ComponentStore<IScheduleState> {
   // From global store
-  readonly operatingMode$ = this.select(
-    this.store.select(SonnenBatterieSelectors.selectSonnenBatterieOperatingMode),
-    (mode) => mode
-  );
-  readonly schedules$ = this.select(
-    this.store.select(SonnenBatterieSelectors.selectSonnenBatterieSchedules),
-    (schedules) => schedules
-  );
+  readonly operatingMode$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieOperatingMode);
+  readonly schedules$ = this.store
+    .select(SonnenBatterieSelectors.selectSonnenBatterieSchedules)
+    .pipe(map((schedules) => [...schedules].sort((a, b) => a.start.localeCompare(b.start))));
 
   // Local selectors
+  readonly edit$ = this.select((state) => state.edit);
+  readonly initialStart$ = this.select((state) => state.initialStart);
   readonly schedule$ = this.select((state) => state.schedule);
   readonly unchanged$ = this.select((state) => state.unchanged);
   readonly overlaps$ = this.select(
     this.schedules$,
     this.schedule$,
-    (schedules, schedule) =>
+    this.edit$,
+    this.initialStart$,
+    (schedules, schedule, edit, initialStart) =>
       schedule &&
       schedules
         // Ignore schedule being edited
-        .filter(({ start, stop }) => start !== schedule.start && stop !== schedule.stop)
+        .filter(({ start }) => !edit || (edit && start !== initialStart))
         .some(({ start, stop }) => {
           const existingStart = timeToNumber(start);
           const existingStop = timeToNumber(stop);
@@ -73,7 +74,6 @@ export class SchedulePageStore extends ComponentStore<IScheduleState> {
       (schedule && schedule.start === schedule.stop) ||
       (schedule && schedule.start === '24:00' && schedule.stop === '00:00')
   );
-  readonly edit$ = this.select((state) => state.edit);
   readonly scheduleStart$ = this.select(this.schedule$, (schedule) => schedule?.start || '01:00');
   readonly scheduleStop$ = this.select(this.schedule$, (schedule) => schedule?.stop || '05:00');
   readonly scheduleThreshold$ = this.select(this.schedule$, (schedule) => schedule?.threshold_p_max || 0);
