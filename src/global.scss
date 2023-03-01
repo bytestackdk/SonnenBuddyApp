@@ -79,12 +79,17 @@
 
 table.key-value {
   font-size: 14px;
+  width: 100%;
   tr {
+    td {
+      padding: 2px 0;
+    }
     td:first-child {
       padding-right: 16px;
     }
     td:nth-child(2) {
       color: var(--ion-color-dark);
+      text-align: right;
     }
   }
 }

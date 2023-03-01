@@ -27,6 +27,9 @@ export class SettingsPageStore extends ComponentStore<ISettingsState> {
   readonly darkMode$ = this.store.select(InputSelectors.selectDarkMode);
   readonly prognosisCharging$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatteriePrognosisCharging);
   readonly device$ = this.store.select(SonnenBatterieSelectors.selectDevice);
+  readonly inverterMaxPower$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieInverterMaxPower);
+  readonly batteryCapacity$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieBatteryCapacity);
+  readonly solarMaxPower$ = this.store.select(InputSelectors.selectSolarMaxPower);
 
   constructor(private readonly store: Store) {
     super({ ...initialState });

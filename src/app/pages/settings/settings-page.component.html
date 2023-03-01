@@ -63,14 +63,26 @@
       <div class="flex-1">
         <table class="key-value">
           <tr>
-            <td>IP:</td>
-            <td>
-              <a href="http://{{ device?.lanIp }}" target="_blank">http://{{ device?.lanIp }}</a>
-            </td>
-          </tr>
-          <tr>
             <td>Serial:</td>
             <td>{{ device?.serialNumber }}</td>
+          </tr>
+          <tr>
+            <td>Inverter max power:</td>
+            <td>{{ componentStore.inverterMaxPower$ | ngrxPush | kw }}</td>
+          </tr>
+          <tr>
+            <td>Solar max power:</td>
+            <td>{{ componentStore.solarMaxPower$ | ngrxPush | kw }}</td>
+          </tr>
+          <tr>
+            <td>Battery capacity:</td>
+            <td>{{ componentStore.batteryCapacity$ | ngrxPush | kw }}</td>
+          </tr>
+          <tr>
+            <td>IP:</td>
+            <td>
+              <a href="http://{{ device?.lanIp }}" target="_blank">{{ device?.lanIp }}</a>
+            </td>
           </tr>
         </table>
       </div>

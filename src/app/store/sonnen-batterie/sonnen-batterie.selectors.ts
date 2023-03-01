@@ -40,6 +40,12 @@ export const selectSonnenBatterieInverterMaxPower = createSelector(
   selectSonnenBatterie,
   (sonnenBatterie) => sonnenBatterie.maxPower
 );
+
+export const selectSonnenBatterieBatteryCapacity = createSelector(
+  selectSonnenBatterie,
+  ({ batteryModuleCapacity, batteryQuantity }) => batteryModuleCapacity * batteryQuantity
+);
+
 export const selectSonnenBatterieBatteryMaxPower = createSelector(selectSonnenBatterie, ({ batteryQuantity }) => {
   // https://www.myenergy.dk/wp-content/uploads/2021/06/Operating-instructions-sonnenBatterie-hybrid-9.53_22358_UK507EN.pdf
   if (batteryQuantity === 1) {
