@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { SonnenBatterieActions } from '../sonnen-batterie';
-import { tap } from 'rxjs/operators';
+import { debounceTime, tap } from 'rxjs/operators';
 import { ToastController } from '@ionic/angular';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PlatformActions } from '../platform';
@@ -42,6 +42,7 @@ export class ToastEffects {
     () => {
       return this.actions$.pipe(
         ofType(PlatformActions.wifiConnectionChange),
+        debounceTime(500),
         tap(async ({ status }) => {
           const { connected, connectionType } = status;
 

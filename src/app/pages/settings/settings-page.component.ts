@@ -5,7 +5,7 @@ import { SettingsPageStore } from './settings-page.store';
 import { ConfigurationKey, OperatingMode } from '../../api/models/battery.model';
 import { SonnenBatterieActions } from '../../store/sonnen-batterie';
 import { InputActions } from '../../store/input/input.actions';
-import { Platform, ToggleChangeEventDetail } from '@ionic/angular';
+import { ActionSheetController, Platform, ToggleChangeEventDetail } from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
@@ -28,7 +28,8 @@ export class SettingsPage implements OnInit {
   constructor(
     private readonly store: Store,
     readonly componentStore: SettingsPageStore,
-    private readonly platform: Platform
+    private readonly platform: Platform,
+    private readonly actionSheetCtrl: ActionSheetController
   ) {}
 
   ngOnInit() {
@@ -62,6 +63,37 @@ export class SettingsPage implements OnInit {
         configuration: e.detail.checked ? '1' : '0',
       })
     );
+  }
+
+  async resetConfirm() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Please confirm',
+      subHeader: 'This will clear all data and restart the setup',
+      buttons: [
+        {
+          text: 'Reset',
+          role: 'destructive',
+          data: {
+            action: 'reset',
+          },
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          data: {
+            action: 'cancel',
+          },
+        },
+      ],
+    });
+
+    await actionSheet.present();
+
+    const result = await actionSheet.onDidDismiss();
+
+    if (result.data.action === 'reset') {
+      this.runWizard();
+    }
   }
 
   runWizard() {
