@@ -69,7 +69,21 @@ export class SonnenBatterieEffects {
     return this.actions$.pipe(
       ofType(SonnenBatterieActions.saveSchedules),
       map(({ schedules }) => {
-        const configuration = JSON.stringify(schedules);
+        // API doesn't understand a full 24 hours, so we need a minute less than that
+        if (schedules.length === 1) {
+          const { start, stop } = schedules[0];
+
+          if (start === '00:00' && stop === '24:00') {
+            schedules[0].stop = '23:59';
+          }
+        }
+
+        // Model stores stop as 24:00 as that helps visuals, but API needs it to be 00:00
+        const stopCorrectedSchedules = schedules.map((schedule) =>
+          schedule.stop !== '24:00' ? schedule : { ...schedule, stop: '00:00' }
+        );
+
+        const configuration = JSON.stringify(stopCorrectedSchedules);
         return SonnenBatterieActions.setConfiguration({ key: ConfigurationKey.EM_ToU_Schedule, configuration });
       })
     );

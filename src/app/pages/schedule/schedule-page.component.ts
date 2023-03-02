@@ -31,7 +31,6 @@ export class SchedulePage implements OnInit {
   }
 
   timespanChange(e: TimespanChangeEvent) {
-    // TODO: Validate there's no overlap with existing schedules
     const { start, stop } = e;
     this.componentStore.updateTimespan({ start, stop });
   }

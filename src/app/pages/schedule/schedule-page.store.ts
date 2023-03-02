@@ -141,12 +141,6 @@ export class SchedulePageStore extends ComponentStore<IScheduleState> {
 
   save() {
     const { initialStart, edit, schedule } = this.get();
-    const { start, stop } = schedule;
-
-    if (stop === '24:00') {
-      // stop can't be 00:00 when start is the same, so need this workaround
-      schedule.stop = start === '00:00' ? '23:59' : '00:00';
-    }
 
     if (edit) {
       this.store.dispatch(SonnenBatterieActions.updateSchedule({ start: initialStart, schedule }));
