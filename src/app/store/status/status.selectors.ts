@@ -5,6 +5,7 @@ import { capacityReservedPerBatteryModule } from '../sonnen-batterie/sonnen-batt
 import * as timeFunctions from '../../shared/functions/timespan';
 import { SonnenBatterieSelectors } from '../sonnen-batterie';
 import { InputSelectors } from '../input';
+import { getTimespan } from '../../shared/functions/timespan';
 
 export const selectStatus = createSelector(statusFeature.selectStatusState, (state) => state.entity);
 export const selectStatusError = createSelector(statusFeature.selectStatusState, (state) => state.error);
@@ -121,3 +122,7 @@ export const selectInverterAndGrid = createSelector(
   (inverterToGrid, gridToInverter) => ({ inverterToGrid, gridToInverter })
 );
 export const selectTimestamp = createSelector(selectStatus, (entity) => entity?.Timestamp.split(' ')[1]);
+export const selectDelayInSeconds = createSelector(statusFeature.selectStatusState, ({ updated, now }) =>
+  updated && now ? getTimespan(updated, now).second : 0
+);
+export const selectDelayed = createSelector(selectDelayInSeconds, (delayInSeconds) => delayInSeconds > 4);

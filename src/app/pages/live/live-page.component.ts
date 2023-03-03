@@ -4,6 +4,8 @@ import { StatusSelectors } from '../../store/status';
 import { LivePageFacade } from './live-page.facade';
 import { SonnenBatterieActions, SonnenBatterieSelectors } from '../../store/sonnen-batterie';
 import { InputSelectors } from 'src/app/store/input';
+import { map } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-live',
@@ -45,6 +47,24 @@ export class LivePage {
   gridToHome$ = this.store.select(StatusSelectors.selectGridToHome);
 
   updated$ = this.store.select(StatusSelectors.selectTimestamp);
+  delayed$ = this.store.select(StatusSelectors.selectDelayed);
+  delayColor$ = this.store
+    .select(StatusSelectors.selectDelayed)
+    .pipe(map((delayed) => (delayed ? 'warning' : 'success')));
+  delayIcon$ = this.store
+    .select(StatusSelectors.selectDelayed)
+    .pipe(map((delayed) => (delayed ? 'alert-circle-outline' : 'checkmark-circle-outline')));
+  delayText$ = combineLatest([
+    this.store.select(StatusSelectors.selectDelayed),
+    this.store.select(StatusSelectors.selectDelayInSeconds),
+  ]).pipe(
+    map(([delayed, seconds]) => {
+      if (delayed) {
+        return seconds < 60 ? `${seconds}s` : '> 1 min';
+      }
+      return 'None';
+    })
+  );
 
   device$ = this.store.select(SonnenBatterieSelectors.selectDevice);
 

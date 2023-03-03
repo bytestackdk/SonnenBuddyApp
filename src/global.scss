@@ -41,6 +41,10 @@
     flex-direction: column;
   }
   &.gap {
+    &-05 {
+      gap: 4px;
+    }
+
     &-1 {
       gap: 8px;
     }

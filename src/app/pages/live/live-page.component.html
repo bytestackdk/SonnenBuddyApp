@@ -97,8 +97,13 @@
       <ion-col class="information" size="8">
         <table class="key-value">
           <tr>
-            <td><ion-text color="medium">Updated:</ion-text></td>
-            <td>{{ updated$ | ngrxPush }}</td>
+            <td><ion-text color="medium">Data delay:</ion-text></td>
+            <td>
+              <div class="ion-flex ion-align-items-center ion-justify-content-end gap-05">
+                <ion-icon [color]="delayColor$ | ngrxPush" [name]="delayIcon$ | ngrxPush"></ion-icon>
+                <ion-text [color]="delayColor$ | ngrxPush">{{ delayText$ | ngrxPush }}</ion-text>
+              </div>
+            </td>
           </tr>
           <tr>
             <td><ion-text color="medium">Usable charge:</ion-text></td>

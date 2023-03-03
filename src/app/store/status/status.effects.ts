@@ -50,7 +50,20 @@ export class StatusEffects {
     );
   });
 
-  polling$ = createEffect(() => {
+  updateNow$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(StatusActions.startPolling),
+      switchMap(() =>
+        interval(POLLING_INTERVAL).pipe(
+          startWith(0),
+          takeUntil(this.actions$.pipe(ofType(StatusActions.stopPolling))),
+          map(() => StatusActions.refreshUpdated())
+        )
+      )
+    );
+  });
+
+  statusPolling$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(StatusActions.startPolling),
       switchMap(() =>

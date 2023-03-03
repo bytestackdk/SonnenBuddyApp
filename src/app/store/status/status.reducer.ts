@@ -5,10 +5,14 @@ import { StatusActions } from './status.actions';
 
 export interface StatusState extends LoadingState {
   entity: IBatteryStatus;
+  updated: Date;
+  now: Date;
 }
 
 export const initialState: StatusState = {
   entity: null,
+  updated: null,
+  now: null,
   ...LoadingState.initial(),
 };
 
@@ -17,12 +21,14 @@ export const statusFeature = createFeature({
   reducer: createReducer(
     initialState,
 
+    on(StatusActions.refreshUpdated, (state): StatusState => ({ ...state, now: new Date() })),
     on(StatusActions.getStatus, (state): StatusState => ({ ...state, ...LoadingState.loading() })),
     on(
       StatusActions.getStatusSuccess,
       (state, { status }): StatusState => ({
         ...state,
         entity: status,
+        updated: new Date(),
         ...LoadingState.loaded(),
       })
     ),

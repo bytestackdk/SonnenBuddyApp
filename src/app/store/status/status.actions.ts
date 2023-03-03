@@ -11,5 +11,6 @@ export const StatusActions = createActionGroup({
     'Clear Status': emptyProps(),
     'Start Polling': emptyProps(),
     'Stop Polling': emptyProps(),
+    'Refresh Updated': emptyProps(),
   },
 });
