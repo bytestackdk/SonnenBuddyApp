@@ -50,7 +50,6 @@ export const selectBatteryChargingTime = createSelector(
     if (!charging) return 0;
 
     const now = new Date();
-    // TODO
     const chargeTimeInSeconds = Math.floor(((usableCapacity - batteryRemaining) / currentUsage) * 3600);
     const fullTime = new Date(now.getTime() + chargeTimeInSeconds * 1000);
     const timespan = timeFunctions.getTimespan(now, fullTime);
@@ -122,7 +121,12 @@ export const selectInverterAndGrid = createSelector(
   (inverterToGrid, gridToInverter) => ({ inverterToGrid, gridToInverter })
 );
 export const selectTimestamp = createSelector(selectStatus, (entity) => entity?.Timestamp.split(' ')[1]);
-export const selectDelayInSeconds = createSelector(statusFeature.selectStatusState, ({ updated, now }) =>
-  updated && now ? getTimespan(updated, now).second : 0
-);
-export const selectDelayed = createSelector(selectDelayInSeconds, (delayInSeconds) => delayInSeconds > 4);
+export const selectDelayInSeconds = createSelector(statusFeature.selectStatusState, ({ updated, now }) => {
+  if (updated && now) {
+    const { second, minute, hour, day, week, month, year } = getTimespan(updated, now);
+    const moreThanOneMinute = minute + hour + day + week + month + year > 0;
+    return moreThanOneMinute ? 61 : second;
+  }
+  return 0;
+});
+export const selectDelayed = createSelector(selectDelayInSeconds, (delayInSeconds) => delayInSeconds > 5);

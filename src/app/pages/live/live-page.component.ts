@@ -5,7 +5,6 @@ import { LivePageFacade } from './live-page.facade';
 import { SonnenBatterieActions, SonnenBatterieSelectors } from '../../store/sonnen-batterie';
 import { InputSelectors } from 'src/app/store/input';
 import { map } from 'rxjs/operators';
-import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-live',
@@ -53,18 +52,8 @@ export class LivePage {
     .pipe(map((delayed) => (delayed ? 'warning' : 'success')));
   delayIcon$ = this.store
     .select(StatusSelectors.selectDelayed)
-    .pipe(map((delayed) => (delayed ? 'alert-circle-outline' : 'checkmark-circle-outline')));
-  delayText$ = combineLatest([
-    this.store.select(StatusSelectors.selectDelayed),
-    this.store.select(StatusSelectors.selectDelayInSeconds),
-  ]).pipe(
-    map(([delayed, seconds]) => {
-      if (delayed) {
-        return seconds < 60 ? `${seconds}s` : '> 1 min';
-      }
-      return 'None';
-    })
-  );
+    .pipe(map((delayed) => (delayed ? 'hourglass-outline' : 'checkmark-circle-outline')));
+  delayText$ = this.store.select(StatusSelectors.selectDelayed).pipe(map((delayed) => (delayed ? 'Delayed' : 'Okay')));
 
   device$ = this.store.select(SonnenBatterieSelectors.selectDevice);
 

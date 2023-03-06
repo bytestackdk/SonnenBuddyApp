@@ -50,7 +50,7 @@ export class ToastEffects {
             this.wifiToast = await this.toastController.create({
               icon: 'warning',
               message: 'Wifi not connected',
-              duration: 60000,
+              duration: 10000,
               position: 'top',
               color: 'warning',
             });
