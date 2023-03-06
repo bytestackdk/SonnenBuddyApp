@@ -9,8 +9,8 @@ export const StatusActions = createActionGroup({
     'Get Status Success': props<{ status: IBatteryStatus }>(),
     'Get Status Failed': props<{ error: HttpErrorResponse }>(),
     'Clear Status': emptyProps(),
-    'Start Polling': emptyProps(),
-    'Stop Polling': emptyProps(),
+    'Start Status Polling': emptyProps(),
+    'Stop Status Polling': emptyProps(),
     'Refresh Updated': emptyProps(),
   },
 });

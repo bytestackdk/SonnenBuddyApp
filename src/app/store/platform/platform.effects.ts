@@ -23,7 +23,7 @@ export class PlatformEffects {
   pause$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PlatformActions.pause),
-      map(() => StatusActions.stopPolling())
+      map(() => StatusActions.stopStatusPolling())
     )
   );
 
@@ -40,7 +40,7 @@ export class PlatformEffects {
         }
 
         return this.batteryService.pingLan().pipe(
-          map(() => StatusActions.startPolling()),
+          map(() => StatusActions.startStatusPolling()),
           catchError(() =>
             this.networkService.find().pipe(
               // If devices is empty we just ignore it as we might just be off WI-FI or on a different WI-FI
@@ -60,7 +60,7 @@ export class PlatformEffects {
   startPolling$ = createEffect(() =>
     this.actions$.pipe(
       ofType(SonnenBatterieActions.updateDevice),
-      map(() => StatusActions.startPolling())
+      map(() => StatusActions.startStatusPolling())
     )
   );
 

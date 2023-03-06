@@ -7,7 +7,8 @@ import { PlatformActions } from '../platform';
 import { catchError, exhaustMap, map, startWith, switchMap, takeUntil } from 'rxjs/operators';
 import { interval, of } from 'rxjs';
 
-const POLLING_INTERVAL = 2000;
+const UPDATED_POLLING_INTERVAL = 2000;
+const STATUS_POLLING_INTERVAL = 2000;
 
 @Injectable()
 export class StatusEffects {
@@ -39,24 +40,24 @@ export class StatusEffects {
   stopPollingWhenGoingToWizard$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PlatformActions.gotoWizard),
-      map(() => StatusActions.stopPolling())
+      map(() => StatusActions.stopStatusPolling())
     );
   });
 
   startPolling$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PlatformActions.gotoLivePage),
-      map(() => StatusActions.startPolling())
+      map(() => StatusActions.startStatusPolling())
     );
   });
 
-  updateNow$ = createEffect(() => {
+  refreshUpdated$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(StatusActions.startPolling),
+      ofType(PlatformActions.ready, PlatformActions.resume),
       switchMap(() =>
-        interval(POLLING_INTERVAL).pipe(
+        interval(UPDATED_POLLING_INTERVAL).pipe(
           startWith(0),
-          takeUntil(this.actions$.pipe(ofType(StatusActions.stopPolling))),
+          takeUntil(this.actions$.pipe(ofType(PlatformActions.pause, PlatformActions.stop))),
           map(() => StatusActions.refreshUpdated())
         )
       )
@@ -65,11 +66,11 @@ export class StatusEffects {
 
   statusPolling$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(StatusActions.startPolling),
+      ofType(StatusActions.startStatusPolling),
       switchMap(() =>
-        interval(POLLING_INTERVAL).pipe(
+        interval(STATUS_POLLING_INTERVAL).pipe(
           startWith(0),
-          takeUntil(this.actions$.pipe(ofType(StatusActions.stopPolling))),
+          takeUntil(this.actions$.pipe(ofType(StatusActions.stopStatusPolling))),
           map(() => StatusActions.getStatus())
         )
       )
