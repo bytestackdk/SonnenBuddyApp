@@ -11,6 +11,11 @@ import { PlatformActions } from '../platform';
 export class ToastEffects {
   private wifiToast: HTMLIonToastElement = null;
 
+  /**
+   * Flag to only show wifi connection is it wasn't connected in the first place
+   */
+  private wifiNotConnected = false;
+
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
@@ -53,10 +58,12 @@ export class ToastEffects {
           const wifi = connectionType === 'wifi';
 
           if (!connected || !wifi) {
+            this.wifiNotConnected = true;
             await this.showWifiToast('warning', 'Wifi not connected', 10000, 'warning');
           }
 
-          if (connected && wifi) {
+          if (connected && wifi && this.wifiNotConnected) {
+            this.wifiNotConnected = false;
             await this.showWifiToast('checkmark', 'Wifi connected', 3000, 'success');
           }
         })
