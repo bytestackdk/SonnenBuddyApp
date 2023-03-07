@@ -44,40 +44,37 @@ export class ToastEffects {
         ofType(PlatformActions.wifiConnectionChange),
         debounceTime(500),
         tap(async ({ status }) => {
-          const { connected, connectionType } = status;
-
-          if ((!connected || connectionType !== 'wifi') && !this.wifiToast) {
-            this.wifiToast = await this.toastController.create({
-              icon: 'warning',
-              message: 'Wifi not connected',
-              duration: 10000,
-              position: 'top',
-              color: 'warning',
-            });
-
-            this.wifiToast.present();
-            this.wifiToast.onDidDismiss().then(() => (this.wifiToast = null));
+          if (this.wifiToast) {
+            await this.wifiToast.dismiss();
+            this.wifiToast = null;
           }
 
-          if (this.wifiToast && connected && connectionType === 'wifi') {
-            await this.wifiToast.dismiss();
+          const { connected, connectionType } = status;
+          const wifi = connectionType === 'wifi';
 
-            this.wifiToast = null;
+          if (!connected || !wifi) {
+            await this.showWifiToast('warning', 'Wifi not connected', 10000, 'warning');
+          }
 
-            this.wifiToast = await this.toastController.create({
-              icon: 'checkmark',
-              message: 'Wifi connected',
-              duration: 3000,
-              position: 'top',
-              color: 'success',
-            });
-
-            this.wifiToast.present();
-            this.wifiToast.onDidDismiss().then(() => (this.wifiToast = null));
+          if (connected && wifi) {
+            await this.showWifiToast('checkmark', 'Wifi connected', 3000, 'success');
           }
         })
       );
     },
     { dispatch: false }
   );
+
+  private async showWifiToast(icon, message, duration, color) {
+    this.wifiToast = await this.toastController.create({
+      icon,
+      message,
+      duration,
+      color,
+      position: 'top',
+    });
+
+    await this.wifiToast.present();
+    this.wifiToast.onDidDismiss().then(() => (this.wifiToast = null));
+  }
 }
