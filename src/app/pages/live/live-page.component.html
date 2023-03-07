@@ -33,8 +33,8 @@
         ></app-power-square>
       </ion-col>
       <ion-col>
-        <div class="ion-flex ion-flex-column ion-align-items-center gap-1">
-          <app-utilization class="utilization-bar" [percent]="solarUtilization$ | ngrxPush"></app-utilization>
+        <div class="ion-flex ion-flex-column ion-align-items-center gap-05">
+          <app-utilization class="utilization-bar solar" [percent]="solarUtilization$ | ngrxPush"></app-utilization>
           <img src="assets/ph.svg" class="svg-icon solar" alt="Solar" />
           <div class="solar-production kw">
             {{ solarProduction$ | ngrxPush | kw }}

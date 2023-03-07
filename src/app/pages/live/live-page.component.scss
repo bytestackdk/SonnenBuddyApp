@@ -75,19 +75,20 @@
 }
 
 img {
-  //width: 50px;
   height: 50px;
   &.solar {
-    width: 50px;
+    margin-bottom: 6px;
+    width: 58px;
   }
   &.inverter {
-    //margin-top: 2px;
   }
   &.home {
     width: 50px;
     margin-top: 5px;
   }
   &.grid {
+    margin-top: 5px;
+    margin-right: 1px;
   }
 }
 
