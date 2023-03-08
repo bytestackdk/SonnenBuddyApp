@@ -28,9 +28,13 @@ export class ToastEffects {
         ofType(SonnenBatterieActions.setConfigurationFailed),
         tap(async ({ error }) => {
           const httpError = typeof error !== 'string' ? (error as HttpErrorResponse) : null;
-          const message = httpError
+          let message = httpError
             ? `Error: ${httpError.message} (${JSON.stringify(httpError.error)})`
             : (error as string);
+
+          if (message.includes('401')) {
+            message = 'Oops! Did you remember to enable Write API?';
+          }
 
           if (!this.wifiToast) {
             const toast = await this.toastController.create({ message, duration: 5000, position: 'bottom' });
