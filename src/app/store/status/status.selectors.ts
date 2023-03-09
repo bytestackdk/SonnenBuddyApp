@@ -14,7 +14,10 @@ export const selectSolarProduction = createSelector(selectStatus, (entity) => en
 export const selectSolarUtilization = createSelector(
   InputSelectors.selectSolarMaxPower,
   selectSolarProduction,
-  (solarMaxPower, production) => (production / solarMaxPower) * 100
+  (maxPower, currentPower) => {
+    const utilization = Math.ceil((currentPower / maxPower) * 100);
+    return utilization > 100 ? 100 : utilization;
+  }
 );
 
 export const selectSolarToBattery = createSelector(selectStatus, (entity) => entity?.FlowProductionBattery);
@@ -30,7 +33,13 @@ export const selectBatteryUsage = createSelector(selectStatus, (entity) =>
 export const selectBatteryUtilization = createSelector(
   fromSonnenBatterie.selectSonnenBatterieBatteryMaxPower,
   selectBatteryUsage,
-  (maxPower, currentPower) => (!!currentPower ? Math.abs((currentPower / maxPower) * 100) : 0)
+  (maxPower, currentPower = 0) => {
+    if (currentPower < 0) {
+      return 0;
+    }
+    const utilization = Math.ceil((currentPower / maxPower) * 100);
+    return utilization > 100 ? 100 : utilization;
+  }
 );
 export const selectBatteryChargePercent = createSelector(selectStatus, (entity) => entity?.USOC || 0);
 export const selectBatteryRemaining = createSelector(
@@ -98,7 +107,10 @@ export const selectInverterCurrentPower = createSelector(
 export const selectInverterUtilization = createSelector(
   SonnenBatterieSelectors.selectSonnenBatterieInverterMaxPower,
   selectInverterCurrentPower,
-  (capacity, current) => (current / capacity) * 100
+  (maxPower, currentPower) => {
+    const utilization = Math.ceil((currentPower / maxPower) * 100);
+    return utilization > 100 ? 100 : utilization;
+  }
 );
 export const selectInverterToBattery = createSelector(
   selectStatus,

@@ -27,18 +27,29 @@ export class ToastEffects {
       return this.actions$.pipe(
         ofType(SonnenBatterieActions.setConfigurationFailed),
         tap(async ({ error }) => {
-          const httpError = typeof error !== 'string' ? (error as HttpErrorResponse) : null;
-          let message = httpError
-            ? `Error: ${httpError.message} (${JSON.stringify(httpError.error)})`
-            : (error as string);
+          const httpError = error instanceof HttpErrorResponse ? (error as HttpErrorResponse) : null;
+
+          let message = error as string;
+
+          if (httpError) {
+            if (httpError.message) {
+              message += httpError.message;
+            }
+            if (httpError.error?.error) {
+              message += ` - ${httpError.error.error}`;
+            }
+          }
 
           if (message.includes('401')) {
             message = 'Oops! Did you remember to enable Write API?';
           }
 
+          if (message.includes('403') && message.includes('VPP')) {
+            message = "Oops! Can't do that - VPP is active and has priority";
+          }
+
           if (!this.wifiToast) {
             const toast = await this.toastController.create({ message, duration: 5000, position: 'bottom' });
-
             toast.present();
           }
         })
