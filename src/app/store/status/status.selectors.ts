@@ -34,10 +34,7 @@ export const selectBatteryUtilization = createSelector(
   fromSonnenBatterie.selectSonnenBatterieBatteryMaxPower,
   selectBatteryUsage,
   (maxPower, currentPower = 0) => {
-    if (currentPower < 0) {
-      return 0;
-    }
-    const utilization = Math.ceil((currentPower / maxPower) * 100);
+    const utilization = Math.ceil((Math.abs(currentPower) / maxPower) * 100);
     return utilization > 100 ? 100 : utilization;
   }
 );
@@ -108,7 +105,7 @@ export const selectInverterUtilization = createSelector(
   SonnenBatterieSelectors.selectSonnenBatterieInverterMaxPower,
   selectInverterCurrentPower,
   (maxPower, currentPower) => {
-    const utilization = Math.ceil((currentPower / maxPower) * 100);
+    const utilization = Math.ceil((Math.abs(currentPower) / maxPower) * 100);
     return utilization > 100 ? 100 : utilization;
   }
 );
