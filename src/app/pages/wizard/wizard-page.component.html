@@ -87,7 +87,7 @@
             communication with your sonnenBatterie.
           </app-step-header>
 
-          <ion-item>
+          <ion-item lines="full">
             <ion-label position="floating">API Token</ion-label>
             <ion-input (ionChange)="updateToken($event)" value="{{ componentStore.apiToken$ | ngrxPush }}"></ion-input>
           </ion-item>
