@@ -9,6 +9,7 @@ export class MaxPowerService {
     const alert = await this.alertController.create({
       header,
       subHeader: 'Please input in Watts',
+      cssClass: 'ion-alert-custom',
       buttons: [
         {
           text: 'Cancel',

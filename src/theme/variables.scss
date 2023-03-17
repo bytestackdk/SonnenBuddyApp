@@ -197,6 +197,10 @@ body.dark {
 
   --ion-item-background: #1e1e1e;
   --ion-card-background: #1e1e1e;
+
+  .ion-alert-custom .alert-wrapper {
+    background: var(--ion-color-step-150);
+  }
 }
 
 .ios body.dark ion-modal {
@@ -244,4 +248,8 @@ body.dark {
 
   --ion-toolbar-background: #1f1f1f;
   --ion-tab-bar-background: #1f1f1f;
+
+  .ion-alert-custom .alert-wrapper {
+    background: var(--ion-color-step-100);
+  }
 }
