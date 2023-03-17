@@ -1,5 +1,5 @@
 export type IP = string;
-export type SerialNumber = number;
+export type SerialNumber = number | string;
 
 /**
  * Model from the find URL provided by Sonnen

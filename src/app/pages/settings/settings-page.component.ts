@@ -5,7 +5,10 @@ import { SettingsPageStore } from './settings-page.store';
 import { ConfigurationKey, OperatingMode } from '../../api/models/battery.model';
 import { SonnenBatterieActions } from '../../store/sonnen-batterie';
 import { InputActions } from '../../store/input/input.actions';
-import { ActionSheetController, Platform, ToggleChangeEventDetail } from '@ionic/angular';
+import { Platform, ToggleChangeEventDetail } from '@ionic/angular';
+import { IpService } from '../../core/services/ip.service';
+import { MaxPowerService } from '../../core/services/max-power.service';
+import { ConfirmService } from '../../core/services/confirm.service';
 
 @Component({
   selector: 'app-settings',
@@ -29,7 +32,9 @@ export class SettingsPage implements OnInit {
     private readonly store: Store,
     readonly componentStore: SettingsPageStore,
     private readonly platform: Platform,
-    private readonly actionSheetCtrl: ActionSheetController
+    private readonly confirmService: ConfirmService,
+    private readonly ipService: IpService,
+    private readonly maxPowerService: MaxPowerService
   ) {}
 
   ngOnInit() {
@@ -40,16 +45,36 @@ export class SettingsPage implements OnInit {
     this.store.dispatch(SonnenBatterieActions.refreshConfigurations());
   }
 
-  toggleOperatingModeModal(show: boolean) {
-    this.componentStore.toggleOperatingModeModal(show);
-  }
-
   setOperatingMode(operatingMode: OperatingMode) {
     this.componentStore.toggleOperatingModeModal(false);
 
     this.store.dispatch(
       SonnenBatterieActions.setConfiguration({ key: ConfigurationKey.EM_OperatingMode, configuration: operatingMode })
     );
+  }
+
+  changeBatteryMaxOutput(value: string) {
+    this.maxPowerService.show(value, 'Battery max power').then((batteryMaxPower) => {
+      if (batteryMaxPower && batteryMaxPower.toString() !== value) {
+        this.store.dispatch(InputActions.setBatteryMaxPower({ batteryMaxPower }));
+      }
+    });
+  }
+
+  changeSolarMaxOutput(value: string) {
+    this.maxPowerService.show(value, 'Solar max output').then((solarMaxPower) => {
+      if (solarMaxPower && solarMaxPower.toString() !== value) {
+        this.store.dispatch(InputActions.setSolarMaxPower({ solarMaxPower }));
+      }
+    });
+  }
+
+  changeIp(ip: string) {
+    this.ipService.show(ip).then((lanIp) => {
+      if (lanIp && lanIp !== ip) {
+        this.store.dispatch(SonnenBatterieActions.setLanIp({ lanIp }));
+      }
+    });
   }
 
   setDarkMode(e: CustomEvent<ToggleChangeEventDetail>) {
@@ -66,34 +91,11 @@ export class SettingsPage implements OnInit {
   }
 
   async resetConfirm() {
-    const actionSheet = await this.actionSheetCtrl.create({
-      header: 'Please confirm',
-      subHeader: 'This will clear all data and restart the setup',
-      buttons: [
-        {
-          text: 'Reset',
-          role: 'destructive',
-          data: {
-            action: 'reset',
-          },
-        },
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          data: {
-            action: 'cancel',
-          },
-        },
-      ],
+    this.confirmService.confirm('Reset', 'This will clear all data and restart the setup').then((confirm) => {
+      if (confirm) {
+        this.runWizard();
+      }
     });
-
-    await actionSheet.present();
-
-    const result = await actionSheet.onDidDismiss();
-
-    if (result.data.action === 'reset') {
-      this.runWizard();
-    }
   }
 
   runWizard() {

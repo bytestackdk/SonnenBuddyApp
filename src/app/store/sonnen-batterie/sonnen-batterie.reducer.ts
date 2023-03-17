@@ -56,6 +56,14 @@ export const sonnenBatterieFeature = createFeature({
       ...initialState,
     })),
 
+    on(SonnenBatterieActions.setLanIp, (state, { lanIp }) => ({
+      ...state,
+      device: {
+        ...state.device,
+        lanIp,
+      },
+    })),
+
     // Get configuration
     // ====================================================================================
     on(

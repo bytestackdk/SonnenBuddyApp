@@ -36,10 +36,12 @@
             *ngIf="
               (componentStore.loading$ | ngrxPush) ||
               (componentStore.device$ | ngrxPush) ||
+              (componentStore.noDevices$ | ngrxPush) ||
               (componentStore.error$ | ngrxPush)
             "
           >
             <ion-card-content>
+              <!--Loading-->
               <ion-spinner *ngIf="componentStore.loading$ | ngrxPush"></ion-spinner>
 
               <!--Device-->
@@ -49,26 +51,56 @@
                 @enterFadeAnimation
               >
                 <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
-                <p class="ion-text-left" [class.flex-1]="componentStore.multipleDevices$ | ngrxPush">
-                  IP: <b>{{ device.lanIp }}</b
-                  ><br />
-                  Serial: <b>{{ device.serialNumber }}</b>
-                </p>
+                <table
+                  class="key-value"
+                  [style.width]="'unset'"
+                  [class.flex-1]="componentStore.multipleDevices$ | ngrxPush"
+                >
+                  <tr>
+                    <td class="ion-text-left">IP:</td>
+                    <td>{{ device.lanIp }}</td>
+                  </tr>
+                  <tr>
+                    <td class="ion-text-left">Serial:</td>
+                    <td>{{ device.serialNumber }}</td>
+                  </tr>
+                </table>
+
+                <!--Change device (if multiple)-->
                 <ion-button
+                  class="ion-margin-start"
                   (click)="componentStore.toggleSelectDevice()"
                   *ngIf="componentStore.multipleDevices$ | ngrxPush"
+                  size="small"
+                  >Change</ion-button
+                >
+
+                <!--Change IP (if input manually)-->
+                <ion-button
+                  class="ion-margin-start"
+                  (click)="addIpManually()"
+                  *ngIf="componentStore.deviceAddedManually$ | ngrxPush"
+                  size="small"
                   >Change</ion-button
                 >
               </div>
 
-              <div
-                class="ion-flex ion-align-items-center ion-justify-content-center gap-2"
-                *ngIf="componentStore.error$ | ngrxPush as error"
-                @enterFadeAnimation
-              >
-                <ion-icon class="icon" name="alert-sharp" color="danger"></ion-icon>
-                <p class="ion-text-left">There was an error<br />Please try again</p>
-              </div>
+              <!--Error or no devices found-->
+              <ng-container *ngIf="(componentStore.noDevices$ | ngrxPush) || (componentStore.error$ | ngrxPush)">
+                <div class="ion-flex ion-align-items-center ion-justify-content-center gap-2" @enterFadeAnimation>
+                  <ng-container *ngIf="componentStore.noDevices$ | ngrxPush">
+                    <ion-icon class="icon" name="warning-outline" color="warning"></ion-icon>
+                    <p class="ion-text-left">Couldn't find any sonnenBatterie.</p>
+                  </ng-container>
+
+                  <ng-container *ngIf="componentStore.error$ | ngrxPush">
+                    <ion-icon class="icon" name="alert-circle-outline" color="danger"></ion-icon>
+                    <p class="ion-text-left">There was an error.<br />Please try again.</p>
+                  </ng-container>
+                </div>
+
+                <ion-button class="ion-margin-top" (click)="addIpManually()" size="small">Add IP manually</ion-button>
+              </ng-container>
             </ion-card-content>
           </ion-card>
         </div>
@@ -83,8 +115,8 @@
         <div>
           <app-step-header icon="lock-open-outline.svg" title="API token">
             Please provide the <ion-text color="primary">API token</ion-text> and enable
-            <ion-text color="primary">Read API</ion-text> and <ion-text color="primary">Write API</ion-text> to enable
-            communication with your sonnenBatterie.
+            <ion-text color="primary">Read API</ion-text> and <ion-text color="primary">Write API</ion-text> on your
+            sonnenBatterie.
           </app-step-header>
 
           <ion-item lines="full">
@@ -118,11 +150,20 @@
                 @enterFadeAnimation
               >
                 <ion-icon class="icon" name="checkmark-sharp" color="success"></ion-icon>
-                <p class="ion-text-left">
-                  Inverter max power: <b>{{ componentStore.maxPower$ | ngrxPush }}W</b><br />
-                  Module capacity: <b>{{ componentStore.batteryModuleCapacity$ | ngrxPush }}W</b><br />
-                  Battery modules: <b>{{ componentStore.batteryQuantity$ | ngrxPush }}</b>
-                </p>
+                <table class="key-value" [style.width]="'unset'">
+                  <tr>
+                    <td class="ion-text-left">Inverter max power:</td>
+                    <td>{{ componentStore.maxPower$ | ngrxPush }}W</td>
+                  </tr>
+                  <tr>
+                    <td class="ion-text-left">Module capacity:</td>
+                    <td>{{ componentStore.batteryModuleCapacity$ | ngrxPush }}W</td>
+                  </tr>
+                  <tr>
+                    <td class="ion-text-left">Battery modules:</td>
+                    <td>{{ componentStore.batteryQuantity$ | ngrxPush }}</td>
+                  </tr>
+                </table>
               </div>
 
               <div
@@ -137,7 +178,10 @@
         </div>
 
         <div class="ion-flex gap-1">
-          <ion-button class="flex-1" (click)="previous()" *ngIf="componentStore.multipleDevices$ | ngrxPush"
+          <ion-button
+            class="flex-1"
+            (click)="previous()"
+            *ngIf="(componentStore.multipleDevices$ | ngrxPush) || (componentStore.deviceAddedManually$ | ngrxPush)"
             >Previous</ion-button
           >
           <ion-button class="flex-1" (click)="next()" [disabled]="componentStore.apiTokenUntested$ | ngrxPush"
@@ -244,7 +288,7 @@
                   ><br />
                   Serial: <b>{{ device.serialNumber }}</b>
                 </p>
-                <ion-button (click)="componentStore.selectDevice(device)">Select</ion-button>
+                <ion-button (click)="componentStore.selectDevice(device)" size="small">Select</ion-button>
               </div>
             </ion-card-content>
           </ion-card>

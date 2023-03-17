@@ -11,7 +11,9 @@ import { BatteryService } from '../../api/services/battery.service';
 import { ConfigurationKey } from '../../api/models/battery.model';
 import { WizardActions } from '../../store/wizard/wizard.actions';
 import { ApiToken, WizardOutput } from '../../shared/models/wizard.model';
-import { InputSelectors } from 'src/app/store/input';
+import { inputFeature, InputState } from '../../store/input/input.reducer';
+
+const MANUAL_SERIAL_NUMBER = 'Unknown';
 
 export interface IWizardState {
   devices: Device[];
@@ -45,10 +47,19 @@ export const initialState: IWizardState = {
   error: null,
 };
 
+export const tokenNotTestedState: Partial<IWizardState> = {
+  maxPower: null,
+  batteryQuantity: null,
+  batteryModuleCapacity: null,
+};
+
 @Injectable()
 export class WizardPageStore extends ComponentStore<IWizardState> {
   readonly devices$ = this.select((state) => state.devices);
+  readonly noDevices$ = this.select(this.devices$, (devices) => devices?.length === 0);
   readonly device$ = this.select((state) => state.device);
+  readonly deviceLanIp$ = this.select((state) => state.device?.lanIp);
+  readonly deviceAddedManually$ = this.select(this.device$, (device) => device?.serialNumber === MANUAL_SERIAL_NUMBER);
   readonly deviceSelected$ = this.select(this.device$, (device) => !!device);
   readonly multipleDevices$ = this.select(this.devices$, (devices) => devices?.length > 1);
   readonly noDevice$ = this.select((state) => !state.device);
@@ -78,10 +89,22 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
     private readonly store: Store
   ) {
     super({ ...initialState });
+
+    // Restore some input if it's there (is only the case in the browser)
+    const input = localStorage.getItem(inputFeature.name);
+    const inputState: InputState = input ? JSON.parse(input) : null;
+
+    if (inputState?.apiToken || inputState?.solarMaxPower) {
+      this.patchState({
+        ...(inputState.apiToken && { apiToken: inputState?.apiToken }),
+        ...(inputState?.solarMaxPower && { solarMaxPower: inputState?.solarMaxPower }),
+      });
+    }
   }
 
   selectDevice(device: Device) {
-    this.patchState({ device });
+    // Select device and clear any test of a token if tried before
+    this.patchState({ device, ...tokenNotTestedState });
 
     // ion-modal needs device set and modal dismiss in separate operations to work, thus this hack
     setTimeout(() => this.patchState({ showSelectDevice: false }));
@@ -128,21 +151,14 @@ export class WizardPageStore extends ComponentStore<IWizardState> {
     this.setState(() => ({ ...initialState }));
   }
 
-  readonly findPreviousApiToken = this.effect(() =>
-    this.store
-      .select(InputSelectors.selectApiToken)
-      .pipe(tap((apiToken: ApiToken) => this.patchState({ ...(apiToken && { apiToken }) })))
-  );
-
-  readonly findPreviousSolarMaxPower = this.effect(() =>
-    this.store
-      .select(InputSelectors.selectSolarMaxPower)
-      .pipe(tap((solarMaxPower: number) => this.patchState({ ...(solarMaxPower && { solarMaxPower }) })))
-  );
+  addDeviceManually(lanIp: string) {
+    const device: Device = { lanIp, ca20: true, info: 'sonnenBatterie', serialNumber: MANUAL_SERIAL_NUMBER };
+    this.patchState({ device, devices: [device], error: null, ...tokenNotTestedState });
+  }
 
   readonly findDevices = this.effect((trigger$) =>
     trigger$.pipe(
-      tap(() => this.patchState({ devices: null, loading: true, error: null })),
+      tap(() => this.patchState({ devices: null, device: null, loading: true, error: null })),
       switchMap(() =>
         this.networkService.find().pipe(
           tapResponse(

@@ -1,7 +1,6 @@
 import { createSelector } from '@ngrx/store';
 import { statusFeature } from './status.reducer';
 import * as fromSonnenBatterie from '../sonnen-batterie/sonnen-batterie.selectors';
-import { capacityReservedPerBatteryModule } from '../sonnen-batterie/sonnen-batterie.selectors';
 import * as timeFunctions from '../../shared/functions/timespan';
 import { SonnenBatterieSelectors } from '../sonnen-batterie';
 import { InputSelectors } from '../input';
@@ -41,11 +40,11 @@ export const selectBatteryUtilization = createSelector(
 export const selectBatteryChargePercent = createSelector(selectStatus, (entity) => entity?.USOC || 0);
 export const selectBatteryRemaining = createSelector(
   selectStatus,
-  SonnenBatterieSelectors.selectSonnenBatterieConfiguration,
-  (entity, configuration) =>
+  SonnenBatterieSelectors.selectSonnenBatterieBatteryReservedCapacity,
+  (entity, reservedCapacity) =>
     // Remaining capacity minus reserved capacity
     // TODO: Is entity?.RemainingCapacity_Wh 0 or reserve when RSOC is 0%?
-    entity?.RemainingCapacity_Wh - configuration?.batteryQuantity * capacityReservedPerBatteryModule || 0
+    entity?.RemainingCapacity_Wh - reservedCapacity || 0
 );
 export const selectBatteryChargingTime = createSelector(
   selectBatteryCharging,

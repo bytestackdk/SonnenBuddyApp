@@ -11,165 +11,202 @@
     </ion-toolbar>
   </ion-header>
 
-  <!--Operating mode-->
-  <ion-card>
-    <ion-card-header>
-      <ion-card-subtitle>Operating mode</ion-card-subtitle>
-      <ion-card-title class="card-title" color="primary">{{
-        componentStore.operatingMode$ | ngrxPush | om
-      }}</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <p>
-        This can be changed by clicking the button below, which will also provide a brief description of each of the
-        operating modes.
-      </p>
-      <ion-button class="ion-float-right ion-margin-vertical" (click)="toggleOperatingModeModal(true)"
-        >Change</ion-button
-      >
-    </ion-card-content>
-  </ion-card>
-
-  <!--Dark mode-->
-  <ion-card>
-    <ion-card-content class="ion-flex ion-align-items-center">
-      <ion-icon class="icon ion-margin-end" name="moon-outline"></ion-icon>
-      <div class="flex-1">
-        <p>Dark mode</p>
-      </div>
-      <ion-toggle (ionChange)="setDarkMode($event)" [checked]="componentStore.darkMode$ | ngrxPush"></ion-toggle>
-    </ion-card-content>
-  </ion-card>
-
-  <!--Weather forecast charging-->
-  <ion-card>
-    <ion-card-content class="ion-flex ion-align-items-center">
-      <ion-icon class="icon sun ion-margin-end" name="sunny"></ion-icon>
-      <div class="flex-1">
-        <p>Use weather forecast for charge management</p>
-      </div>
-      <ion-toggle
-        class="forecast"
-        (ionChange)="setPrognosisCharging($event)"
-        [checked]="componentStore.prognosisCharging$ | ngrxPush"
-      ></ion-toggle>
-    </ion-card-content>
-  </ion-card>
-
-  <!--Device information-->
+  <!--Editable card-->
   <ion-card *ngrxLet="componentStore.device$ as device">
-    <ion-card-content class="device-info ion-flex ion-align-items-center gap-2">
-      <img src="assets/sonnen-ico.svg" class="svg-icon" alt="Sonnen device" />
-      <div class="flex-1">
-        <table class="key-value">
-          <tr>
-            <td>Serial:</td>
-            <td>{{ device?.serialNumber }}</td>
-          </tr>
-          <tr>
-            <td>Inverter max power:</td>
-            <td>{{ componentStore.inverterMaxPower$ | ngrxPush | kw }}</td>
-          </tr>
-          <tr>
-            <td>Solar max power:</td>
-            <td>{{ componentStore.solarMaxPower$ | ngrxPush | kw }}</td>
-          </tr>
-          <tr>
-            <td>Battery capacity:</td>
-            <td>{{ componentStore.batteryCapacity$ | ngrxPush | kw }}</td>
-          </tr>
-          <tr>
-            <td>IP:</td>
-            <td>
+    <ion-card-content class="ion-no-padding">
+      <ion-list>
+        <!--Operating mode-->
+        <ion-item lines="full">
+          <ion-icon class="icon" color="success" name="play-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>{{ componentStore.operatingMode$ | ngrxPush | om }}</h3>
+            <p>Operating mode</p>
+          </ion-label>
+          <ion-button slot="end" (click)="componentStore.toggleOperatingModeModal(true)">Change</ion-button>
+        </ion-item>
+
+        <!--Battery max power-->
+        <ion-item lines="full" *ngrxLet="componentStore.batteryMaxPower$ as batteryMaxPower">
+          <ion-icon class="icon" color="dark" name="battery-charging-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>{{ batteryMaxPower | ngrxPush | kw }}</h3>
+            <p>Battery max power</p>
+          </ion-label>
+          <ion-button slot="end" (click)="changeBatteryMaxOutput(batteryMaxPower)">Change</ion-button>
+        </ion-item>
+
+        <!--Solar max power-->
+        <ion-item lines="full" *ngrxLet="componentStore.solarMaxPower$ as solarMaxPower">
+          <ion-icon class="icon" color="dark" name="sunny-outline" slot="start"></ion-icon>
+
+          <ion-label>
+            <h3>{{ solarMaxPower | ngrxPush | kw }}</h3>
+            <p>Solar max power</p>
+          </ion-label>
+          <ion-button slot="end" (click)="changeSolarMaxOutput(solarMaxPower)">Change</ion-button>
+        </ion-item>
+
+        <!--IP address-->
+        <ion-item lines="none">
+          <ion-icon class="icon" color="dark" name="git-network-outline" slot="start"></ion-icon>
+          <ion-label>
+            <h3>
               <a href="http://{{ device?.lanIp }}" target="_blank">{{ device?.lanIp }}</a>
-            </td>
-          </tr>
-        </table>
-      </div>
+            </h3>
+            <p>IP address</p>
+          </ion-label>
+          <ion-button slot="end" (click)="changeIp(device?.lanIp)">Change</ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <!--Extracted information-->
+  <ion-card *ngrxLet="componentStore.device$ as device">
+    <ion-card-content class="ion-no-padding">
+      <!--Serial-->
+      <ion-item lines="full">
+        <ion-icon class="icon" color="dark" name="build-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h3>{{ device?.serialNumber }}</h3>
+          <p>Serial number</p>
+        </ion-label>
+      </ion-item>
+
+      <!--Inverter max power-->
+      <ion-item lines="full">
+        <ion-icon class="icon" color="dark" name="flash-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h3>{{ componentStore.inverterMaxPower$ | ngrxPush | kw }}</h3>
+          <p>Inverter max power</p>
+        </ion-label>
+      </ion-item>
+
+      <!--Battery capacity-->
+      <ion-item lines="none">
+        <ion-icon class="icon" color="dark" name="battery-full-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h3>{{ componentStore.batteryCapacity$ | ngrxPush | kw }}h</h3>
+          <p>Battery capacity</p>
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <!--Toggles-->
+  <ion-card>
+    <ion-card-content class="ion-no-padding">
+      <!--Dark mode-->
+      <ion-item lines="full">
+        <ion-icon class="icon" color="dark" name="moon-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h3>Dark mode</h3>
+          <p>Embrace the darkness</p>
+        </ion-label>
+        <ion-toggle
+          (ionChange)="setDarkMode($event)"
+          [checked]="componentStore.darkMode$ | ngrxPush"
+          slot="end"
+        ></ion-toggle>
+      </ion-item>
+
+      <!--Weather forecast charging-->
+      <ion-item lines="none">
+        <ion-icon class="icon" color="dark" name="partly-sunny-outline" slot="start"></ion-icon>
+        <ion-label>
+          <h3>Weather forecast charging</h3>
+          <p>Maximize your production</p>
+        </ion-label>
+        <ion-toggle
+          (ionChange)="setPrognosisCharging($event)"
+          [checked]="componentStore.prognosisCharging$ | ngrxPush"
+          slot="end"
+        ></ion-toggle>
+      </ion-item>
     </ion-card-content>
   </ion-card>
 
   <ion-button class="ion-margin" expand="block" color="danger" (click)="resetConfirm()">RESET AND RUN SETUP</ion-button>
-
-  <!--Operating mode modal-->
-  <ion-modal
-    [isOpen]="componentStore.showOperatingMode$ | ngrxPush"
-    [canDismiss]="true"
-    [presentingElement]="presentingElement"
-    (didDismiss)="toggleOperatingModeModal(false)"
-  >
-    <ng-template>
-      <ion-header>
-        <ion-toolbar>
-          <ion-title>Operating mode</ion-title>
-          <ion-buttons slot="end">
-            <ion-button (click)="toggleOperatingModeModal(false)">Close</ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-accordion-group *ngIf="componentStore.operatingMode$ | ngrxPush as currentMode" [value]="currentMode">
-          <ion-accordion [value]="mode" *ngFor="let mode of operatingModes">
-            <ion-item slot="header" color="light">
-              <ion-label>{{ mode | om }}</ion-label>
-              <ion-badge color="primary" *ngIf="mode === currentMode">Current</ion-badge>
-            </ion-item>
-            <div class="ion-padding" slot="content">
-              <ng-container [ngSwitch]="mode">
-                <ng-container *ngSwitchCase="OperatingMode.TimeOfUse">
-                  <p>
-                    This mode is the recommended mode if you want the option to charge your battery from the grid during
-                    periods with low electricity prices. It will prioritize power like this unless configured otherwise:
-                  </p>
-                  <ul>
-                    <li>Cover the household loads</li>
-                    <li>Charge the battery system</li>
-                    <li>Export excess power to the grid</li>
-                  </ul>
-                  <ion-card>
-                    <ion-card-content class="ion-flex ion-align-items-center gap-2">
-                      <ion-icon class="icon" name="checkmark-done-circle-outline" color="success"></ion-icon>
-                      <p>With this mode you can set schedules</p>
-                    </ion-card-content>
-                  </ion-card>
-                </ng-container>
-                <ng-container *ngSwitchCase="OperatingMode.Manual">
-                  <p>Manual charging or discharging via API.</p>
-                  <p>Manual charge/discharge can be reverted by setting mode to self consumption.</p>
-                  <ng-container *ngTemplateOutlet="notSupported"></ng-container>
-                </ng-container>
-                <ng-container *ngSwitchCase="OperatingMode.BatteryModuleExtension">
-                  <ng-container *ngTemplateOutlet="notSupported"></ng-container>
-                </ng-container>
-                <ng-container *ngSwitchCase="OperatingMode.SelfConsumption">
-                  <p>
-                    This is the automatic mode, which is almost the same as Time-Of-Use. It will prioritize power like
-                    this:
-                  </p>
-                  <ul>
-                    <li>Cover the household loads</li>
-                    <li>Charge the battery system</li>
-                    <li>Export excess power to the grid</li>
-                  </ul>
-                  <ng-container *ngTemplateOutlet="noScheduleWarning"></ng-container>
-                </ng-container>
-              </ng-container>
-
-              <div
-                class="ion-flex ion-justify-content-end"
-                *ngIf="
-                  mode !== currentMode && mode !== OperatingMode.Manual && mode !== OperatingMode.BatteryModuleExtension
-                "
-              >
-                <ion-button (click)="setOperatingMode(mode)">Select</ion-button>
-              </div>
-            </div>
-          </ion-accordion>
-        </ion-accordion-group>
-      </ion-content>
-    </ng-template>
-  </ion-modal>
 </ion-content>
+
+<!--Operating mode modal-->
+<ion-modal
+  [isOpen]="componentStore.showOperatingModeModal$ | ngrxPush"
+  [canDismiss]="true"
+  [presentingElement]="presentingElement"
+  (didDismiss)="componentStore.toggleOperatingModeModal(false)"
+>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Operating mode</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="componentStore.toggleOperatingModeModal(false)">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-accordion-group *ngIf="componentStore.operatingMode$ | ngrxPush as currentMode" [value]="currentMode">
+        <ion-accordion [value]="mode" *ngFor="let mode of operatingModes">
+          <ion-item slot="header" color="light">
+            <ion-label>{{ mode | om }}</ion-label>
+            <ion-badge color="primary" *ngIf="mode === currentMode">Current</ion-badge>
+          </ion-item>
+          <div class="ion-padding" slot="content">
+            <ng-container [ngSwitch]="mode">
+              <ng-container *ngSwitchCase="OperatingMode.TimeOfUse">
+                <p>
+                  This mode is the recommended mode if you want the option to charge your battery from the grid during
+                  periods with low electricity prices. It will prioritize power like this unless configured otherwise:
+                </p>
+                <ul>
+                  <li>Cover the household loads</li>
+                  <li>Charge the battery system</li>
+                  <li>Export excess power to the grid</li>
+                </ul>
+                <ion-card>
+                  <ion-card-content class="ion-flex ion-align-items-center gap-2">
+                    <ion-icon class="icon" name="checkmark-done-circle-outline" color="success"></ion-icon>
+                    <p>With this mode you can set schedules</p>
+                  </ion-card-content>
+                </ion-card>
+              </ng-container>
+              <ng-container *ngSwitchCase="OperatingMode.Manual">
+                <p>Manual charging or discharging via API.</p>
+                <p>Manual charge/discharge can be reverted by setting mode to self consumption.</p>
+                <ng-container *ngTemplateOutlet="notSupported"></ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="OperatingMode.BatteryModuleExtension">
+                <ng-container *ngTemplateOutlet="notSupported"></ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="OperatingMode.SelfConsumption">
+                <p>
+                  This is the automatic mode, which is almost the same as Time-Of-Use. It will prioritize power like
+                  this:
+                </p>
+                <ul>
+                  <li>Cover the household loads</li>
+                  <li>Charge the battery system</li>
+                  <li>Export excess power to the grid</li>
+                </ul>
+                <ng-container *ngTemplateOutlet="noScheduleWarning"></ng-container>
+              </ng-container>
+            </ng-container>
+
+            <div
+              class="ion-flex ion-justify-content-end"
+              *ngIf="
+                mode !== currentMode && mode !== OperatingMode.Manual && mode !== OperatingMode.BatteryModuleExtension
+              "
+            >
+              <ion-button (click)="setOperatingMode(mode)">Select</ion-button>
+            </div>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+    </ion-content>
+  </ng-template>
+</ion-modal>
 
 <ng-template #noScheduleWarning>
   <ion-card>
@@ -188,3 +225,25 @@
     </ion-card-content>
   </ion-card>
 </ng-template>
+
+<!--Max power modal (used to change various max power input)-->
+<!--<ion-modal-->
+<!--  [isOpen]="componentStore.showPowerModal$ | ngrxPush"-->
+<!--  [canDismiss]="true"-->
+<!--  [presentingElement]="presentingElement"-->
+<!--  (didDismiss)="componentStore.togglePowerModal(false)"-->
+<!--&gt;-->
+<!--  <ng-template>-->
+<!--    <ion-header>-->
+<!--      <ion-toolbar>-->
+<!--        <ion-title>Capacity and power</ion-title>-->
+<!--        <ion-buttons slot="end">-->
+<!--          <ion-button (click)="componentStore.togglePowerModal(false)">Close</ion-button>-->
+<!--        </ion-buttons>-->
+<!--      </ion-toolbar>-->
+<!--    </ion-header>-->
+<!--    <ion-content class="ion-padding">-->
+<!--      <p>Max power stuff</p>-->
+<!--    </ion-content>-->
+<!--  </ng-template>-->
+<!--</ion-modal>-->

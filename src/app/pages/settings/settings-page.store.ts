@@ -8,6 +8,7 @@ import { InputSelectors } from 'src/app/store/input';
 export interface ISettingsState {
   operatingMode: OperatingMode;
   showOperatingModeModal: boolean;
+  // showPowerModal: boolean;
   loading: boolean;
   error: unknown;
 }
@@ -15,13 +16,15 @@ export interface ISettingsState {
 export const initialState: ISettingsState = {
   operatingMode: null,
   showOperatingModeModal: false,
+  // showPowerModal: false,
   loading: false,
   error: null,
 };
 
 @Injectable()
 export class SettingsPageStore extends ComponentStore<ISettingsState> {
-  readonly showOperatingMode$ = this.select((state) => state.showOperatingModeModal);
+  readonly showOperatingModeModal$ = this.select((state) => state.showOperatingModeModal);
+  // readonly showPowerModal$ = this.select((state) => state.showPowerModal);
 
   readonly operatingMode$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieOperatingMode);
   readonly darkMode$ = this.store.select(InputSelectors.selectDarkMode);
@@ -29,6 +32,7 @@ export class SettingsPageStore extends ComponentStore<ISettingsState> {
   readonly device$ = this.store.select(SonnenBatterieSelectors.selectDevice);
   readonly inverterMaxPower$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieInverterMaxPower);
   readonly batteryCapacity$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieBatteryCapacity);
+  readonly batteryMaxPower$ = this.store.select(SonnenBatterieSelectors.selectSonnenBatterieBatteryMaxPower);
   readonly solarMaxPower$ = this.store.select(InputSelectors.selectSolarMaxPower);
 
   constructor(private readonly store: Store) {
@@ -38,4 +42,8 @@ export class SettingsPageStore extends ComponentStore<ISettingsState> {
   toggleOperatingModeModal(showOperatingModeModal: boolean) {
     this.patchState(() => ({ showOperatingModeModal }));
   }
+
+  // togglePowerModal(showPowerModal: boolean) {
+  //   this.patchState(() => ({ showPowerModal }));
+  // }
 }

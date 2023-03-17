@@ -15,6 +15,8 @@ export const SonnenBatterieActions = createActionGroup({
     'Remove Schedule': props<{ start: string }>(),
     'Clear Schedules': emptyProps(),
 
+    'Set Lan Ip': props<{ lanIp: string }>(),
+
     // Handles persisting in configuration
     'Save Schedules': props<{ schedules: ISchedule[] }>(),
 

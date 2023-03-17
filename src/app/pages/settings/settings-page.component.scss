@@ -1,6 +1,9 @@
-ion-toggle {
-  &.forecast {
-    --background-checked: var(--ion-color-warning);
+.single-row {
+  ion-button {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 0;
   }
 }
 
@@ -12,4 +15,8 @@ ion-toggle {
   img {
     width: 24px;
   }
+}
+
+hr {
+  border-top: 1px solid var(--ion-color-medium);
 }

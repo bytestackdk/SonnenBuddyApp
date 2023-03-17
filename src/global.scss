@@ -34,6 +34,10 @@
   flex-shrink: 0;
 }
 
+.ion-position-relative {
+  position: relative;
+}
+
 .ion-flex {
   display: flex;
 
@@ -50,6 +54,12 @@
     }
     &-2 {
       gap: 16px;
+    }
+    &-3 {
+      gap: 24px;
+    }
+    &-4 {
+      gap: 32px;
     }
   }
   .flex-1 {

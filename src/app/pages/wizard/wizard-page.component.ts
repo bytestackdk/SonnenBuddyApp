@@ -3,6 +3,8 @@ import { SwiperComponent } from 'swiper/angular';
 import { WizardPageStore } from './wizard-page.store';
 import { ApiToken } from '../../shared/models/wizard.model';
 import { enterFadeAnimation } from '../../shared/utilities/animations';
+import { IpService } from '../../core/services/ip.service';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-wizard',
@@ -16,7 +18,7 @@ export class WizardPage implements OnInit {
 
   presentingElement = null;
 
-  constructor(public readonly componentStore: WizardPageStore) {}
+  constructor(public readonly componentStore: WizardPageStore, private readonly ipService: IpService) {}
 
   ngOnInit() {
     this.presentingElement = document.querySelector('.ion-content');
@@ -28,6 +30,16 @@ export class WizardPage implements OnInit {
 
   next() {
     this.swiper.swiperRef.slideNext(100);
+  }
+
+  addIpManually() {
+    this.componentStore.deviceLanIp$.pipe(take(1)).subscribe((ip) => {
+      this.ipService.show(ip).then((lanIp) => {
+        if (lanIp) {
+          this.componentStore.addDeviceManually(lanIp);
+        }
+      });
+    });
   }
 
   updateToken(e: CustomEvent<{ value: ApiToken }>) {

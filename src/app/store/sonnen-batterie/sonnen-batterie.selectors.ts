@@ -4,9 +4,6 @@ import { SonnenBatterie } from '../../shared/models/sonnen-batterie.model';
 import { OperatingMode } from '../../api/models/battery.model';
 import { InputSelectors } from '../input';
 
-// https://www.myenergy.dk/wp-content/uploads/2021/06/Operating-instructions-sonnenBatterie-hybrid-9.53_22358_UK507EN.pdf
-export const capacityReservedPerBatteryModule = 250;
-
 export const { selectSonnenBatterieState, selectLoading, selectLoaded, selectFailed, selectError } =
   sonnenBatterieFeature;
 
@@ -46,23 +43,39 @@ export const selectSonnenBatterieBatteryCapacity = createSelector(
   ({ batteryModuleCapacity, batteryQuantity }) => batteryModuleCapacity * batteryQuantity
 );
 
-export const selectSonnenBatterieBatteryMaxPower = createSelector(selectSonnenBatterie, ({ batteryQuantity }) => {
-  // https://www.myenergy.dk/wp-content/uploads/2021/06/Operating-instructions-sonnenBatterie-hybrid-9.53_22358_UK507EN.pdf
-  if (batteryQuantity === 1) {
-    return 1100;
-  } else if (batteryQuantity === 2) {
-    return 2500;
+export const selectSonnenBatterieBatteryMaxPower = createSelector(
+  selectSonnenBatterie,
+  InputSelectors.selectBatteryMaxPower,
+  ({ batteryQuantity }, batteryMaxPower) => {
+    // TODO: Consider making the sonnen product selectable and extract battery max power from specs and hardcode for each device
+    // hybrid 9.53: https://www.myenergy.dk/wp-content/uploads/2021/06/Operating-instructions-sonnenBatterie-hybrid-9.53_22358_UK507EN.pdf
+    // hybrid 8.1:  https://d3pcsg2wjq9izr.cloudfront.net/files/56540/download/731344/82.pdf
+    // eco 8:       https://www.sonnensupportaustralia.com.au/uploads/2/9/8/5/29857561/sonnen_-_datasheet_-_australia_-_eco_8.0__3_.pdf
+    // 10:          https://webatt.energy/wp-content/uploads/2020/02/Datasheet_sonnenBatterie_10.pdf
+    if (batteryMaxPower > 0) {
+      // Manual battery max power has been input, so we just use that - Else fallback to 9.53 hard codes
+      return batteryMaxPower;
+    }
+
+    if (batteryQuantity === 1) {
+      return 1100;
+    } else if (batteryQuantity === 2) {
+      return 2500;
+    }
+    return 3300;
   }
-  return 3300;
-});
+);
 
 export const selectSonnenBatterieBatteryUsableCapacity = createSelector(
   selectSonnenBatterie,
   ({ batteryQuantity, batteryModuleCapacity }) =>
-    // Max. capacity   2.5 kWh  5.0 kWh  7.5 kWh  10.0 kWh  12.5 kWh  15.0 kWh
-    // Usable capacity 2.25 kWh 4.5 kWh  6.75 kWh  9.0 kWh  11.25 kWh 13.5 kWh
-    // -> For every module there's 250Wh that's not usable = 10%
-    batteryQuantity * (batteryModuleCapacity - capacityReservedPerBatteryModule)
+    // usableCapacity x 1.1 = totalCapacity => usableCapacity = totalCapacity / 1.1
+    (batteryQuantity * batteryModuleCapacity) / 1.1
+);
+export const selectSonnenBatterieBatteryReservedCapacity = createSelector(
+  selectSonnenBatterieBatteryCapacity,
+  selectSonnenBatterieBatteryUsableCapacity,
+  (totalCapacity, usableCapacity) => totalCapacity - usableCapacity
 );
 export const selectSonnenBatterieOperatingMode = createSelector(
   selectSonnenBatterie,

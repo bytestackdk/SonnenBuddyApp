@@ -11,12 +11,14 @@ export interface InputState {
   /**
    * Max power of solar installation in Watts
    */
+  batteryMaxPower: number;
   solarMaxPower: number;
   darkMode: boolean;
 }
 
 export const initialState: InputState = {
   apiToken: null,
+  batteryMaxPower: null,
   solarMaxPower: null,
   darkMode: false,
 };
@@ -30,10 +32,19 @@ export const inputFeature = createFeature({
       ...state,
       apiToken,
       solarMaxPower,
+      batteryMaxPower: null,
     })),
     on(InputActions.setDarkMode, (state, { enabled }) => ({
       ...state,
       darkMode: enabled,
+    })),
+    on(InputActions.setSolarMaxPower, (state, { solarMaxPower }) => ({
+      ...state,
+      solarMaxPower,
+    })),
+    on(InputActions.setBatteryMaxPower, (state, { batteryMaxPower }) => ({
+      ...state,
+      batteryMaxPower,
     })),
     on(InputActions.clearInput, ({ darkMode }) => ({
       ...initialState,
