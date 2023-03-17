@@ -6,7 +6,7 @@ android {
         applicationId "dk.bytestack.sonnenbuddy"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 72
+        versionCode 73
         versionName "1.02"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
