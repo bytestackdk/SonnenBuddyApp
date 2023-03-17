@@ -9,6 +9,7 @@ export class IpService {
   async show(currentIp?: string) {
     const alert = await this.alertController.create({
       header: 'IP address',
+      cssClass: 'ion-alert-custom',
       buttons: [
         {
           text: 'Cancel',

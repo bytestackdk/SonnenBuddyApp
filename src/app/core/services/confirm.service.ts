@@ -9,6 +9,7 @@ export class ConfirmService {
     const actionSheet = await this.actionSheetCtrl.create({
       header: 'Please confirm',
       subHeader,
+      cssClass: 'ion-alert-custom',
       buttons: [
         {
           text: buttonText,
