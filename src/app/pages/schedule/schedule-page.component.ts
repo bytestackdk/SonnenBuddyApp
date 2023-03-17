@@ -44,7 +44,7 @@ export class SchedulePage implements OnInit {
     // TODO: Don't start with something that's not valid
     this.start = '01:00';
     this.stop = '05:00';
-    this.threshold = '2000';
+    this.threshold = '5000';
 
     const schedule: ISchedule = {
       start: this.start,
