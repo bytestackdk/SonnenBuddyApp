@@ -25,8 +25,8 @@ export class NetworkService extends BaseService {
     // return of([]);
 
     // const devices: Device[] = [
-    //   { lanIp: '192.168.86.21', ca20: true, info: 'sonnenBatterie', serialNumber: 182643 },
-    //   { lanIp: '192.168.1.40', ca20: true, info: 'sonnenBatterie', serialNumber: 216262 },
+    //   { lanIp: '192.168.86.21', ca20: true, info: 'sonnenBatterie', serialNumber: 1234 },
+    //   { lanIp: '192.168.1.40', ca20: true, info: 'sonnenBatterie', serialNumber: 5678 },
     // ];
     // return of(devices);
 
@@ -36,7 +36,7 @@ export class NetworkService extends BaseService {
         lanIp: '192.168.1.130',
         ca20: true,
         info: 'sonnenBatterie',
-        serialNumber: 162099,
+        serialNumber: 123456, // Hardcode your serial to be found here when you're developing
       },
     ];
     return of(devices);
