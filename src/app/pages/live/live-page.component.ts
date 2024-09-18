@@ -80,7 +80,7 @@ export class LivePage {
   // }
   //
   // setToken() {
-  //   this.store.dispatch(fromSonnenBatterie.setToken({ apiToken: '5cb9e400-dac7-4211-942d-c03eeaaed186' }));
+  //   this.store.dispatch(fromSonnenBatterie.setToken({ apiToken: '<TOKEN HERE>' }));
   // }
   //
   // setPanelCapacity(panelCapacity: number) {
